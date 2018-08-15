@@ -25,6 +25,16 @@ import realm from '@databases/baseSchemas';
 
 const apiUrl = `${Constant.BASE_URL}/api/%s/%s`;
 
+const addApi = {
+  id: -1,
+  apiName: '',
+  isValide: 'true',
+  type: 'Add an API',
+  accessTokenKey: '',
+  refreshTokenKey: '',
+  accessTokenSecret: ''
+};
+
 const fitbit = {
   api: 'Fitbit',
   apiName: 'fitbit',
@@ -64,6 +74,17 @@ const itemsApi = [
 ];
 
 export default class Home extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      apiLists: []
+    };
+    this.reloadData();
+    realm.addListener('change', () => {
+      this.reloadData();
+    });
+  }
+
   static navigationOptions = {
     title: 'Home'
   };
@@ -212,24 +233,64 @@ export default class Home extends React.Component {
     this.verification(event.url);
   };
 
-  getItems = () => {};
+  getApiImage = apiName => {
+    switch (apiName) {
+      case 'fitbit':
+        return require('@images/fitbit-logo.png');
+      case 'nokia_health':
+        return require('@images/nokia_health-logo.png');
+      case 'garmin':
+        return require('@images/garmin-logo.png');
+      default:
+        return require('@images/add.png');
+    }
+  };
+
+  reloadData = () => {
+    queryAllApi()
+      .then(apiLists => {
+        let arr = Object.values(apiLists);
+        arr.push(addApi);
+        this.setState({ apiLists: arr });
+      })
+      .catch(error => {
+        this.setState({ apiLists: [] });
+      });
+  };
+
+  addApi = () => {
+    console.log(`add api`);
+  };
+
+  loadApi = api => {
+    this.props.navigation.navigate('Explorateur', { ...api });
+    console.log(`load api : ${api.apiName}`);
+  };
 
   render() {
     return (
       <GridView
         itemDimension={130}
-        items={itemsApi}
+        items={this.state.apiLists}
         style={styles.gridView}
         renderItem={item => (
           <TouchableHighlight
-            onPress={() => this.authorisation(item.apiName, item.oauth)}
+            onPress={() =>
+              item.apiName === '' ? this.addApi() : this.loadApi(item)
+            }
           >
             <View
-              style={[styles.itemContainer, { backgroundColor: '#8be1b7' }]}
+              style={[
+                styles.itemContainer,
+                { backgroundColor: item.apiName === '' ? '#c7e1d4' : '#8be1b7' }
+              ]}
             >
-              <Image style={styles.logo} source={item.image} />
-              <Text style={styles.itemName}>{item.api}</Text>
-              <Text style={styles.itemCode}>{item.oauth}</Text>
+              <Image
+                style={styles.logo}
+                source={this.getApiImage(item.apiName)}
+              />
+              <Text style={styles.itemName}>{item.apiName}</Text>
+              <Text style={styles.itemCode}>{item.type}</Text>
             </View>
           </TouchableHighlight>
         )}

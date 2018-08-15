@@ -129,6 +129,7 @@ let FlatListItem = props => {
     </Swipeout>
   );
 };
+
 export default class ApiListComponent extends Component {
   constructor(props) {
     super(props);
@@ -150,6 +151,7 @@ export default class ApiListComponent extends Component {
         this.setState({ apiLists: [] });
       });
   };
+
   renderSeparator = () => {
     return (
       <View
