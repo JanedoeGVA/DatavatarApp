@@ -9,12 +9,16 @@
 import React, { Component } from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import PropTypes from 'prop-types';
-import { createBottomTabNavigator } from 'react-navigation';
+import {
+  createBottomTabNavigator,
+  createStackNavigator
+} from 'react-navigation';
 import { StyleSheet, Text, View, YellowBox } from 'react-native';
-import Home from '@screen/Home';
-import Api from '@screen/Api';
+import ListApiScreen from '@screen/ListApi';
+import SettingsScreen from '@screen/Settings';
 import Explorateur from '@screen/Explorateur';
-import Folder from '@screen/Folder';
+import FolderScreen from '@screen/Folder';
+import AddApiScreen from '@screen/AddApi';
 
 YellowBox.ignoreWarnings([
   'Warning: isMounted(...) is deprecated',
@@ -22,12 +26,22 @@ YellowBox.ignoreWarnings([
   'Class RCTCxxModule'
 ]);
 
+const HomeStack = createStackNavigator(
+  {
+    ListApi: ListApiScreen,
+    AddApi: AddApiScreen
+  },
+  {
+    initialRouteName: 'ListApi'
+  }
+);
+
 const Tabs = createBottomTabNavigator(
   {
-    Home: { screen: Home },
-    Api: { screen: Api },
+    Home: { screen: HomeStack },
     Explorateur: { screen: Explorateur },
-    Folder: { screen: Folder }
+    Folder: { screen: FolderScreen },
+    Settings: { screen: SettingsScreen }
   },
   {
     navigationOptions: ({ navigation }) => ({
@@ -38,7 +52,7 @@ const Tabs = createBottomTabNavigator(
           case 'Home':
             iconName = 'ios-home';
             break;
-          case 'Api':
+          case 'Settings':
             iconName = 'ios-list-box';
             break;
           case 'Folder':

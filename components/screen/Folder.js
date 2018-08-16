@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Image, Button } from 'react-native';
+import { View, Text, Image, Button, StyleSheet } from 'react-native';
 
 export default class Folder extends React.Component {
   static navigationOptions = {
@@ -9,8 +9,16 @@ export default class Folder extends React.Component {
   render() {
     return (
       <View>
-        <Text>Folder !!!! lorem asdasdsd asdasdas asdasdas </Text>
+        <Text style={styles.container}>
+          Folder !!!! lorem asdasdsd asdasdas asdasdas{' '}
+        </Text>
       </View>
     );
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    paddingTop: 40
+  }
+});

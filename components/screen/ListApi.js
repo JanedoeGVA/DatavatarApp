@@ -73,7 +73,7 @@ const itemsApi = [
   }
 ];
 
-export default class Home extends React.Component {
+export default class ListApi extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -86,7 +86,7 @@ export default class Home extends React.Component {
   }
 
   static navigationOptions = {
-    title: 'Home'
+    title: 'ListApi'
   };
 
   authorisation(apiName, authType) {
@@ -249,7 +249,8 @@ export default class Home extends React.Component {
   reloadData = () => {
     queryAllApi()
       .then(apiLists => {
-        let arr = Object.values(apiLists);
+        //let arr = Object.values(apiLists); /**/ !!!ES7 functions seems works only on debug mod */
+        let arr = Object.keys(apiLists).map(key => apiLists[key]);
         arr.push(addApi);
         this.setState({ apiLists: arr });
       })
@@ -260,6 +261,7 @@ export default class Home extends React.Component {
 
   addApi = () => {
     console.log(`add api`);
+    this.props.navigation.navigate('AddApi');
   };
 
   loadApi = api => {
