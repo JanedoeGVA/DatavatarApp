@@ -23,7 +23,7 @@ import {
 } from '@databases/baseSchemas';
 import realm from '@databases/baseSchemas';
 
-const apiUrl = `${Constant.BASE_URL}/api/%s/%s`;
+//const apiUrl = `${Constant.BASE_URL}/api/%s/%s`;
 
 const addApi = {
   id: -1,
@@ -35,45 +35,19 @@ const addApi = {
   accessTokenSecret: ''
 };
 
-const fitbit = {
+/*const fitbit = {
   api: 'Fitbit',
   apiName: 'fitbit',
   oauth: 'Oauth2.0',
   //code: '#9deec7',
   image: require('@images/fitbit-logo.png')
-};
-
-const itemsApi = [
-  {
-    api: 'Fitbit',
-    apiName: 'fitbit',
-    oauth: 'Oauth2.0',
-    //code: '#9deec7',
-    image: require('@images/fitbit-logo.png')
-  },
-  {
-    api: 'Garmin',
-    apiName: 'garmin',
-    oauth: 'Oauth1.A',
-    //code: '#9deec7',
-    image: require('@images/garmin-logo.png')
-  },
-  {
-    api: 'Nokia Health',
-    apiName: 'nokia_health',
-    oauth: 'Oauth2.0',
-    //code: '#f1c40f',
-    image: require('@images/nokia_health-logo.png')
-  },
-  {
-    api: 'My FitnessPal',
-    oauth: 'Oauth1.A',
-    //code: '#f1c40f',
-    image: require('@images/myfitnesspal-logo.png')
-  }
-];
+};*/
 
 export default class ListApi extends React.Component {
+  static navigationOptions = {
+    title: 'Health & Wellness partener'
+  };
+
   constructor(props) {
     super(props);
     this.state = {
@@ -84,11 +58,7 @@ export default class ListApi extends React.Component {
       this.reloadData();
     });
   }
-
-  static navigationOptions = {
-    title: 'ListApi'
-  };
-
+  /*
   authorisation(apiName, authType) {
     apiExist(apiName)
       .then(exist => {
@@ -231,8 +201,9 @@ export default class ListApi extends React.Component {
 
   _handleOpenURL = event => {
     this.verification(event.url);
-  };
+  };*/
 
+  //A mettre dans une classe externe
   getApiImage = apiName => {
     switch (apiName) {
       case 'fitbit':
@@ -284,10 +255,13 @@ export default class ListApi extends React.Component {
             <View
               style={[
                 styles.itemContainer,
-                { backgroundColor: item.apiName === '' ? '#c7e1d4' : '#8be1b7' }
+                {
+                  backgroundColor: item.apiName === '' ? '#c7e1d4' : '#8be1b7'
+                }
               ]}
             >
               <Image
+                activeOpacity={50}
                 style={styles.logo}
                 source={this.getApiImage(item.apiName)}
               />
