@@ -222,6 +222,10 @@ export default class ListApi extends React.Component {
       .then(apiLists => {
         //let arr = Object.values(apiLists); /**/ !!!ES7 functions seems works only on debug mod */
         let arr = Object.keys(apiLists).map(key => apiLists[key]);
+        for (let index = 0; index < arr.length; index++) {
+          const element = arr[index];
+          console.log(`list : ${JSON.stringify(element)}`);
+        }
         arr.push(addApi);
         this.setState({ apiLists: arr });
       })

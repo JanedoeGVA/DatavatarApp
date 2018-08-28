@@ -66,9 +66,9 @@ export default class AddApi extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {
+    /*this.state = {
       apiLists: []
-    };
+    };*/
     this.reloadData();
     realm.addListener('change', () => {
       this.reloadData();
@@ -104,32 +104,38 @@ export default class AddApi extends React.Component {
   };
 
   authorisation(apiName, authType) {
-    var authUrl = vsprintf(apiUrl, [apiName, 'authorisation']);
-    console.log('authURL : ' + authUrl);
-    fetch(authUrl)
-      .then(response => response.json())
-      .then(json => {
-        console.log(json);
-        //store requestTokenSecret if oauth1
-        if (authType == 'Oauth1.A') {
-          console.log('storing requestTokenSecret : ');
-          this._storeData('requestTokenSecret', json['requestTokenSecret']);
-        }
-        Linking.openURL(json.urlVerification);
-      })
-      .catch(error => {
-        console.error(
-          "85. Il y a eu un problème avec l'opération fetch: " + error.message
-        );
-      });
+    console.log('authorisation call');
+    apiExist(apiName).then(exist => {
+      if (!exist) {
+        var authUrl = vsprintf(apiUrl, [apiName, 'authorisation']);
+        console.log('authURL : ' + authUrl);
+        fetch(authUrl)
+          .then(response => response.json())
+          .then(json => {
+            console.log(json);
+            //store requestTokenSecret if oauth1
+            if (authType == 'Oauth1.A') {
+              console.log('storing requestTokenSecret : ');
+              this._storeData('requestTokenSecret', json['requestTokenSecret']);
+            }
+            console.log('linking call');
+            Linking.openURL(json.urlVerification);
+          })
+          .catch(error => {
+            console.error(error);
+          });
+      }
+    });
   }
 
   verification(url) {
+    console.log(`verification`);
     const uri = new URI(url);
     const apiName = uri.host();
     const oauth = uri.segment(0);
     const authUrl = new URI(vsprintf(apiUrl, [apiName, 'verification']));
     if (oauth === 'oauth1') {
+      console.log(`oauth1`);
       this._retrieveData('requestTokenSecret')
         .then(reqTokenSecret => {
           let reqToken = uri.query(true)['oauth_token'];
@@ -143,27 +149,31 @@ export default class AddApi extends React.Component {
           console.error('Promise is rejected with error: ' + error);
         });
     } else {
+      console.log(`oauth2`);
       const code = uri.query(true)['code'];
       authUrl.addQuery('code', code);
+      console.log(`AuthURL: ${authUrl}`);
       this.accessToken(authUrl.valueOf());
     }
     this._removeData('requestTokenSecret');
   }
 
   accessToken(authUrl) {
+    console.log(`AuthURL: ${authUrl}`);
     fetch(authUrl)
       .then(response => response.json())
       .then(api => {
         insertApi(api)
-          .then(
+          .then(() => {
             queryAllApi()
               .then(apiLists => {
-                console.log(`all Api${apiLists.toString()}`);
+                console.log(`all Apilist${apiLists.toString()}`);
               })
               .catch(error => {
-                console.error(`error : ${error}`);
-              })
-          )
+                console.error(`error api list: ${error}`);
+              });
+            this.props.navigation.navigate('ListApi');
+          })
           .catch(error => {
             console.error(`error : ${error}`);
             alert(`Insert api error ${error}`);
@@ -209,6 +219,7 @@ export default class AddApi extends React.Component {
       Linking.getInitialURL()
         .then(url => {
           if (url) {
+            console.log(`componentDidMount call vérification`);
             this.verification(url);
           }
         })
@@ -224,6 +235,8 @@ export default class AddApi extends React.Component {
   }
 
   _handleOpenURL = event => {
+    console.log(`_handleOpenURL call vérification`);
+
     this.verification(event.url);
   };
 

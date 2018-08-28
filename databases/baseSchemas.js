@@ -40,6 +40,7 @@ export const insertApi = newApi =>
           }
           console.log(`id : ${id}`);
           newApi.id = id;
+          console.log(`baseSchemas newApi: ${JSON.stringify(newApi)}`);
           realm.create(TBL_API_SCHEMA, newApi);
           resolve(newApi);
         });
