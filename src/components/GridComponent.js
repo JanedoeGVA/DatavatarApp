@@ -6,14 +6,13 @@ import {
   TouchableHighlight,
   Image
 } from 'react-native';
-
-import { object, string } from 'prop-types';
+import PropTypes from 'prop-types';
 
 export default class GridComponent extends React.Component {
-  state = { input: '' };
+  state = { listApi: [] };
 
   static propTypes = {
-    model: object.isRequired,
+    onPressItem: PropTypes.func.isRequired,
     title: string
   };
 
@@ -43,7 +42,7 @@ export default class GridComponent extends React.Component {
     return (
       <GridView
         itemDimension={130}
-        items={this.state.items}
+        items={this.state.listApi}
         style={grid.gridView}
         renderItem={(item) => (
           <TouchableHighlight
