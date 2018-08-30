@@ -7,8 +7,9 @@ import {
   Image
 } from 'react-native';
 
+import { object, string } from 'prop-types';
+
 export default class GridComponent extends React.Component {
-  
   state = { input: '' };
 
   static propTypes = {
