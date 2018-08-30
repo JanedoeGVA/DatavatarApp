@@ -31,6 +31,7 @@ let FlatListItem = props => {
     popupDialogComponent,
     onPressItem
   } = props;
+
   getApiImage = () => {
     switch (apiName) {
       case 'fitbit':

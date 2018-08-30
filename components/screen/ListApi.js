@@ -22,6 +22,7 @@ import {
   apiExist
 } from '@databases/baseSchemas';
 import realm from '@databases/baseSchemas';
+import { grid } from '@styles/Styles';
 
 //const apiUrl = `${Constant.BASE_URL}/api/%s/%s`;
 
@@ -34,14 +35,6 @@ const addApi = {
   refreshTokenKey: '',
   accessTokenSecret: ''
 };
-
-/*const fitbit = {
-  api: 'Fitbit',
-  apiName: 'fitbit',
-  oauth: 'Oauth2.0',
-  //code: '#9deec7',
-  image: require('@images/fitbit-logo.png')
-};*/
 
 export default class ListApi extends React.Component {
   static navigationOptions = {
@@ -58,6 +51,82 @@ export default class ListApi extends React.Component {
       this.reloadData();
     });
   }
+
+  //A mettre dans une classe externe
+  getApiImage = apiName => {
+    switch (apiName) {
+      case 'fitbit':
+        return require('@images/fitbit-logo.png');
+      case 'nokia_health':
+        return require('@images/nokia_health-logo.png');
+      case 'garmin':
+        return require('@images/garmin-logo.png');
+      default:
+        return require('@images/add.png');
+    }
+  };
+
+  reloadData = () => {
+    queryAllApi()
+      .then(apiLists => {
+        //let arr = Object.values(apiLists); /**/ !!!ES7 functions seems works only on debug mod */
+        let arr = Object.keys(apiLists).map(key => apiLists[key]);
+        for (let index = 0; index < arr.length; index++) {
+          const element = arr[index];
+          console.log(`list : ${JSON.stringify(element)}`);
+        }
+        arr.push(addApi);
+        this.setState({ apiLists: arr });
+      })
+      .catch(error => {
+        this.setState({ apiLists: [] });
+      });
+  };
+
+  addApi = () => {
+    console.log(`add api`);
+    this.props.navigation.navigate('AddApi');
+  };
+
+  loadApi = api => {
+    this.props.navigation.navigate('Explorateur', { ...api });
+    console.log(`load api : ${api.apiName}`);
+  };
+
+  render() {
+    return (
+      <GridView
+        itemDimension={130}
+        items={this.state.apiLists}
+        style={grid.gridView}
+        renderItem={item => (
+          <TouchableHighlight
+            onPress={() =>
+              item.apiName === '' ? this.addApi() : this.loadApi(item)
+            }
+          >
+            <View
+              style={[
+                grid.itemContainer,
+                {
+                  backgroundColor: item.apiName === '' ? '#c7e1d4' : '#8be1b7'
+                }
+              ]}
+            >
+              <Image
+                activeOpacity={50}
+                style={grid.logo}
+                source={this.getApiImage(item.apiName)}
+              />
+              <Text style={grid.itemName}>{item.apiName}</Text>
+              <Text style={grid.itemCode}>{item.type}</Text>
+            </View>
+          </TouchableHighlight>
+        )}
+      />
+    );
+  }
+
   /*
   authorisation(apiName, authType) {
     apiExist(apiName)
@@ -202,107 +271,4 @@ export default class ListApi extends React.Component {
   _handleOpenURL = event => {
     this.verification(event.url);
   };*/
-
-  //A mettre dans une classe externe
-  getApiImage = apiName => {
-    switch (apiName) {
-      case 'fitbit':
-        return require('@images/fitbit-logo.png');
-      case 'nokia_health':
-        return require('@images/nokia_health-logo.png');
-      case 'garmin':
-        return require('@images/garmin-logo.png');
-      default:
-        return require('@images/add.png');
-    }
-  };
-
-  reloadData = () => {
-    queryAllApi()
-      .then(apiLists => {
-        //let arr = Object.values(apiLists); /**/ !!!ES7 functions seems works only on debug mod */
-        let arr = Object.keys(apiLists).map(key => apiLists[key]);
-        for (let index = 0; index < arr.length; index++) {
-          const element = arr[index];
-          console.log(`list : ${JSON.stringify(element)}`);
-        }
-        arr.push(addApi);
-        this.setState({ apiLists: arr });
-      })
-      .catch(error => {
-        this.setState({ apiLists: [] });
-      });
-  };
-
-  addApi = () => {
-    console.log(`add api`);
-    this.props.navigation.navigate('AddApi');
-  };
-
-  loadApi = api => {
-    this.props.navigation.navigate('Explorateur', { ...api });
-    console.log(`load api : ${api.apiName}`);
-  };
-
-  render() {
-    return (
-      <GridView
-        itemDimension={130}
-        items={this.state.apiLists}
-        style={styles.gridView}
-        renderItem={item => (
-          <TouchableHighlight
-            onPress={() =>
-              item.apiName === '' ? this.addApi() : this.loadApi(item)
-            }
-          >
-            <View
-              style={[
-                styles.itemContainer,
-                {
-                  backgroundColor: item.apiName === '' ? '#c7e1d4' : '#8be1b7'
-                }
-              ]}
-            >
-              <Image
-                activeOpacity={50}
-                style={styles.logo}
-                source={this.getApiImage(item.apiName)}
-              />
-              <Text style={styles.itemName}>{item.apiName}</Text>
-              <Text style={styles.itemCode}>{item.type}</Text>
-            </View>
-          </TouchableHighlight>
-        )}
-      />
-    );
-  }
 }
-
-const styles = StyleSheet.create({
-  gridView: {
-    paddingTop: 40,
-    flex: 1
-  },
-  logo: {
-    flex: 1,
-    alignSelf: 'center',
-    resizeMode: 'contain'
-  },
-  itemContainer: {
-    justifyContent: 'flex-end',
-    borderRadius: 5,
-    padding: 10,
-    height: 150
-  },
-  itemName: {
-    fontSize: 16,
-    color: '#fff',
-    fontWeight: '600'
-  },
-  itemCode: {
-    fontWeight: '600',
-    fontSize: 12,
-    color: '#fff'
-  }
-});
