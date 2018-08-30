@@ -8,12 +8,21 @@ import {
 } from 'react-native';
 
 export default class GridComponent extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      input: ''
-    };
-  }
+  
+  state = { input: '' };
+
+  static propTypes = {
+    model: object.isRequired,
+    title: string
+  };
+
+  // Default props below propTypes
+  static defaultProps = {
+    model: {
+      id: 0
+    },
+    title: 'Your Name'
+  };
 
   getApiImage = () => {
     switch (apiName) {
