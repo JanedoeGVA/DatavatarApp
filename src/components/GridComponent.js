@@ -9,15 +9,27 @@ import {
 import PropTypes from 'prop-types';
 
 export default class GridComponent extends React.Component {
-  state = { listApi: [] };
+  state = { listApi: this.props.listApi };
+
+  //called when data changes, listener on realm for exemple
+  reloadListApi = (listApi) => {
+    this.setState({
+      listApi: listApi
+    });
+  };
 
   static propTypes = {
     onPressItem: PropTypes.func.isRequired,
-    title: string
+    setItemColor: PropTypes.func.isRequired,
+    title: PropTypes.string,
+    listApi: PropTypes.array
   };
 
   // Default props below propTypes
   static defaultProps = {
+    setItemColor: (name) => {
+      name === '' ? '#c7e1d4' : '#8be1b7';
+    },
     model: {
       id: 0
     },
@@ -38,7 +50,11 @@ export default class GridComponent extends React.Component {
   };
 
   render() {
-    const { onPressItem, title } = this.props;
+    const {
+      onPressItem,
+      setItemColor,
+      item: { apiName, type }
+    } = this.props;
     return (
       <GridView
         itemDimension={130}
@@ -54,17 +70,17 @@ export default class GridComponent extends React.Component {
               style={[
                 grid.itemContainer,
                 {
-                  backgroundColor: this.state.setColor(item)
+                  backgroundColor: setItemColor(apiName)
                 }
               ]}
             >
               <Image
                 activeOpacity={50}
                 style={grid.logo}
-                source={this.getApiImage(item.apiName)}
+                source={this.getApiImage(apiName)}
               />
-              <Text style={grid.itemName}>{item.apiName}</Text>
-              <Text style={grid.itemCode}>{item.type}</Text>
+              <Text style={grid.itemName}>{apiName}</Text>
+              <Text style={grid.itemCode}>{type}</Text>
             </View>
           </TouchableHighlight>
         )}
