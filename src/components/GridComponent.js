@@ -60,14 +60,14 @@ export default class GridComponent extends React.Component {
         renderItem={(item) => (
           <TouchableHighlight
             onPress={() => {
-              onPressItem;
+              onPressItem(item);
             }}
           >
             <View
               style={[
                 grid.itemContainer,
                 {
-                  backgroundColor: setItemColor
+                  backgroundColor: setItemColor(item)
                 }
               ]}
             >

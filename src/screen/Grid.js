@@ -42,21 +42,23 @@ const itemsApi = [
   }
 ];
 
-onPressItem = () => {
-  item.available ? alert(`Not in your list`) : alert(`Already in your list`);
-};
-
-setItemColor = () => {
-  item.available ? '#8be1b7' : '#c3ddd0';
-};
-
 export default class Grid extends React.Component {
+  onPressItem = (item) => {
+    return item.available
+      ? alert(`Not in your list`)
+      : alert(`Already in your list`);
+  };
+
+  setItemColor = (item) => {
+    return item.available ? '#8be1b7' : '#c3ddd0';
+  };
+
   render() {
     return (
       <GridComponent
         listApi={itemsApi}
-        onPressItem={onPressItem}
-        setItemColor={setItemColor}
+        onPressItem={this.onPressItem}
+        setItemColor={this.setItemColor}
       />
     );
   }
