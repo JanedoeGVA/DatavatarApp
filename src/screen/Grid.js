@@ -6,7 +6,6 @@ import {
   TouchableHighlight,
   Image
 } from 'react-native';
-
 import GridComponent from '@components/GridComponent';
 
 const itemsApi = [
@@ -43,8 +42,22 @@ const itemsApi = [
   }
 ];
 
+onPressItem = () => {
+  item.available ? alert(`Not in your list`) : alert(`Already in your list`);
+};
+
+setItemColor = () => {
+  item.available ? '#8be1b7' : '#c3ddd0';
+};
+
 export default class Grid extends React.Component {
   render() {
-    return <GridComponent />;
+    return (
+      <GridComponent
+        listApi={itemsApi}
+        onPressItem={onPressItem}
+        setItemColor={setItemColor}
+      />
+    );
   }
 }

@@ -7,6 +7,8 @@ import {
   Image
 } from 'react-native';
 import PropTypes from 'prop-types';
+import { grid } from '@styles/Styles';
+import GridView from 'react-native-super-grid';
 
 export default class GridComponent extends React.Component {
   state = { listApi: this.props.listApi };
@@ -21,7 +23,6 @@ export default class GridComponent extends React.Component {
   static propTypes = {
     onPressItem: PropTypes.func.isRequired,
     setItemColor: PropTypes.func.isRequired,
-    title: PropTypes.string,
     listApi: PropTypes.array
   };
 
@@ -29,14 +30,10 @@ export default class GridComponent extends React.Component {
   static defaultProps = {
     setItemColor: (name) => {
       name === '' ? '#c7e1d4' : '#8be1b7';
-    },
-    model: {
-      id: 0
-    },
-    title: 'Your Name'
+    }
   };
 
-  getApiImage = () => {
+  getApiImage = (apiName) => {
     switch (apiName) {
       case 'fitbit':
         return require('@images/fitbit-logo.png');
@@ -45,15 +42,15 @@ export default class GridComponent extends React.Component {
       case 'garmin':
         return require('@images/garmin-logo.png');
       default:
-        break;
+        return require('@images/myfitnesspal-logo.png');
     }
   };
 
   render() {
     const {
       onPressItem,
-      setItemColor,
-      item: { apiName, type }
+      setItemColor
+      //item: { apiName, type }
     } = this.props;
     return (
       <GridView
@@ -70,17 +67,17 @@ export default class GridComponent extends React.Component {
               style={[
                 grid.itemContainer,
                 {
-                  backgroundColor: setItemColor(apiName)
+                  backgroundColor: setItemColor
                 }
               ]}
             >
               <Image
                 activeOpacity={50}
                 style={grid.logo}
-                source={this.getApiImage(apiName)}
+                source={this.getApiImage(item.apiName)}
               />
-              <Text style={grid.itemName}>{apiName}</Text>
-              <Text style={grid.itemCode}>{type}</Text>
+              <Text style={grid.itemName}>{item.apiName}</Text>
+              <Text style={grid.itemCode}>{item.type}</Text>
             </View>
           </TouchableHighlight>
         )}

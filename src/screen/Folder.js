@@ -8,10 +8,8 @@ export default class Folder extends React.Component {
 
   render() {
     return (
-      <View>
-        <Text style={styles.container}>
-          Folder !!!! lorem asdasdsd asdasdas asdasdas{' '}
-        </Text>
+      <View style={styles.middle}>
+        <Text>Folder</Text>
       </View>
     );
   }
@@ -20,5 +18,10 @@ export default class Folder extends React.Component {
 const styles = StyleSheet.create({
   container: {
     paddingTop: 40
+  },
+  middle: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center'
   }
 });
