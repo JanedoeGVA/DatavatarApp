@@ -9,40 +9,52 @@ import {
 import PropTypes from 'prop-types';
 import { grid } from '@styles/Styles';
 import GridView from 'react-native-super-grid';
+import { listApi } from '@utils/Constant';
+import Constant from '@utils/Constant';
+import { apiExist } from '@databases/baseSchemas';
+import realm from '@databases/baseSchemas';
 
 export default class GridComponent extends React.Component {
-  state = { listApi: this.props.listApi };
+  constructor(props) {
+    super(props);
+    this.state = { list: [] };
+    this.loadList();
+    realm.addListener('change', () => {
+      this.loadList();
+    });
+  }
 
   //called when data changes, listener on realm for exemple
-  reloadListApi = (listApi) => {
-    this.setState({
-      listApi: listApi
-    });
-  };
 
-  static propTypes = {
-    onPressItem: PropTypes.func.isRequired,
-    setItemColor: PropTypes.func.isRequired,
-    listApi: PropTypes.array
-  };
+  loadList = () => {
+    console.log(Constant.OAUTH_1);
+    let x = { z: '1', y: Constant.OAUTH_1 };
+    console.log(x.y);
+    compareApi = (apiA, apiB) => {
+      if (apiA.available == apiB.available) {
+        return apiA.name.localeCompare(apiB.name);
+      }
+      if (apiB.available) {
+        return 1;
+      }
+      return -1;
+    };
 
-  // Default props below propTypes
-  static defaultProps = {
-    setItemColor: (name) => {
-      name === '' ? '#c7e1d4' : '#8be1b7';
-    }
-  };
-
-  getApiImage = (apiName) => {
-    switch (apiName) {
-      case 'fitbit':
-        return require('@images/fitbit-logo.png');
-      case 'nokia_health':
-        return require('@images/nokia_health-logo.png');
-      case 'garmin':
-        return require('@images/garmin-logo.png');
-      default:
-        return require('@images/myfitnesspal-logo.png');
+    for (let index = 0, size = listApi.length; index < size; index++) {
+      let item = listApi[index];
+      apiExist(item.api)
+        .then((isExist) => {
+          if (item.api != 'my_fitnesspal') {
+            item.available = !isExist;
+          }
+          if (index + 1 == size) {
+            listApi.sort(compareApi);
+            this.setState({ list: listApi });
+          }
+        })
+        .catch((error) => {
+          console.error(`error : ${error}`);
+        });
     }
   };
 
@@ -55,7 +67,7 @@ export default class GridComponent extends React.Component {
     return (
       <GridView
         itemDimension={130}
-        items={this.state.listApi}
+        items={this.state.list}
         style={grid.gridView}
         renderItem={(item) => (
           <TouchableHighlight
@@ -71,13 +83,8 @@ export default class GridComponent extends React.Component {
                 }
               ]}
             >
-              <Image
-                activeOpacity={50}
-                style={grid.logo}
-                source={this.getApiImage(item.apiName)}
-              />
-              <Text style={grid.itemName}>{item.apiName}</Text>
-              <Text style={grid.itemCode}>{item.type}</Text>
+              <Image activeOpacity={50} style={grid.logo} source={item.logo} />
+              <Text style={grid.itemName}>{item.name}</Text>
             </View>
           </TouchableHighlight>
         )}

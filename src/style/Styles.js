@@ -2,8 +2,7 @@ import { StyleSheet } from 'react-native';
 
 export const grid = StyleSheet.create({
   gridView: {
-    paddingTop: 40,
-    flex: 1
+    paddingTop: 40
   },
   logo: {
     width: 80,
