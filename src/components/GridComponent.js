@@ -10,7 +10,6 @@ import PropTypes from 'prop-types';
 import { grid } from '@styles/Styles';
 import GridView from 'react-native-super-grid';
 import { listApi } from '@utils/Constant';
-import Constant from '@utils/Constant';
 import { apiExist } from '@databases/baseSchemas';
 import realm from '@databases/baseSchemas';
 
@@ -27,9 +26,6 @@ export default class GridComponent extends React.Component {
   //called when data changes, listener on realm for exemple
 
   loadList = () => {
-    console.log(Constant.OAUTH_1);
-    let x = { z: '1', y: Constant.OAUTH_1 };
-    console.log(x.y);
     compareApi = (apiA, apiB) => {
       if (apiA.available == apiB.available) {
         return apiA.name.localeCompare(apiB.name);
