@@ -14,13 +14,13 @@ import {
   queryAllApi,
   getApiId
 } from '@databases/baseSchemas';
-import { toTitleCase } from '@utils/Utils';
+import { toTitleCase } from '@api/Utils';
 import Swipeout from 'react-native-swipeout';
 import realm from '@databases/baseSchemas';
 import PopupDialogComponent from '@components/PopupDialogComponent';
 import HeaderComponent from '@components/HeaderComponent';
 
-let FlatListItem = props => {
+let FlatListItem = (props) => {
   const {
     itemIndex,
     id,
@@ -65,7 +65,7 @@ let FlatListItem = props => {
           onPress: () => {
             deleteApi(id)
               .then()
-              .catch(error => {
+              .catch((error) => {
                 alert(`failed to delete Api with id = ${id}, error=${error}`);
               });
           }
@@ -145,10 +145,10 @@ export default class ApiListComponent extends Component {
 
   reloadData = () => {
     queryAllApi()
-      .then(apiLists => {
+      .then((apiLists) => {
         this.setState({ apiLists });
       })
-      .catch(error => {
+      .catch((error) => {
         this.setState({ apiLists: [] });
       });
   };
@@ -166,8 +166,8 @@ export default class ApiListComponent extends Component {
     );
   };
 
-  getData = item => {
-    this.getDataAsync(item).then(json => {
+  getData = (item) => {
+    this.getDataAsync(item).then((json) => {
       console.log(JSON.stringify(json));
       //check if valide
       let accessToken = json.oauthAccessTokenT;
@@ -183,7 +183,7 @@ export default class ApiListComponent extends Component {
     });
   };
 
-  getDataAsync = async item => {
+  getDataAsync = async (item) => {
     try {
       let response = await fetch(
         'https://datavatar.sytes.net/api/fitbit/protecteddata/profil',
@@ -241,7 +241,7 @@ export default class ApiListComponent extends Component {
               }}
             />
           )}
-          keyExtractor={item => item.id.toString()} //add .toString
+          keyExtractor={(item) => item.id.toString()} //add .toString
         />
         <PopupDialogComponent ref={'popupDialogComponent'} />
       </View>

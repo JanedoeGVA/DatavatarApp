@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import URI from 'urijs';
 import { vsprintf } from 'sprintf-js';
-import Constant from '@utils/Constant';
+import Constant from '@api/Constant';
 import GridView from 'react-native-super-grid';
 import {
   updateApi,
@@ -53,7 +53,7 @@ export default class ListApi extends React.Component {
   }
 
   //A mettre dans une classe externe
-  getApiImage = apiName => {
+  getApiImage = (apiName) => {
     switch (apiName) {
       case 'fitbit':
         return require('@images/fitbit-logo.png');
@@ -68,9 +68,8 @@ export default class ListApi extends React.Component {
 
   reloadData = () => {
     queryAllApi()
-      .then(apiLists => {
-        //let arr = Object.values(apiLists); /**/ !!!ES7 functions seems works only on debug mod */
-        let arr = Object.keys(apiLists).map(key => apiLists[key]);
+      .then((apiLists) => {
+        let arr = Object.keys(apiLists).map((key) => apiLists[key]); //Object.values(apiLists); /**/ !!!ES7 functions seems works only on debug mod */
         for (let index = 0; index < arr.length; index++) {
           const element = arr[index];
           console.log(`list : ${JSON.stringify(element)}`);
@@ -78,7 +77,7 @@ export default class ListApi extends React.Component {
         arr.push(addApi);
         this.setState({ apiLists: arr });
       })
-      .catch(error => {
+      .catch((error) => {
         this.setState({ apiLists: [] });
       });
   };
@@ -88,7 +87,7 @@ export default class ListApi extends React.Component {
     this.props.navigation.navigate('AddApi');
   };
 
-  loadApi = api => {
+  loadApi = (api) => {
     this.props.navigation.navigate('Explorateur', { ...api });
     console.log(`load api : ${api.apiName}`);
   };
@@ -99,7 +98,7 @@ export default class ListApi extends React.Component {
         itemDimension={130}
         items={this.state.apiLists}
         style={grid.gridView}
-        renderItem={item => (
+        renderItem={(item) => (
           <TouchableHighlight
             onPress={() =>
               item.apiName === '' ? this.addApi() : this.loadApi(item)

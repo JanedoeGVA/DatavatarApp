@@ -7,7 +7,7 @@ import {
   Image
 } from 'react-native';
 import GridComponent from '@components/GridComponent';
-import { listApi } from '@utils/Constant';
+import { listApi } from '@api/Constant';
 
 export default class Grid extends React.Component {
   onPressItem = (item) => {

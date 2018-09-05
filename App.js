@@ -6,25 +6,25 @@
  * @flow
  */
 
-import React, { Component } from "react";
-import Ionicons from "react-native-vector-icons/Ionicons";
-import PropTypes from "prop-types";
+import React, { Component } from 'react';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import PropTypes from 'prop-types';
 import {
   createBottomTabNavigator,
   createStackNavigator
-} from "react-navigation";
-import { StyleSheet, Text, View, YellowBox } from "react-native";
-import ListApiScreen from "@screen/ListApi";
-import SettingsScreen from "@screen/Settings";
-import Explorateur from "@screen/Explorateur";
-import FolderScreen from "@screen/Folder";
-import AddApiScreen from "@screen/AddApi";
-import GridScreen from "@screen/Grid";
+} from 'react-navigation';
+import { StyleSheet, Text, View, YellowBox } from 'react-native';
+import ListApiScreen from '@navigation/ListApi';
+import SettingsScreen from '@navigation/Settings';
+import Explorateur from '@navigation/Explorateur';
+import FolderScreen from '@navigation/Folder';
+import AddApiScreen from '@navigation/AddApi';
+import GridScreen from '@navigation/Grid';
 
 YellowBox.ignoreWarnings([
-  "Warning: isMounted(...) is deprecated",
-  "Module RCTImageLoader",
-  "Class RCTCxxModule"
+  'Warning: isMounted(...) is deprecated',
+  'Module RCTImageLoader',
+  'Class RCTCxxModule'
 ]);
 
 const HomeStack = createStackNavigator(
@@ -33,7 +33,7 @@ const HomeStack = createStackNavigator(
     AddApi: AddApiScreen
   },
   {
-    initialRouteName: "ListApi"
+    initialRouteName: 'ListApi'
   }
 );
 
@@ -51,17 +51,17 @@ const Tabs = createBottomTabNavigator(
         const { routeName } = navigation.state;
         let iconName;
         switch (routeName) {
-          case "Home":
-            iconName = "ios-home";
+          case 'Home':
+            iconName = 'ios-home';
             break;
-          case "Settings":
-            iconName = "ios-list-box";
+          case 'Settings':
+            iconName = 'ios-list-box';
             break;
-          case "Folder":
-            iconName = "ios-archive";
+          case 'Folder':
+            iconName = 'ios-archive';
             break;
           default:
-            iconName = "ios-eye";
+            iconName = 'ios-eye';
             break;
         }
         return <Ionicons name={iconName} size={25} color={tintColor} />;
@@ -70,12 +70,12 @@ const Tabs = createBottomTabNavigator(
     tabBarOptions: {
       showIcon: true,
       showLabel: true,
-      activeBackgroundColor: "#DDEBF9",
+      activeBackgroundColor: '#DDEBF9',
       style: {
-        backgroundColor: "#ffffff"
+        backgroundColor: '#ffffff'
       },
-      activeTintColor: "#38aefa",
-      inactiveTintColor: "gray"
+      activeTintColor: '#38aefa',
+      inactiveTintColor: 'gray'
     }
   }
 );
