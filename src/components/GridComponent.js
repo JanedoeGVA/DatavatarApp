@@ -7,9 +7,9 @@ import {
   Image
 } from 'react-native';
 import PropTypes from 'prop-types';
-import { grid } from '@styles/Styles';
+import { grid } from '@styles/styles';
 import GridView from 'react-native-super-grid';
-import { listApi } from '@api/Constant';
+import { listApi } from '@api/constant';
 import { apiExist } from '@databases/baseSchemas';
 import realm from '@databases/baseSchemas';
 

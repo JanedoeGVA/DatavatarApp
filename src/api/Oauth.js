@@ -8,7 +8,7 @@ import {
   queryAllApi,
   apiExist
 } from '@databases/baseSchemas';
-import Constant from '@api/Constant';
+import Constant from '@api/constant';
 
 const apiUrl = `${Constant.BASE_URL}/api/%s/%s`;
 

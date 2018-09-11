@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import URI from 'urijs';
 import { vsprintf } from 'sprintf-js';
-import Constant from '@api/Constant';
+import Constant from '@api/constant';
 import GridView from 'react-native-super-grid';
 import {
   updateApi,
@@ -22,7 +22,7 @@ import {
   apiExist
 } from '@databases/baseSchemas';
 import realm from '@databases/baseSchemas';
-import { grid } from '@styles/Styles';
+import { grid } from '@styles/styles';
 
 //const apiUrl = `${Constant.BASE_URL}/api/%s/%s`;
 

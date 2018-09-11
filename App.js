@@ -14,12 +14,12 @@ import {
   createStackNavigator
 } from 'react-navigation';
 import { StyleSheet, Text, View, YellowBox } from 'react-native';
-import ListApiScreen from '@navigation/ListApi';
-import SettingsScreen from '@navigation/Settings';
-import Explorateur from '@navigation/Explorateur';
-import FolderScreen from '@navigation/Folder';
-import AddApiScreen from '@navigation/AddApi';
-import GridScreen from '@navigation/Grid';
+import ListApiScreen from '@navigators/ListApi';
+import SettingsScreen from '@navigators/Settings';
+import Explorateur from '@navigators/Explorateur';
+import FolderScreen from '@navigators/Folder';
+import AddApiScreen from '@navigators/AddApi';
+import GridScreen from '@navigators/Grid';
 
 YellowBox.ignoreWarnings([
   'Warning: isMounted(...) is deprecated',

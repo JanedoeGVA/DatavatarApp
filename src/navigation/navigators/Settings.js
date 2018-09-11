@@ -1,5 +1,5 @@
 import React from 'react';
-import ApiListComponent from '@components/ApiListComponent';
+import ApiList from '@components/ApiList';
 
 export default class Settings extends React.Component {
   static navigationOptions = {
@@ -7,6 +7,6 @@ export default class Settings extends React.Component {
   };
 
   render() {
-    return <ApiListComponent />;
+    return <ApiList />;
   }
 }

@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Linking } from 'react-native';
 import { NavigationEvents } from 'react-navigation';
 import GridComponent from '@components/GridComponent';
-import { authorisation, verification } from '@api/Oauth';
+import { authorisation, verification } from '@api/oauth';
 import {
   updateApi,
   insertApi,

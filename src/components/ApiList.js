@@ -14,7 +14,7 @@ import {
   queryAllApi,
   getApiId
 } from '@databases/baseSchemas';
-import { toTitleCase } from '@api/Utils';
+import { toTitleCase } from '@api/utils';
 import Swipeout from 'react-native-swipeout';
 import realm from '@databases/baseSchemas';
 import PopupDialogComponent from '@components/PopupDialogComponent';
@@ -131,7 +131,7 @@ let FlatListItem = (props) => {
   );
 };
 
-export default class ApiListComponent extends Component {
+export default class ApiList extends Component {
   constructor(props) {
     super(props);
     this.state = {
