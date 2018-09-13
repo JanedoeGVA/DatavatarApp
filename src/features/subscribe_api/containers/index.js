@@ -1,8 +1,8 @@
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import SomeFeature from '../components/some_feature'; //imports the feature's entry component.
-import { navigate } from 'navigation/actions'; //imports navigation action to be used by feature
-import { getExploreData } from '../actions'; // imports action creators as needed.
+import { addApi } from '../actions'; // imports action creators as needed
+import SubscribeApi from '../components/subscribe_api'; //imports the feature's entry component.
+
 import { getCategoryListing } from '../selectors'; // imports selectors as needed.
 
 const mapStateToProps = (state) => ({
@@ -13,7 +13,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) =>
   bindActionCreators(
     {
-      getExploreData
+      addApi
     },
     dispatch
   );
@@ -22,4 +22,4 @@ const mapDispatchToProps = (dispatch) =>
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(SomeFeature);
+)(SubscribeApi);

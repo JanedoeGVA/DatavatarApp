@@ -1,4 +1,3 @@
-import { combineReducers } from 'redux';
 import { SUBSCRIBE_API } from '../constants';
 import { listApi } from '@api/constants';
 
@@ -27,6 +26,4 @@ const subscribeReducer = (state = INITIAL_STATE, action) => {
   }
 };
 
-export default combineReducers({
-  api: subscribeReducer
-});
+export default subscribeReducer;
