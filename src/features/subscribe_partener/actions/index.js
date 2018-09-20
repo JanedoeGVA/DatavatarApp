@@ -1,4 +1,5 @@
 import { ADD_API, REMOVE_API } from '../constants';
+import store from '..';
 
 export const addApi = (api) => ({
   type: ADD_API,
