@@ -16,16 +16,19 @@ import realm from '@databases/baseSchemas';
 export default class GridComponent extends React.Component {
   constructor(props) {
     super(props);
+  }
+  /*constructor(props) {
+    super(props);
     this.state = { list: [] };
     this.loadList();
     realm.addListener('change', () => {
       this.loadList();
     });
-  }
+  }*/
 
   //called when data changes, listener on realm for exemple
 
-  loadList = () => {
+  /*loadList = () => {
     compareApi = (apiA, apiB) => {
       if (apiA.available == apiB.available) {
         return apiA.name.localeCompare(apiB.name);
@@ -52,18 +55,14 @@ export default class GridComponent extends React.Component {
           console.error(`error : ${error}`);
         });
     }
-  };
+  };*/
 
   render() {
-    const {
-      onPressItem,
-      setItemColor
-      //item: { apiName, type }
-    } = this.props;
+    const { onPressItem, setItemColor, list } = this.props;
     return (
       <GridView
         itemDimension={130}
-        items={this.state.list}
+        items={list}
         style={grid.gridView}
         renderItem={(item) => (
           <TouchableHighlight
