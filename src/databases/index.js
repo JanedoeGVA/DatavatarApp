@@ -1,6 +1,8 @@
 import * as realm from './baseSchemas';
+import * as async from './asyncStorage';
 
 export default {
-  ...realm
+  ...realm,
+  ...async
   //other store like async...
 };
