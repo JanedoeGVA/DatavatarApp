@@ -16,6 +16,7 @@
     "react-native-swipeout": "^2.3.6",
     "react-native-vector-icons": "^5.0.0",
     "react-navigation": "^2.11.2",
+    "react-navigation-redux-helpers": "^2.0.6",
     "realm": "^2.14.2",
     "sprintf-js": "^1.1.1",
     "urijs": "^1.19.1"
