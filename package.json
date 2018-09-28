@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.0.0",
+    "ajv": "^6.5.4",
     "prop-types": "^15.6.2",
     "react": "16.5.0",
     "react-native": "0.57.1",
@@ -17,7 +18,7 @@
     "react-native-vector-icons": "^5.0.0",
     "react-navigation": "^2.17.0",
     "react-redux": "^5.0.7",
-    "realm": "^2.16.2",
+    "realm": "^2.17.0",
     "redux": "^4.0.0",
     "sprintf-js": "^1.1.1",
     "urijs": "^1.19.1"
