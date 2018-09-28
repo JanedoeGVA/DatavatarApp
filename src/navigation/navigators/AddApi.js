@@ -16,7 +16,7 @@ export default class AddApi extends React.Component {
     title: 'AddApi'
   };
 
-  didFocus(payload) {
+  /*didFocus(payload) {
     console.log('did focus', payload);
     Linking.addEventListener('url', this._handleOpenURL);
   }
@@ -53,7 +53,7 @@ export default class AddApi extends React.Component {
 
   setItemColor = (item) => {
     return item.available ? '#8be1b7' : '#c3ddd0';
-  };
+  };*/
 
   render() {
     return (

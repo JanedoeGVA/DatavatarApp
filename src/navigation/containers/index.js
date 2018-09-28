@@ -8,7 +8,7 @@ import { View } from 'react-native';
 import ListApiScreen from '../navigators/ListApi';
 import SettingsScreen from '../navigators/Settings';
 import Explorateur from '../navigators/Explorateur';
-import FolderScreen from '../navigators//Folder';
+import FolderScreen from '../navigators/Folder';
 import AddApiScreen from '../navigators/AddApi';
 import GridScreen from '../navigators/Grid';
 
