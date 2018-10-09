@@ -22,4 +22,4 @@ const databaseOptions = {
   schemaVersion: 0 //optional
 };
 
-export default class ModelA extends Realm.Object {}
+export default new Realm(databaseOptions);
