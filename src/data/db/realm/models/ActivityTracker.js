@@ -1,9 +1,7 @@
-import Realm from 'realm';
+export const TBL_ACT_TRACKER_SCHEMA = 'Api';
 
-const TBL_API_SCHEMA = 'Api';
-
-const apiSchema = {
-  name: TBL_API_SCHEMA,
+export const activityTracker = {
+  name: TBL_ACT_TRACKER_SCHEMA,
   primaryKey: 'id',
   properties: {
     id: { type: 'int' },
@@ -15,11 +13,3 @@ const apiSchema = {
     accessTokenSecret: { type: 'string', optional: true }
   }
 };
-
-const databaseOptions = {
-  path: 'datavatarApp.realm',
-  schema: [apiSchema],
-  schemaVersion: 0 //optional
-};
-
-export default new Realm(databaseOptions);

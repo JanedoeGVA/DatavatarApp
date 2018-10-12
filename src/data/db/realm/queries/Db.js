@@ -1,8 +1,41 @@
-//functions
+const realm = '';
 
-import config from '../models';
+const getRealm = () => {
+  new Promise((resolve, reject) => {
+        Realm.open(config)
+          .then((realm) => {
+            resolve(realm);
+            
+          })
+          .catch((error) => reject(error));
+      });
+          };
 
-export const insert = (item, model) =>
+          export const f = (model, filter = '') => {
+            let objects = this.realm.objects(model);
+                  if (filter) {
+                    return (objects.filtered(filter));
+                  } else {
+                    return(objects);
+                  }
+          };
+
+export const query = (model, filter = '') => {
+  new Promise((resolve, reject) => {
+    Realm.open(config)
+    .then((realm) => {
+        let objects = realm.objects(model);
+        if (filter) {
+          resolve (objects.filtered(filter));
+        } else {
+          resolve(objects);
+        }
+      })
+      .catch((error) => reject(error));
+  });
+};
+
+export const insert = (item, model) => {
   new Promise((resolve, reject) => {
     Realm.open(config)
       .then((realm) => {
@@ -25,9 +58,10 @@ export const insert = (item, model) =>
         });
       })
       .catch((error) => reject(error));
-  }); //insertApi
+  });
+}; //insertApi
 
-export const update = (item, id) =>
+export const update = (item, id) => {
   new Promise((resolve, reject) => {
     Realm.open(databaseOptions)
       .then((realm) => {
@@ -44,20 +78,21 @@ export const update = (item, id) =>
       .catch((error) => reject(error));
   }); //updateName
 
-export const updateAccessToken = (api) =>
-  new Promise((resolve, reject) => {
-    Realm.open(databaseOptions)
-      .then((realm) => {
-        realm.write(() => {
-          let updatingApi = realm.objectForPrimaryKey(Ap, api.id);
-          updatingApi.accessTokenKey = api.accessTokenKey;
-          resolve();
-        });
-      })
-      .catch((error) => reject(error));
-  }); //updateAccessToken
+  export const updateAccessToken = (api) =>
+    new Promise((resolve, reject) => {
+      Realm.open(databaseOptions)
+        .then((realm) => {
+          realm.write(() => {
+            let updatingApi = realm.objectForPrimaryKey(Ap, api.id);
+            updatingApi.accessTokenKey = api.accessTokenKey;
+            resolve();
+          });
+        })
+        .catch((error) => reject(error));
+    });
+}; //updateAccessToken
 
-export const apiExist = (apiName) =>
+export const apiExist = (apiName) => {
   new Promise((resolve, reject) => {
     Realm.open(databaseOptions)
       .then((realm) => {
@@ -70,8 +105,9 @@ export const apiExist = (apiName) =>
         reject(error);
       });
   });
+};
 
-export const getApiId = (apiName) =>
+export const getApiId = (apiName) => {
   new Promise((resolve, reject) => {
     Realm.open(databaseOptions)
       .then((realm) => {
@@ -84,8 +120,9 @@ export const getApiId = (apiName) =>
         reject(error);
       });
   });
+};
 
-export const deleteApi = (apiId) =>
+export const deleteApi = (apiId) => {
   new Promise((resolve, reject) => {
     Realm.open(databaseOptions)
       .then((realm) => {
@@ -97,8 +134,9 @@ export const deleteApi = (apiId) =>
       })
       .catch((error) => reject(error));
   }); //deleteApi
+};
 
-export const deleteAllApi = () =>
+export const deleteAllApi = () => {
   new Promise((resolve, reject) => {
     Realm.open(databaseOptions)
       .then((realm) => {
@@ -110,15 +148,4 @@ export const deleteAllApi = () =>
       })
       .catch((error) => reject(error));
   });
-
-export const queryAllApi = () =>
-  new Promise((resolve, reject) => {
-    Realm.open(databaseOptions)
-      .then((realm) => {
-        let allApi = realm.objects(TBL_API_SCHEMA);
-        resolve(allApi);
-      })
-      .catch((error) => {
-        reject(error);
-      });
-  });
+};
