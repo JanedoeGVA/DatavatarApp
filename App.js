@@ -8,7 +8,7 @@
 
 import React, { Component } from 'react';
 
-import DB from './bd/db';
+import DBHelper from './bd/dbhelper';
 
 import {
   Platform,
@@ -19,10 +19,27 @@ import {
   FlatList
 } from 'react-native';
 
-const car = {
-  make: 'Ford',
-  model: 'Fiesta',
-  miles: 1000
+const api = {
+  id: 2,
+  apiName: 'Strava',
+  isValide: true,
+  type: 'OAUTH2',
+  accessTokenKey: 'aadasd425252'
+};
+
+const apiUn = {
+  apiName: 'Nike',
+  isValide: true,
+  type: 'OAUTH2',
+  accessTokenKey: 'aadasd425252'
+};
+
+const apiUpdate = {
+  id: 2,
+  apiName: 'fitbit',
+  isValide: true,
+  type: 'OAUTH1',
+  accessTokenKey: 'aadasd425252'
 };
 
 export default class App extends Component {
@@ -33,23 +50,71 @@ export default class App extends Component {
       value: 'nothing',
       dataSource: []
     };
-    DB.insert('Car', car)
-      .then((items) => {
-        alert(`nb item: ${items.length}`);
-        this.refresh(items);
+    this._refresh();
+  }
+
+  _update = () => {
+    DBHelper.updateActTracker(apiUpdate)
+      .then(() => {
+        this._refresh();
       })
       .catch((error) => {
         alert(error);
       });
-  }
-
-  insert = () => {
-    console.log('insert');
   };
 
-  refresh = (items) => {
-    this.setState({ value: items.length });
-    this.setState({ dataSource: items });
+  _removeAll = () => {
+    DBHelper.removeAllActTracker()
+      .then(() => {
+        this._refresh();
+      })
+      .catch((error) => {
+        alert(error);
+      });
+  };
+  _remove = () => {
+    DBHelper.removeActTracker(api)
+      .then(() => {
+        this._refresh();
+      })
+      .catch((error) => {
+        alert(error);
+      });
+  };
+
+  _insert = () => {
+    DBHelper.addActTracker(apiUn)
+      .then(() => {
+        this._refresh();
+      })
+      .catch((error) => {
+        alert(error);
+      });
+  };
+
+  _refresh = () => {
+    DBHelper.getLstActTracker()
+      .then((lstActTracker) => {
+        this.setState({ value: lstActTracker.length });
+        this.setState({ dataSource: lstActTracker });
+      })
+      .catch((error) => {
+        alert(`error refresh ${error}`);
+      });
+  };
+
+  _exist = () => {
+    DBHelper.isExist(apiUpdate)
+      .then((isExist) => {
+        if (isExist) {
+          console.log('exist');
+        } else {
+          console.log('exist pas ');
+        }
+      })
+      .catch((error) => {
+        alert(`error refresh ${error}`);
+      });
   };
 
   render() {
@@ -57,11 +122,32 @@ export default class App extends Component {
       <View style={styles.container}>
         <Button
           onPress={() => {
-            this.insert();
+            this._insert();
           }}
           title="insert"
           color="#841584"
           accessibilityLabel="Learn more about this purple button"
+        />
+        <Button
+          onPress={() => {
+            this._removeAll();
+          }}
+          title="remove"
+          color="#841584"
+        />
+        <Button
+          onPress={() => {
+            this._update();
+          }}
+          title="update"
+          color="#841584"
+        />
+        <Button
+          onPress={() => {
+            this._exist();
+          }}
+          title="exist"
+          color="#841584"
         />
         <Text style={styles.instructions}>{this.state.value}</Text>
         <FlatList
@@ -69,11 +155,12 @@ export default class App extends Component {
           showsVerticalScrollIndicator={false}
           renderItem={({ item }) => (
             <View style={styles.flatview}>
-              <Text>{item.make}</Text>
-              <Text>{item.model}</Text>
+              <Text>{item.id}</Text>
+              <Text>{item.apiName}</Text>
+              <Text>{item.type}</Text>
             </View>
           )}
-          keyExtractor={(item) => item.models}
+          keyExtractor={(item) => item.id.toString()}
         />
       </View>
     );

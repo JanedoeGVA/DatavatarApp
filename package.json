@@ -10,7 +10,7 @@
     "@babel/runtime": "^7.1.2",
     "react": "16.5.0",
     "react-native": "0.57.2",
-    "realm": "^2.18.0"
+    "realm": "^2.14.0"
   },
   "devDependencies": {
     "babel-jest": "23.6.0",
