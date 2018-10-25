@@ -13,6 +13,17 @@ class DBHelper {
         });
     });
 
+  addActTracker = (actTracker) =>
+    new Promise((resolve, reject) => {
+      DB.insert(TBL_ACT_TRACKER_SCHEMA, actTracker)
+        .then(() => {
+          resolve();
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+
   getLstActTracker = () =>
     new Promise((resolve, reject) => {
       DB.query(TBL_ACT_TRACKER_SCHEMA)
