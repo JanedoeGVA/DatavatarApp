@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
-import bdData from 'db/reducers';
+import subscribe from '../features/subscribe/reducers';
 
 export default combineReducers({
-  bdData
+  subscribe
   //add other reducers...
 });

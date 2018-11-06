@@ -1,5 +1,40 @@
 import DBHelper from '../../../db/realm/queries/dbhelper';
+import {
+  CREATE_IS_PROCESSING,
+  CREATE_ITEM_HAS_ERRORED,
+  ITEM_CREATE_SUCCESS
+} from '../constant';
+
+export const isProcessing = (bool) => {
+  return {
+    type: CREATE_IS_PROCESSING,
+    isProcessing: bool
+  };
+};
+
+export const createItemHasErrored = (bool) => {
+  return {
+    type: CREATE_ITEM_HAS_ERRORED,
+    hasErrored: bool
+  };
+};
+
+export const createSuccess = (item) => {
+  return {
+    type: ITEM_CREATE_SUCCESS,
+    item
+  };
+};
 
 export const createActTracker = (actTracker) => {
-  DBHelper.addActTracker(actTracker);
+  return (dispatch) => {
+    dispatch(isProcessing(true));
+    DBHelper.addActTracker(actTracker)
+      .then((actTracker) => {
+        dispatch(isProcessing(false));
+        return actTracker;
+      })
+      .then((actTracker) => dispatch(createSuccess(actTracker)))
+      .catch(() => dispatch(createItemHasErrored(true)));
+  };
 };
