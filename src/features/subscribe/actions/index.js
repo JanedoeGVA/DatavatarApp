@@ -34,7 +34,18 @@ export const createActTracker = (actTracker) => {
         dispatch(isProcessing(false));
         return actTracker;
       })
-      .then((actTracker) => dispatch(createSuccess(actTracker)))
+      .then((actTracker) => {
+        dispatch(createSuccess(actTracker));
+      })
       .catch(() => dispatch(createItemHasErrored(true)));
   };
 };
+
+/*const delay = (time, actTracker) => {
+  new Promise((resolve) =>
+    setTimeout(() => {
+      dispatch(isProcessing(false));
+      resolve(actTracker);
+    }, time)
+  );
+};*/
