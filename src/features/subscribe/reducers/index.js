@@ -3,7 +3,41 @@ import { CREATE_IS_PROCESSING } from '../constant';
 import { CREATE_ITEM_HAS_ERRORED } from '../constant';
 
 const INITIAL_STATE = {
-  item: {},
+  lstTrackers: [
+    {
+      id: 1,
+      apiName: 'Fitbit',
+      available: true,
+      isValide: '',
+      type: 'OAUTH2',
+      accessTokenKey: 'zzsasd',
+      refreshTokenKey: 'assc',
+      accessTokenSecret: '',
+      image: require('assets/fitbit-logo.png')
+    },
+    {
+      id: 2,
+      apiName: 'Withings',
+      available: false,
+      isValide: 'true',
+      type: 'OAUTH2',
+      accessTokenKey: 'asca11sc',
+      refreshTokenKey: 'asc11aca',
+      accessTokenSecret: '',
+      image: require('assets/nokia_health-logo.png')
+    },
+    {
+      id: 3,
+      apiName: 'Fitbit',
+      available: true,
+      isValide: 'true',
+      type: 'OAUTH2',
+      accessTokenKey: 'zzsasd',
+      refreshTokenKey: 'assc',
+      accessTokenSecret: '',
+      image: require('assets/garmin-logo.png')
+    }
+  ],
   isProcessing: false,
   hasErrored: false
 };
@@ -15,7 +49,7 @@ const create = (state = INITIAL_STATE, action) => {
     case CREATE_IS_PROCESSING:
       return { ...state, isProcessing: action.isProcessing };
     case ITEM_CREATE_SUCCESS:
-      return { ...state, item: action.item };
+      return { ...state, lstTrackers: action.lstTrackers };
     default:
       return state;
   }

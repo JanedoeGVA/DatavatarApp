@@ -1,17 +1,12 @@
 import React from 'react';
 import { View, Linking } from 'react-native';
 import { NavigationEvents } from 'react-navigation';
-import GridComponent from '@components/GridComponent';
-import { authorisation, verification } from '@api/oauth';
-import {
-  updateApi,
-  insertApi,
-  deleteApi,
-  queryAllApi,
-  apiExist
-} from '@databases/baseSchemas';
+import TrackerGrid from '../../../components/tracker_grid';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { createActTracker } from '../actions';
 
-export default class AddApi extends React.Component {
+class Subscribe extends React.Component {
   static navigationOptions = {
     title: 'AddApi'
   };
@@ -41,34 +36,63 @@ export default class AddApi extends React.Component {
         console.error('Promise is rejected with error: ' + error);
       });
   };
-
+*/
   onPressItem = (item) => {
+    console.log('coucou');
     console.log(`item.name: ${item.name}`);
     console.log(`item.api: ${item.api}`);
     console.log(`item.auth_method: ${item.auth_method}`);
-    return item.available
+    /*return item.available
       ? authorisation(item.api, item.auth_method)
-      : alert(`Already in your list`);
+      : alert(`Already in your list`);*/
   };
 
   setItemColor = (item) => {
     return item.available ? '#8be1b7' : '#c3ddd0';
-  };*/
+  };
 
   render() {
     return (
       <View>
         <NavigationEvents
-          onWillFocus={(payload) => this.willFocus(payload)}
-          onDidFocus={(payload) => this.didFocus(payload)}
-          onWillBlur={(payload) => this.willBlur(payload)}
+          onWillFocus={(payload) => {
+            /*this.willFocus(payload)*/
+          }}
+          onDidFocus={(payload) => {
+            /*this.didFocus(payload)*/
+          }}
+          onWillBlur={(payload) => {
+            /*this.willBlur(payload)*/
+          }}
           onDidBlur={(payload) => console.log('did blur', payload)}
         />
-        <GridComponent
+        <TrackerGrid
           onPressItem={this.onPressItem}
           setItemColor={this.setItemColor}
+          lstTrackers={this.props.lstTrackers}
         />
       </View>
     );
   }
 }
+
+Subscribe.propTypes = {
+  lstTrackers: PropTypes.array.isRequired
+};
+
+const mapStateToProps = (state) => {
+  return {
+    lstTrackers: state.subscribe.lstTrackers
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    addTracker: (actTracker) => dispatch(createActTracker(actTracker))
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Subscribe);

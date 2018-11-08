@@ -19,10 +19,10 @@ export const createItemHasErrored = (bool) => {
   };
 };
 
-export const createSuccess = (item) => {
+export const createSuccess = (lstTracker) => {
   return {
     type: ITEM_CREATE_SUCCESS,
-    item
+    lstTracker
   };
 };
 
