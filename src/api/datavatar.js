@@ -1,8 +1,10 @@
-import { AsyncStorage, Linking } from 'react-native';
+import { Linking } from 'react-native';
+import store from '../db';
 import URI from 'urijs';
 import { vsprintf } from 'sprintf-js';
 import * as Constant from './constant';
 
+const { removeData, storeData, retrieveData } = store;
 const API_URL = `${Constant.DATAVATAR_BASE_URL}/api/%s/%s`;
 
 export const authorisation = (provider, authentification) => {
@@ -20,7 +22,7 @@ export const authorisation = (provider, authentification) => {
       console.log(`auth = ${authentification}`);
       if (authentification == Constant.OAUTH1) {
         console.log('storing requestTokenSecret : ');
-        _storeData('requestTokenSecret', json['requestTokenSecret']);
+        storeData('requestTokenSecret', json['requestTokenSecret']);
       }
       console.log('linking call');
       Linking.openURL(json.urlVerification);
@@ -39,7 +41,7 @@ export const verification = (url) =>
     const authUrl = new URI(vsprintf(API_URL, [provider, 'verification']));
     if (oauth === 'oauth1') {
       console.log(`oauth1`);
-      _retrieveData('requestTokenSecret')
+      retrieveData('requestTokenSecret')
         .then((reqTokenSecret) => {
           let reqToken = uri.query(true)['oauth_token'];
           let verifier = uri.query(true)['oauth_verifier'];
@@ -59,7 +61,7 @@ export const verification = (url) =>
       console.log(`AuthURL: ${authUrl}`);
       accessToken(authUrl.valueOf());
     }
-    _removeData('requestTokenSecret');
+    removeData('requestTokenSecret');
     resolve();
   }); //insertApi
 
@@ -94,30 +96,3 @@ const accessToken = (authUrl) =>
         reject(error);
       });
   });
-
-const _storeData = async (key, value) => {
-  try {
-    await AsyncStorage.setItem(key, value);
-  } catch (error) {
-    console.error(`_storeData error : ${error}`);
-  }
-};
-
-const _removeData = async (key) => {
-  try {
-    await AsyncStorage.removeItem(key);
-  } catch (error) {
-    console.error(`_removeData error : ${error}`);
-  }
-};
-
-const _retrieveData = async (key) => {
-  try {
-    const value = await AsyncStorage.getItem(key);
-    if (value !== null) {
-      return value;
-    }
-  } catch (error) {
-    console.error(`_retrieveData error : ${error}`);
-  }
-};
