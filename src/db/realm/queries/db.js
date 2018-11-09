@@ -7,14 +7,14 @@ class DB {
       Realm.open(config)
         .then((realm) => {
           realm.write(() => {
-            let lastId = realm.objects(model).max('id');
+            /*let lastId = realm.objects(model).max('id');
             let id;
             if (lastId === undefined) {
               id = 1;
             } else {
               id = ++lastId;
             }
-            item.id = id;
+            item.id = id;*/
             realm.create(model, item);
             resolve();
           });

@@ -19,16 +19,19 @@ export const createItemHasErrored = (bool) => {
   };
 };
 
-export const createSuccess = (lstTracker) => {
+export const createSuccess = (actTracker) => {
   return {
     type: ITEM_CREATE_SUCCESS,
-    lstTracker
+    actTracker
   };
 };
 
 export const createActTracker = (actTracker) => {
   return (dispatch) => {
     dispatch(isProcessing(true));
+    //call api
+    Datavatar.authorisation(actTracker.provider, actTracker.authentification);
+    console.log('actracker :' + actTracker);
     DBHelper.addActTracker(actTracker)
       .then((actTracker) => {
         dispatch(isProcessing(false));

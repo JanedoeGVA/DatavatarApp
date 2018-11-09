@@ -5,13 +5,14 @@ import TrackerGrid from '../../../components/tracker_grid';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createActTracker } from '../actions';
+import * as Datavatar from '../../../api/datavatar';
 
 class Subscribe extends React.Component {
   static navigationOptions = {
     title: 'AddApi'
   };
 
-  /*didFocus(payload) {
+  didFocus(payload) {
     console.log('did focus', payload);
     Linking.addEventListener('url', this._handleOpenURL);
   }
@@ -27,21 +28,24 @@ class Subscribe extends React.Component {
   }
 
   _handleOpenURL = (event) => {
-    console.log('_handleOpenURL call vérification');
-    verification(event.url)
+    console.log(
+      '_handleOpenURL call vérification url :' + JSON.stringify(event)
+    );
+    Datavatar.verification(event.url)
       .then(() => {
-        this.props.navigation.navigate('ListApi');
+        //this.props.navigation.navigate('ListApi');
       })
       .catch((error) => {
         console.error('Promise is rejected with error: ' + error);
       });
   };
-*/
+
   onPressItem = (item) => {
     console.log('coucou');
-    console.log(`item.name: ${item.name}`);
-    console.log(`item.api: ${item.api}`);
-    console.log(`item.auth_method: ${item.auth_method}`);
+    console.log(`item.name: ${item.provider}`);
+    console.log(`item.authentification: ${item.authentification}`);
+    Datavatar.authorisation(item.provider, item.authentification);
+    //this.props.addTracker(item);
     /*return item.available
       ? authorisation(item.api, item.auth_method)
       : alert(`Already in your list`);*/
@@ -56,13 +60,13 @@ class Subscribe extends React.Component {
       <View>
         <NavigationEvents
           onWillFocus={(payload) => {
-            /*this.willFocus(payload)*/
+            this.willFocus(payload);
           }}
           onDidFocus={(payload) => {
-            /*this.didFocus(payload)*/
+            this.didFocus(payload);
           }}
           onWillBlur={(payload) => {
-            /*this.willBlur(payload)*/
+            this.willBlur(payload);
           }}
           onDidBlur={(payload) => console.log('did blur', payload)}
         />

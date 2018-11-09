@@ -35,9 +35,9 @@ export default class GridComponent extends React.Component {
               <Image
                 activeOpacity={50}
                 style={styles.logo}
-                source={item.image}
+                source={item.logo}
               />
-              <Text style={styles.itemName}>{item.apiName}</Text>
+              <Text style={styles.itemName}>{item.provider}</Text>
             </View>
           </TouchableHighlight>
         )}

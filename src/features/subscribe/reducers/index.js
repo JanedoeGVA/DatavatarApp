@@ -1,43 +1,10 @@
 import { ITEM_CREATE_SUCCESS } from '../constant';
 import { CREATE_IS_PROCESSING } from '../constant';
 import { CREATE_ITEM_HAS_ERRORED } from '../constant';
+import { lstTrackers } from '../../../api/activity_tracker';
 
 const INITIAL_STATE = {
-  lstTrackers: [
-    {
-      id: 1,
-      apiName: 'Fitbit',
-      available: true,
-      isValide: '',
-      type: 'OAUTH2',
-      accessTokenKey: 'zzsasd',
-      refreshTokenKey: 'assc',
-      accessTokenSecret: '',
-      image: require('assets/fitbit-logo.png')
-    },
-    {
-      id: 2,
-      apiName: 'Withings',
-      available: false,
-      isValide: 'true',
-      type: 'OAUTH2',
-      accessTokenKey: 'asca11sc',
-      refreshTokenKey: 'asc11aca',
-      accessTokenSecret: '',
-      image: require('assets/nokia_health-logo.png')
-    },
-    {
-      id: 3,
-      apiName: 'Fitbit',
-      available: true,
-      isValide: 'true',
-      type: 'OAUTH2',
-      accessTokenKey: 'zzsasd',
-      refreshTokenKey: 'assc',
-      accessTokenSecret: '',
-      image: require('assets/garmin-logo.png')
-    }
-  ],
+  lstTrackers: lstTrackers,
   isProcessing: false,
   hasErrored: false
 };

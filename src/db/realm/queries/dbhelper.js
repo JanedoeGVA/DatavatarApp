@@ -59,7 +59,7 @@ class DBHelper {
 
   isExist = (item) =>
     new Promise((resolve, reject) => {
-      DB.query(TBL_ACT_TRACKER_SCHEMA, `apiName == "${item.apiName}"`)
+      DB.query(TBL_ACT_TRACKER_SCHEMA, `apiName == "${item.provider}"`)
         .then((lstActTracker) => {
           resolve(lstActTracker.length !== 0);
         })
