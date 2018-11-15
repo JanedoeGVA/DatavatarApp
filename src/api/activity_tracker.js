@@ -2,7 +2,6 @@ import PropTypes from 'prop-types';
 import * as Constant from './constant';
 import Dbhelper from '../db/realm/queries/dbhelper';
 
-const test = 'test';
 class ActivityTracker {
   constructor(id, provider, protocole, logo) {
     this.id = id;
@@ -64,23 +63,21 @@ export const lstTrackers = [
   STRAVA_TRACKER
 ];
 
-const lstTrackersSort = lstTrackers.sort(compareTracker);
+const lstTrackersSort = lstTrackers.sort((a, b) => a.id - b.id);
 
-const compareTracker = (trackerA, trackerB) => {
-  return trackerA.id - trackerB.id;
-};
-
-export const getLstActTrackerSubscribed = () => {
-  return Dbhelper.getLstActTracker()
-    .then((dbList) => {
-      let LstActTrackerSubscribed = [];
-      let dbArray = Object.keys(dbList).map((key) =>
-        LstActTrackerSubscribed.push(lstTrackersSort[dbList[key].id])
-      ); //Object.values(apiLists); /**/ !!!ES7 functions seems works only on debug mod */
-      console.log(JSON.stringify(dbArray));
-      return dbArray;
-    })
-    .catch((error) => {
-      console.log(`error :${error}`);
-    });
-};
+export const getLstActTrackerSubscribed = () =>
+  new Promise((resolve, reject) => {
+    Dbhelper.getLstActTracker()
+      .then((dbList) => {
+        let LstActTrackerSubscribed = [];
+        let dbArray = Object.keys(dbList).map((key) =>
+          LstActTrackerSubscribed.push(lstTrackersSort[dbList[key].id])
+        ); //Object.values(apiLists); /**/ !!!ES7 functions seems works only on debug mod */
+        console.log(JSON.stringify(dbArray));
+        resolve(dbArray);
+      })
+      .catch((error) => {
+        reject(error);
+        console.log(`error :${error}`);
+      });
+  });
