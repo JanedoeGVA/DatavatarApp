@@ -1,43 +1,42 @@
 import DBHelper from '../../../db/realm/queries/dbhelper';
+import { getLstActTrackerSubscribed } from '../../../api/activity_tracker';
 import {
-  SUBSCRIBE_HAS_ERRORED,
-  SUBSCRIBE_IS_PROCESSING,
-  SUBSCRIBE_SUCCESS
+  CREATE_IS_PROCESSING,
+  CREATE_ITEM_HAS_ERRORED,
+  LOAD_SUCCESS
 } from '../constant';
-import * as Datavatar from '../../../api/datavatar';
 
 export const isProcessing = (bool) => {
   return {
-    type: SUBSCRIBE_IS_PROCESSING,
+    type: CREATE_IS_PROCESSING,
     isProcessing: bool
   };
 };
 
-export const subscribeHasErrored = (bool) => {
+export const createItemHasErrored = (bool) => {
   return {
-    type: SUBSCRIBE_HAS_ERRORED,
+    type: CREATE_ITEM_HAS_ERRORED,
     hasErrored: bool
   };
 };
 
-export const subscribeSuccess = (actTracker) => {
+export const loadSuccess = (lstActTrackerSubscribed) => {
   return {
-    type: SUBSCRIBE_SUCCESS,
-    actTracker
+    type: LOAD_SUCCESS,
+    lstActTrackerSubscribed
   };
 };
 
-export const subscribeActTracker = (actTracker) => {
+export const load = () => {
   return (dispatch) => {
     dispatch(isProcessing(true));
-    Datavatar.authorisation(actTracker.provider, actTracker.authentification);
-    console.log('actracker :' + actTracker);
-    DBHelper.addActTracker(actTracker)
-      .then((actTracker) => {
+    //call api
+    getLstActTrackerSubscribed()
+      .then((lstActTrackerSubscribed) => {
         dispatch(isProcessing(false));
-        return actTracker;
+        return lstActTrackerSubscribed;
       })
-      .then((actTracker) => {
+      .then((lstActTrackerSubscribed) => {
         dispatch(createSuccess(actTracker));
       })
       .catch(() => dispatch(createItemHasErrored(true)));

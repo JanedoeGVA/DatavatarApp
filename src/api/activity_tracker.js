@@ -2,13 +2,14 @@ import PropTypes from 'prop-types';
 import * as Constant from './constant';
 import Dbhelper from '../db/realm/queries/dbhelper';
 
+const test = 'test';
 class ActivityTracker {
-  constructor(id, provider, auth, logo) {
+  constructor(id, provider, protocole, logo) {
     this.id = id;
     this.provider = provider;
     this.isAvailable = Dbhelper.isExist(provider);
     this.isValide = false;
-    this.authentification = auth;
+    this.protocole = protocole;
     this.accessTokenKey = '';
     this.refreshTokenKey = '';
     this.accessTokenSecret = '';
@@ -21,7 +22,7 @@ ActivityTracker.propTypes = {
   provider: PropTypes.string.isRequired,
   isAvailable: PropTypes.bool.isRequired,
   isValide: PropTypes.bool.isRequired,
-  authentification: PropTypes.string.isRequired,
+  protocole: PropTypes.string.isRequired,
   accessTokenKey: PropTypes.string.isRequired,
   refreshTokenKey: PropTypes.string.isRequired,
   accessTokenSecret: PropTypes.string.isRequired,
@@ -38,7 +39,7 @@ const FITBIT_TRACKER = new ActivityTracker(
 const GARMIN_TRACKER = new ActivityTracker(
   Constant.GARMIN_ID,
   Constant.GARMIN_PROVIDER,
-  Constant.OAUTH2,
+  Constant.OAUTH1,
   Constant.GARMIN_LOGO
 );
 
@@ -62,3 +63,24 @@ export const lstTrackers = [
   WITHINGS_TRACKER,
   STRAVA_TRACKER
 ];
+
+const lstTrackersSort = lstTrackers.sort(compareTracker);
+
+const compareTracker = (trackerA, trackerB) => {
+  return trackerA.id - trackerB.id;
+};
+
+export const getLstActTrackerSubscribed = () => {
+  return Dbhelper.getLstActTracker()
+    .then((dbList) => {
+      let LstActTrackerSubscribed = [];
+      let dbArray = Object.keys(dbList).map((key) =>
+        LstActTrackerSubscribed.push(lstTrackersSort[dbList[key].id])
+      ); //Object.values(apiLists); /**/ !!!ES7 functions seems works only on debug mod */
+      console.log(JSON.stringify(dbArray));
+      return dbArray;
+    })
+    .catch((error) => {
+      console.log(`error :${error}`);
+    });
+};

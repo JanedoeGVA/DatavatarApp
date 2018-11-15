@@ -8,7 +8,7 @@ export const activityTrackerSchema = {
     id: { type: 'int' },
     provider: 'string',
     isValide: 'bool',
-    authentification: 'string',
+    protocole: 'string',
     accessTokenKey: 'string',
     refreshTokenKey: { type: 'string', optional: true },
     accessTokenSecret: { type: 'string', optional: true }

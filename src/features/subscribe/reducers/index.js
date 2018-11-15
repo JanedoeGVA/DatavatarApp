@@ -1,6 +1,8 @@
-import { ITEM_CREATE_SUCCESS } from '../constant';
-import { CREATE_IS_PROCESSING } from '../constant';
-import { CREATE_ITEM_HAS_ERRORED } from '../constant';
+import {
+  SUBSCRIBE_HAS_ERRORED,
+  SUBSCRIBE_IS_PROCESSING,
+  SUBSCRIBE_SUCCESS
+} from '../constant';
 import { lstTrackers } from '../../../api/activity_tracker';
 
 const INITIAL_STATE = {
@@ -9,17 +11,17 @@ const INITIAL_STATE = {
   hasErrored: false
 };
 
-const create = (state = INITIAL_STATE, action) => {
+const subscribe = (state = INITIAL_STATE, action) => {
   switch (action.type) {
-    case CREATE_ITEM_HAS_ERRORED:
+    case SUBSCRIBE_HAS_ERRORED:
       return { ...state, hasErrored: action.hasErrored };
-    case CREATE_IS_PROCESSING:
+    case SUBSCRIBE_IS_PROCESSING:
       return { ...state, isProcessing: action.isProcessing };
-    case ITEM_CREATE_SUCCESS:
+    case SUBSCRIBE_SUCCESS:
       return { ...state, lstTrackers: action.lstTrackers };
     default:
       return state;
   }
 };
 
-export default create;
+export default subscribe;

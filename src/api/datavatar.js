@@ -5,22 +5,22 @@ import { vsprintf } from 'sprintf-js';
 import * as Constant from './constant';
 
 const { removeData, storeData, retrieveData } = store;
-const API_URL = `${Constant.DATAVATAR_BASE_URL}/api/%s/%s`;
+const FORMAT_URL = `${Constant.DATAVATAR_BASE_URL}/api/%s/%s`;
 
-export const authorisation = (provider, authentification) => {
-  console.log('authorisation call');
-  var authentificationUrl = vsprintf(API_URL, [
+export const authorization = (provider, protocol) => {
+  console.log('authorization call');
+  var authorizationURL = vsprintf(FORMAT_URL, [
     provider.toLowerCase(),
-    'authorisation'
+    'authorization'
   ]);
-  console.log('authURL : ' + authentificationUrl);
-  fetch(authentificationUrl)
+  console.log('authorizationURL : ' + authorizationURL);
+  fetch(authorizationURL)
     .then((response) => response.json())
     .then((json) => {
       console.log(json);
       //store requestTokenSecret if oauth1
-      console.log(`auth = ${authentification}`);
-      if (authentification == Constant.OAUTH1) {
+      console.log(`authorization protocol = ${protocol}`);
+      if (protocol == Constant.OAUTH1) {
         console.log('storing requestTokenSecret : ');
         storeData('requestTokenSecret', json['requestTokenSecret']);
       }
@@ -37,18 +37,27 @@ export const verification = (url) =>
     console.log(`verification`);
     const uri = new URI(url);
     const provider = uri.host();
-    const oauth = uri.segment(0);
-    const authUrl = new URI(vsprintf(API_URL, [provider, 'verification']));
-    if (oauth === 'oauth1') {
+    const protocol = uri.segment(0);
+    const verificationURL = new URI(
+      vsprintf(FORMAT_URL, [provider, 'verification'])
+    );
+    if (protocol === Constant.OAUTH1) {
       console.log(`oauth1`);
       retrieveData('requestTokenSecret')
-        .then((reqTokenSecret) => {
-          let reqToken = uri.query(true)['oauth_token'];
+        .then((requestTokenSecret) => {
+          let requestToken = uri.query(true)['oauth_token'];
           let verifier = uri.query(true)['oauth_verifier'];
-          authUrl.addQuery('req_token_key', reqToken);
-          authUrl.addQuery('req_token_secret', reqTokenSecret);
-          authUrl.addQuery('verifier', verifier);
-          this.accessToken(authUrl.valueOf());
+          verificationURL.addQuery('req_token_key', requestToken);
+          verificationURL.addQuery('req_token_secret', requestTokenSecret);
+          verificationURL.addQuery('verifier', verifier);
+          accessToken(verificationURL.valueOf())
+            .then((tracker) => {
+              removeData('requestTokenSecret');
+              resolve(tracker);
+            })
+            .catch((error) => {
+              reject(error);
+            });
         })
         .catch((error) => {
           console.error('Promise is rejected with error: ' + error);
@@ -57,20 +66,28 @@ export const verification = (url) =>
     } else {
       console.log(`oauth2`);
       const code = uri.query(true)['code'];
-      authUrl.addQuery('code', code);
-      console.log(`AuthURL: ${authUrl}`);
-      accessToken(authUrl.valueOf());
+      verificationURL.addQuery('code', code);
+      console.log(`AuthURL: ${verificationURL}`);
+      accessToken(verificationURL.valueOf())
+        .then((tracker) => {
+          resolve(tracker);
+        })
+        .catch((error) => {
+          reject(error);
+        });
     }
-    removeData('requestTokenSecret');
-    resolve();
   }); //insertApi
 
-const accessToken = (authUrl) =>
+const accessToken = (verificationURL) =>
   new Promise((resolve, reject) => {
-    console.log(`AuthURL: ${authUrl}`);
-    fetch(authUrl)
+    console.log(`AuthURL: ${verificationURL}`);
+    fetch(verificationURL)
       .then((response) => response.json())
-      .then((api) => {
+      .then((tracker) => {
+        console.log(`tracker JSON : ${JSON.stringify(tracker)}`);
+        resolve(tracker);
+        //TODO modifier nom variable dans le server ?
+        //ancien code
         /*insertApi(api)
           .then(() => {
             queryAllApi()

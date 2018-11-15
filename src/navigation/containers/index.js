@@ -5,20 +5,20 @@ import {
   createStackNavigator
 } from 'react-navigation';
 import { View } from 'react-native';
-import ListApiScreen from '../../features/subscribe/containers';
+import ProvidersScreen from '../../features/home/containers';
 import SettingsScreen from '../../features/subscribe/containers';
 import ExplorateurScreen from '../../features/subscribe/containers';
 import FolderScreen from '../../features/subscribe/containers';
-import AddApiScreen from '../../features/subscribe/containers';
+import SubscribeScreen from '../../features/subscribe/containers';
 import GridScreen from '../../features/subscribe/containers';
 
 const HomeStack = createStackNavigator(
   {
-    ListApi: ListApiScreen,
-    AddApi: AddApiScreen
+    Providers: ProvidersScreen,
+    Subscribe: SubscribeScreen
   },
   {
-    initialRouteName: 'ListApi'
+    initialRouteName: 'Providers'
   }
 );
 

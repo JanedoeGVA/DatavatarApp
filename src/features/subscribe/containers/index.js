@@ -4,7 +4,7 @@ import { NavigationEvents } from 'react-navigation';
 import TrackerGrid from '../../../components/tracker_grid';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { createActTracker } from '../actions';
+import { subscribeActTracker } from '../actions';
 import * as Datavatar from '../../../api/datavatar';
 
 class Subscribe extends React.Component {
@@ -32,8 +32,8 @@ class Subscribe extends React.Component {
       '_handleOpenURL call vérification url :' + JSON.stringify(event)
     );
     Datavatar.verification(event.url)
-      .then(() => {
-        //this.props.navigation.navigate('ListApi');
+      .then((actTracker) => {
+        subscribeActTracker(actTracker);
       })
       .catch((error) => {
         console.error('Promise is rejected with error: ' + error);
@@ -42,9 +42,14 @@ class Subscribe extends React.Component {
 
   onPressItem = (item) => {
     console.log('coucou');
-    console.log(`item.name: ${item.provider}`);
-    console.log(`item.authentification: ${item.authentification}`);
-    Datavatar.authorisation(item.provider, item.authentification);
+    console.log(`item.provider: ${item.provider}`);
+    console.log(`item.protocol: ${item.protocol}`);
+    console.log(`item.isAvailable: ${item.isAvailable}`);
+    if (item.isAvailable) {
+      Datavatar.authorisation(item.provider, item.authentification);
+    } else {
+      alert(`Already in your list`);
+    }
     //this.props.addTracker(item);
     /*return item.available
       ? authorisation(item.api, item.auth_method)
@@ -52,7 +57,7 @@ class Subscribe extends React.Component {
   };
 
   setItemColor = (item) => {
-    return item.available ? '#8be1b7' : '#c3ddd0';
+    return item.isAvailable ? '#8be1b7' : '#c3ddd0';
   };
 
   render() {
@@ -92,7 +97,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    addTracker: (actTracker) => dispatch(createActTracker(actTracker))
+    subscribeActTracker: (tracker) => dispatch(subscribeActTracker(tracker))
   };
 };
 
