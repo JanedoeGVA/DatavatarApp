@@ -1,0 +1,14 @@
+dist: trusty
+sudo: required
+addons:
+sonarqube:
+organization: "janedoegva-github"
+branches:
+- master
+jdk:
+- oraclejdk8
+script:
+- sonar-scanner
+cache:
+directories:
+- '$HOME/.sonar/cache'
