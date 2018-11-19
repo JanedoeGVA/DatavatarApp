@@ -1,14 +1,15 @@
+language: node_js
 dist: trusty
 sudo: required
 addons:
-sonarqube:
-organization: "janedoegva-github"
-branches:
-- master
+  sonarcloud:
+    organization: janedoegva-github
+    token: ${SONAR_TOKEN}
+    branches:
+      - master
 jdk:
-- oraclejdk8
+  - oraclejdk8
+install:
+  - npm install
 script:
-- sonar-scanner
-cache:
-directories:
-- '$HOME/.sonar/cache'
+  - sonar-scanner
