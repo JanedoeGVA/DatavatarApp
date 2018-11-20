@@ -1,9 +1,12 @@
 language: node_js
 node_js:
-  - '6'
+  - '10'
+install:
+  - npm ci
 cache:
   directories:
     - node_modules
+    - npm run ci
 addons:
   sonarcloud:
     organization: janedoegva-github
