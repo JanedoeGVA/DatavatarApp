@@ -1,8 +1,9 @@
 language: node_js
 node_js:
   - '9'
-install:
+before_install:
   - npm i -g npm@6.1.0
+install:
   - npm ci
 cache:
   directories:
