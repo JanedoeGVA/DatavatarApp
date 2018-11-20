@@ -3,9 +3,7 @@ node_js:
   - '9'
 install:
   - npm i -g npm@6.1.0
-  - npm ci
-after_failure:
-  - cat MSBuild_*.failure.txt
+
 addons:
   sonarcloud:
     organization: janedoegva-github
@@ -14,5 +12,5 @@ addons:
       - master
 script:
   - npm -v
-  - npm run ci
+  - npm install
   - sonar-scanner
