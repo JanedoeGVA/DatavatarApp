@@ -15,5 +15,6 @@ addons:
     branches:
       - master
 script:
+  - npm -v
   - npm run ci
   - sonar-scanner
