@@ -1,14 +1,15 @@
 import PropTypes from 'prop-types';
 import * as Constant from './constant';
-import Dbhelper from '../db/realm/queries/dbhelper';
+import * as store from '../store';
 
 class ActivityTracker {
-  constructor(id, provider, protocole, logo) {
+  constructor(id, provider, protocol, logo) {
     this.id = id;
     this.provider = provider;
-    this.isAvailable = Dbhelper.isExist(provider);
+    //this.isAvailable = store.isExist(provider);
+    this.isAvailable = true;
     this.isValide = false;
-    this.protocole = protocole;
+    this.protocol = protocol;
     this.accessTokenKey = '';
     this.refreshTokenKey = '';
     this.accessTokenSecret = '';
@@ -21,7 +22,7 @@ ActivityTracker.propTypes = {
   provider: PropTypes.string.isRequired,
   isAvailable: PropTypes.bool.isRequired,
   isValide: PropTypes.bool.isRequired,
-  protocole: PropTypes.string.isRequired,
+  protocol: PropTypes.string.isRequired,
   accessTokenKey: PropTypes.string.isRequired,
   refreshTokenKey: PropTypes.string.isRequired,
   accessTokenSecret: PropTypes.string.isRequired,
@@ -67,7 +68,8 @@ const lstTrackersSort = lstTrackers.sort((a, b) => a.id - b.id);
 
 export const getLstActTrackerSubscribed = () =>
   new Promise((resolve, reject) => {
-    Dbhelper.getLstActTracker()
+    store
+      .getLstActTracker()
       .then((dbList) => {
         let LstActTrackerSubscribed = [];
         let dbArray = Object.keys(dbList).map((key) =>

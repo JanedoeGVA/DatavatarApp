@@ -1,4 +1,4 @@
-import DBHelper from '../../../db/realm/queries/dbhelper';
+import store from '../../../store';
 import { getLstActTrackerSubscribed } from '../../../api/activity_tracker';
 import {
   CREATE_IS_PROCESSING,

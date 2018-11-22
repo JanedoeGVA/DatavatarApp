@@ -1,14 +1,8 @@
 import React from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  TouchableHighlight,
-  Image
-} from 'react-native';
 import PropTypes from 'prop-types';
 import GridView from 'react-native-super-grid';
 import styles from './styles';
+import TrackerGridItem from '../tracker_grid_item';
 
 export default class GridComponent extends React.Component {
   render() {
@@ -19,27 +13,7 @@ export default class GridComponent extends React.Component {
         items={lstTrackers}
         style={styles.gridView}
         renderItem={(item) => (
-          <TouchableHighlight
-            onPress={() => {
-              onPressItem(item);
-            }}
-          >
-            <View
-              style={[
-                styles.itemContainer,
-                {
-                  backgroundColor: setItemColor(item)
-                }
-              ]}
-            >
-              <Image
-                activeOpacity={50}
-                style={styles.logo}
-                source={item.logo}
-              />
-              <Text style={styles.itemName}>{item.provider}</Text>
-            </View>
-          </TouchableHighlight>
+          <TrackerGridItem {...{ onPressItem, setItemColor, item }} />
         )}
       />
     );
@@ -49,6 +23,5 @@ export default class GridComponent extends React.Component {
 GridComponent.propTypes = {
   onPressItem: PropTypes.func.isRequired,
   setItemColor: PropTypes.func.isRequired,
-  lstTrackers: PropTypes.array.isRequired,
-  backgroundColor: PropTypes.string.isRequired
+  lstTrackers: PropTypes.array.isRequired
 };

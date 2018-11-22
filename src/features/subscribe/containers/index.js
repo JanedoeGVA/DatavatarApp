@@ -33,7 +33,10 @@ class Subscribe extends React.Component {
     );
     Datavatar.verification(event.url)
       .then((actTracker) => {
-        subscribeActTracker(actTracker);
+        console.log(
+          '@_handleOpenURL actTracker = ' + JSON.stringify(actTracker)
+        );
+        this.props.subscribeActTracker(actTracker);
       })
       .catch((error) => {
         console.error('Promise is rejected with error: ' + error);
@@ -46,7 +49,7 @@ class Subscribe extends React.Component {
     console.log(`item.protocol: ${item.protocol}`);
     console.log(`item.isAvailable: ${item.isAvailable}`);
     if (item.isAvailable) {
-      Datavatar.authorisation(item.provider, item.authentification);
+      Datavatar.authorization(item.provider, item.protocol);
     } else {
       alert(`Already in your list`);
     }

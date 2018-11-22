@@ -1,0 +1,55 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders a TrackerGridItem using Snapshots 1`] = `
+<View
+  accessible={true}
+  isTVSelectable={true}
+  onResponderGrant={[Function]}
+  onResponderMove={[Function]}
+  onResponderRelease={[Function]}
+  onResponderTerminate={[Function]}
+  onResponderTerminationRequest={[Function]}
+  onStartShouldSetResponder={[Function]}
+  style={null}
+>
+  <View
+    style={
+      Array [
+        Object {
+          "borderRadius": 5,
+          "height": 150,
+          "justifyContent": "flex-end",
+          "padding": 10,
+        },
+        Object {
+          "backgroundColor": [MockFunction],
+        },
+      ]
+    }
+  >
+    <Image
+      activeOpacity={50}
+      style={
+        Object {
+          "alignSelf": "center",
+          "flex": 1,
+          "height": 80,
+          "resizeMode": "contain",
+          "width": 80,
+        }
+      }
+    />
+    <Text
+      style={
+        Object {
+          "color": "#fff",
+          "fontSize": 16,
+          "fontWeight": "600",
+        }
+      }
+    >
+      Strava
+    </Text>
+  </View>
+</View>
+`;

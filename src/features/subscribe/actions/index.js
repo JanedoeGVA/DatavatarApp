@@ -1,10 +1,9 @@
-import DBHelper from '../../../db/realm/queries/dbhelper';
+import * as store from '../../../store';
 import {
   SUBSCRIBE_HAS_ERRORED,
   SUBSCRIBE_IS_PROCESSING,
   SUBSCRIBE_SUCCESS
 } from '../constant';
-import * as Datavatar from '../../../api/datavatar';
 
 export const isProcessing = (bool) => {
   return {
@@ -30,9 +29,13 @@ export const subscribeSuccess = (actTracker) => {
 export const subscribeActTracker = (actTracker) => {
   return (dispatch) => {
     dispatch(isProcessing(true));
-    Datavatar.authorisation(actTracker.provider, actTracker.authentification);
-    console.log('actracker :' + actTracker);
-    DBHelper.addActTracker(actTracker)
+    console.log(
+      '@actions subscribeActTracker acTracker = ' + JSON.stringify(actTracker)
+    );
+    console.log('store addActTracker');
+
+    store
+      .addActTracker(actTracker)
       .then((actTracker) => {
         dispatch(isProcessing(false));
         return actTracker;
@@ -40,10 +43,9 @@ export const subscribeActTracker = (actTracker) => {
       .then((actTracker) => {
         dispatch(createSuccess(actTracker));
       })
-      .catch(() => dispatch(createItemHasErrored(true)));
+      .catch(() => dispatch(subscribeHasErrored(true)));
   };
 };
-
 /*const delay = (time, actTracker) => {
   new Promise((resolve) =>
     setTimeout(() => {

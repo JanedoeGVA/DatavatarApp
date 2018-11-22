@@ -1,10 +1,10 @@
 import { Linking } from 'react-native';
-import store from '../db';
+import * as store from '../store';
 import URI from 'urijs';
 import { vsprintf } from 'sprintf-js';
 import * as Constant from './constant';
 
-const { removeData, storeData, retrieveData } = store;
+//const { removeData, storeData, retrieveData } = store;
 const FORMAT_URL = `${Constant.DATAVATAR_BASE_URL}/api/%s/%s`;
 
 export const authorization = (provider, protocol) => {
@@ -22,7 +22,7 @@ export const authorization = (provider, protocol) => {
       console.log(`authorization protocol = ${protocol}`);
       if (protocol == Constant.OAUTH1) {
         console.log('storing requestTokenSecret : ');
-        storeData('requestTokenSecret', json['requestTokenSecret']);
+        store.storeData('requestTokenSecret', json['requestTokenSecret']);
       }
       console.log('linking call');
       Linking.openURL(json.urlVerification);
@@ -43,7 +43,8 @@ export const verification = (url) =>
     );
     if (protocol === Constant.OAUTH1) {
       console.log(`oauth1`);
-      retrieveData('requestTokenSecret')
+      store
+        .retrieveData('requestTokenSecret')
         .then((requestTokenSecret) => {
           let requestToken = uri.query(true)['oauth_token'];
           let verifier = uri.query(true)['oauth_verifier'];
@@ -52,7 +53,7 @@ export const verification = (url) =>
           verificationURL.addQuery('verifier', verifier);
           accessToken(verificationURL.valueOf())
             .then((tracker) => {
-              removeData('requestTokenSecret');
+              store.removeData('requestTokenSecret');
               resolve(tracker);
             })
             .catch((error) => {

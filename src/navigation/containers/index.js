@@ -5,7 +5,6 @@ import {
   createStackNavigator,
   createAppContainer
 } from 'react-navigation';
-import { View } from 'react-native';
 import ProvidersScreen from '../../features/home/containers';
 import SettingsScreen from '../../features/subscribe/containers';
 import ExplorateurScreen from '../../features/subscribe/containers';
