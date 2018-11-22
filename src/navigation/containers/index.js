@@ -2,7 +2,8 @@ import React from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {
   createBottomTabNavigator,
-  createStackNavigator
+  createStackNavigator,
+  createAppContainer
 } from 'react-navigation';
 import { View } from 'react-native';
 import ProvidersScreen from '../../features/home/containers';
@@ -31,7 +32,7 @@ const Tabs = createBottomTabNavigator(
     Grid: { screen: GridScreen }
   },
   {
-    navigationOptions: ({ navigation }) => ({
+    defaultNavigationOptions: ({ navigation }) => ({
       tabBarIcon: ({ focused, tintColor }) => {
         const { routeName } = navigation.state;
         let iconName;
@@ -65,10 +66,6 @@ const Tabs = createBottomTabNavigator(
   }
 );
 
-const Navigation = () => (
-  <View style={{ flex: 1 }}>
-    <Tabs />
-  </View>
-);
+const MainNavigator = createAppContainer(Tabs);
 
-export default Navigation;
+export default MainNavigator;
