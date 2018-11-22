@@ -45,3 +45,10 @@ export default class GridComponent extends React.Component {
     );
   }
 }
+
+GridComponent.propTypes = {
+  onPressItem: PropTypes.func.isRequired,
+  setItemColor: PropTypes.func.isRequired,
+  lstTrackers: PropTypes.array.isRequired,
+  backgroundColor: PropTypes.string.isRequired
+};
