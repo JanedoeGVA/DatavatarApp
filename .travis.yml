@@ -8,7 +8,7 @@ addons:
     organization: janedoegva-github
     token: ${SONAR_TOKEN}
     branches:
-      - master
+      - dev
 script:
   - npm -v
   - npm install
