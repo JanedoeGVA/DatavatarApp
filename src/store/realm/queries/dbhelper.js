@@ -1,5 +1,8 @@
-import * as db from './db';
+import DB from './db';
 import { TBL_ACT_TRACKER_SCHEMA } from '../models/activityTracker';
+import { config } from '../models/activityTracker';
+
+const db = new DB(config);
 
 export const addActTracker = (actTracker) =>
   new Promise((resolve, reject) => {
