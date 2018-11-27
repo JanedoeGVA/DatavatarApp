@@ -1,4 +1,5 @@
 import Realm from 'realm';
+
 import { config } from '../models/activityTracker';
 
 export const insert = (model, item) =>
@@ -6,14 +7,6 @@ export const insert = (model, item) =>
     Realm.open(config)
       .then((realm) => {
         realm.write(() => {
-          /*let lastId = realm.objects(model).max('id');
-            let id;
-            if (lastId === undefined) {
-              id = 1;
-            } else {
-              id = ++lastId;
-            }
-            item.id = id;*/
           realm.create(model, item);
           resolve();
         });
@@ -22,6 +15,14 @@ export const insert = (model, item) =>
         reject(error);
       });
   });
+export const nextId = (model) => {
+  let lastId = realm.objects(model).max('id');
+  if (lastId === undefined) {
+    return 1;
+  } else {
+    return lastId + 1;
+  }
+};
 
 export const query = (model, filter = '') =>
   new Promise((resolve, reject) => {

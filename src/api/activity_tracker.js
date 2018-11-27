@@ -6,7 +6,7 @@ class ActivityTracker {
   constructor(id, provider, protocol, logo) {
     this.id = id;
     this.provider = provider;
-    //this.isAvailable = store.isExist(provider);
+    this.isAvailable = store.isExist(provider);
     this.isAvailable = true;
     this.isValide = false;
     this.protocol = protocol;

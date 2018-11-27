@@ -1,4 +1,5 @@
 jest.unmock('../../async_storage');
+jest.unmock('lodash.merge');
 
 jest.mock('react-native', () => ({
   AsyncStorage: {
