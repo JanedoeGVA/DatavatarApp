@@ -1,5 +1,5 @@
-import { activityTrackerSchema } from '../../models/activityTracker';
-import Realm from 'realm';
+import { TBL_ACT_TRACKER_SCHEMA, config } from '../../models/__mocks__/activityTracker';
+import DB from '../db';
 
 jest.unmock('../db');
 
@@ -10,7 +10,7 @@ const items = {
     isValide: true,
     protocole: 'Oauth2',
     accessTokenKey: 'h"OdC{.v:ad4yZY',
-    refreshTokenKey: 'ow0bgNuMWL'
+    refreshTokenKey: 'ow0bgNuMWL',
   },
   withings: {
     id: 2,
@@ -18,7 +18,7 @@ const items = {
     isValide: true,
     protocole: 'Oauth2',
     accessTokenKey: 'y5rlKeoJ5V',
-    refreshTokenKey: 'CMKeabZv0I'
+    refreshTokenKey: 'CMKeabZv0I',
   },
   garmin: {
     id: 3,
@@ -26,27 +26,22 @@ const items = {
     isValide: true,
     protocole: 'Oauth1',
     accessTokenKey: 'qJLBH23qxt',
-    accessTokenSecret: 'JCpVSlG2r7'
-  }
+    accessTokenSecret: 'JCpVSlG2r7',
+  },
 };
 
 jest.mock('../../models/activityTracker');
 
 describe('Realm ', () => {
-  const realmDBStore = require('../../queries/db');
+  const store = new DB(config);
+  const Realm = require('realm');
 
   beforeEach(() => {});
 
   describe('insert', () => {
-    it('should return a promise with no errors', () => {
-      return realmDBStore
-        .insert(activityTrackerSchema.name, items.fitbit)
-        .then(() => {
-          expect(Realm.create).toBeCalledWith(
-            activityTrackerSchema.name,
-            items.fitbit
-          );
-        });
-    });
+    it('should return a promise with no errors', () => store.insert(TBL_ACT_TRACKER_SCHEMA, items.fitbit).then(() => {
+      expect(Realm.create).toBeCalledWith(TBL_ACT_TRACKER_SCHEMA, items.fitbit);
+      // spy.mockRestore();
+    }));
   });
 });

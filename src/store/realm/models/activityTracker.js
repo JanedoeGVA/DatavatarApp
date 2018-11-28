@@ -1,8 +1,8 @@
 // Define your models and their properties
 
-export const TBL_ACT_TRACKER_SCHEMA = 'Api';
+export const TBL_ACT_TRACKER_SCHEMA = 'actTracker';
 
-export const activityTrackerSchema = {
+export const schema = {
   name: TBL_ACT_TRACKER_SCHEMA,
   primaryKey: 'id',
   properties: {
@@ -18,6 +18,6 @@ export const activityTrackerSchema = {
 
 export const config = {
   path: 'datavatarApp.realm',
-  schema: [activityTrackerSchema],
+  schema: [schema],
   schemaVersion: 0 //optional
 };
