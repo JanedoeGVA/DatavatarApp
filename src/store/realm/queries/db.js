@@ -4,6 +4,7 @@ export default class DB {
   constructor(config) {
     this.config = config;
   }
+
   insert = (model, item) =>
     new Promise((resolve, reject) => {
       Realm.open(this.config)
@@ -18,20 +19,20 @@ export default class DB {
         });
     });
 
-  nextId = (model) => {
-    let lastId = realm.objects(model).max('id');
-    if (lastId === undefined) {
-      return 1;
-    } else {
-      return lastId + 1;
-    }
-  };
+  // nextId = (model) => {
+  //   const lastId = realm.objects(model).max('id');
+  //   if (lastId === undefined) {
+  //     return 1;
+  //   } else {
+  //     return lastId + 1;
+  //   }
+  // };
 
   query = (model, filter = '') =>
     new Promise((resolve, reject) => {
       Realm.open(this.config)
         .then((realm) => {
-          let objects = realm.objects(model);
+          const objects = realm.objects(model);
           if (filter) {
             resolve(objects.filtered(filter));
           } else {

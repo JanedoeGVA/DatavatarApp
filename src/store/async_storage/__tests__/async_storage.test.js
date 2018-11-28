@@ -1,48 +1,6 @@
 jest.unmock('../../async_storage');
 jest.unmock('lodash.merge');
 
-jest.mock('react-native', () => ({
-  AsyncStorage: {
-    setItem: jest.fn(() => {
-      return new Promise((resolve) => {
-        resolve(null);
-      });
-    }),
-    multiSet: jest.fn(() => {
-      return new Promise((resolve) => {
-        resolve(null);
-      });
-    }),
-    getItem: jest.fn((key) => {
-      return new Promise((resolve) => {
-        if (returnValues[key]) {
-          resolve(returnValues[key]);
-        } else {
-          resolve(null);
-        }
-      });
-    }),
-    multiGet: jest.fn(() => {
-      return new Promise((resolve) => {
-        resolve(multiGetTestData());
-      });
-    }),
-    removeItem: jest.fn(() => {
-      return new Promise((resolve) => {
-        resolve(null);
-      });
-    }),
-    getAllKeys: jest.fn(() => {
-      return new Promise((resolve) => {
-        resolve(['one', 'two', 'three']);
-      });
-    }),
-    multiRemove: jest.fn(() => ({
-      then: jest.fn()
-    }))
-  }
-}));
-
 const returnValues = {
   arrayOne: JSON.stringify(['red', 'blue']),
   objectOne: JSON.stringify({
@@ -54,20 +12,67 @@ const returnValues = {
   stringOne: JSON.stringify('testing string')
 };
 
-const multiGetTestData = () => {
-  return [
-    ['key1', JSON.stringify({ valor: 1 })],
-    ['key2', JSON.stringify({ valor: 2 })]
-  ];
-};
+const multiGetTestData = () => [
+  ['key1', JSON.stringify({ valor: 1 })],
+  ['key2', JSON.stringify({ valor: 2 })]
+];
 
-const multiSaveTestData = () => {
-  return [['key1', { valor: 1 }], ['key2', { valor: 2 }]];
-};
+const multiSaveTestData = () => [
+  ['key1', { valor: 1 }],
+  ['key2', { valor: 2 }]
+];
+
+jest.mock('react-native', () => ({
+  AsyncStorage: {
+    setItem: jest.fn(
+      () =>
+        new Promise((resolve) => {
+          resolve(null);
+        })
+    ),
+    multiSet: jest.fn(
+      () =>
+        new Promise((resolve) => {
+          resolve(null);
+        })
+    ),
+    getItem: jest.fn(
+      (key) =>
+        new Promise((resolve) => {
+          if (returnValues[key]) {
+            resolve(returnValues[key]);
+          } else {
+            resolve(null);
+          }
+        })
+    ),
+    multiGet: jest.fn(
+      () =>
+        new Promise((resolve) => {
+          resolve(multiGetTestData());
+        })
+    ),
+    removeItem: jest.fn(
+      () =>
+        new Promise((resolve) => {
+          resolve(null);
+        })
+    ),
+    getAllKeys: jest.fn(
+      () =>
+        new Promise((resolve) => {
+          resolve(['one', 'two', 'three']);
+        })
+    ),
+    multiRemove: jest.fn(() => ({
+      then: jest.fn()
+    }))
+  }
+}));
 
 describe('AsyncStorage ', () => {
-  const { AsyncStorage } = require('react-native');
-  const asyncStore = require('../../async_storage');
+  const { AsyncStorage } = require('react-native'); // eslint-disable-line global-require
+  const asyncStore = require('../../async_storage'); // eslint-disable-line global-require
 
   beforeEach(() => {
     AsyncStorage.setItem.mockClear();
@@ -80,8 +85,8 @@ describe('AsyncStorage ', () => {
   });
 
   describe('save', () => {
-    it('should return a promise with no errors', () => {
-      return asyncStore
+    it('should return a promise with no errors', () =>
+      asyncStore
         .saveData('objectOne', JSON.parse(returnValues.objectOne))
         .then((error) => {
           expect(error).toEqual(null);
@@ -89,8 +94,7 @@ describe('AsyncStorage ', () => {
             'objectOne',
             returnValues.objectOne
           );
-        });
-    });
+        }));
 
     it('should return a promise with no errors', () => {
       const result = [
@@ -105,24 +109,22 @@ describe('AsyncStorage ', () => {
   });
 
   describe('retrieve', () => {
-    it('should return a promise with saved data', () => {
-      return asyncStore.retrieveData('objectOne').then((error) => {
+    it('should return a promise with saved data', () =>
+      asyncStore.retrieveData('objectOne').then((error) => {
         expect(error).toEqual(JSON.parse(returnValues.objectOne));
         expect(AsyncStorage.getItem).toBeCalledWith('objectOne');
-      });
-    });
+      }));
 
-    it('should return a promise with saved data', () => {
-      return asyncStore.retrieveData(['testing', 'testing']).then((error) => {
+    it('should return a promise with saved data', () =>
+      asyncStore.retrieveData(['testing', 'testing']).then((error) => {
         expect(error).toEqual([{ valor: 1 }, { valor: 2 }]);
         expect(AsyncStorage.multiGet).toBeCalledWith(['testing', 'testing']);
-      });
-    });
+      }));
   });
 
   describe('update', () => {
-    it('should return a promise with no errors', () => {
-      return asyncStore
+    it('should return a promise with no errors', () =>
+      asyncStore
         .updateData('objectOne', {
           isAGoodTest: false,
           hasNestedData: {
@@ -142,27 +144,24 @@ describe('AsyncStorage ', () => {
               isAGoodTest: false
             })
           );
-        });
-    });
+        }));
 
-    it('should handle a string and return a promise with no errors', () => {
-      return asyncStore.updateData('stringOne', 'asdf').then((error) => {
+    it('should handle a string and return a promise with no errors', () =>
+      asyncStore.updateData('stringOne', 'asdf').then((error) => {
         expect(error).toEqual(null);
         expect(AsyncStorage.setItem).toBeCalledWith(
           'stringOne',
           JSON.stringify('asdf')
         );
-      });
-    });
+      }));
   });
 
   describe('delete', () => {
-    it('should return a promise with no errors', () => {
-      return asyncStore.removeData('testing').then((error) => {
+    it('should return a promise with no errors', () =>
+      asyncStore.removeData('testing').then((error) => {
         expect(error).toEqual(null);
         expect(AsyncStorage.removeItem).toBeCalledWith('testing');
-      });
-    });
+      }));
 
     it('should handle an array of keys', () => {
       const keys = ['thingOne', 'thingTwo'];
@@ -174,12 +173,11 @@ describe('AsyncStorage ', () => {
   });
 
   describe('keys', () => {
-    it('should return the keys', () => {
-      return asyncStore.keysData().then((keys) => {
+    it('should return the keys', () =>
+      asyncStore.keysData().then((keys) => {
         expect(keys).toEqual(['one', 'two', 'three']);
         expect(AsyncStorage.getAllKeys).toBeCalled();
-      });
-    });
+      }));
   });
 
   describe('push', () => {

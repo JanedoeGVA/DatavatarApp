@@ -9,12 +9,9 @@ import merge from 'lodash.merge';
 export const saveData = (key, value) => {
   if (!Array.isArray(key)) {
     return AsyncStorage.setItem(key, JSON.stringify(value));
-  } else {
-    var pairs = key.map(function(pair) {
-      return [pair[0], JSON.stringify(pair[1])];
-    });
-    return AsyncStorage.multiSet(pairs);
   }
+  const pairs = key.map((pair) => [pair[0], JSON.stringify(pair[1])]);
+  return AsyncStorage.multiSet(pairs);
 };
 
 /**
@@ -25,9 +22,8 @@ export const saveData = (key, value) => {
 export const removeData = (key) => {
   if (Array.isArray(key)) {
     return AsyncStorage.multiRemove(key);
-  } else {
-    return AsyncStorage.removeItem(key);
   }
+  return AsyncStorage.removeItem(key);
 };
 
 /**
@@ -37,16 +33,11 @@ export const removeData = (key) => {
  */
 export const retrieveData = (key) => {
   if (!Array.isArray(key)) {
-    return AsyncStorage.getItem(key).then((value) => {
-      return JSON.parse(value);
-    });
-  } else {
-    return AsyncStorage.multiGet(key).then((values) => {
-      return values.map((value) => {
-        return JSON.parse(value[1]);
-      });
-    });
+    return AsyncStorage.getItem(key).then((value) => JSON.parse(value));
   }
+  return AsyncStorage.multiGet(key).then((values) =>
+    values.map((value) => JSON.parse(value[1]))
+  );
 };
 
 /**
@@ -55,29 +46,25 @@ export const retrieveData = (key) => {
  * @param  {Value} value The value to update with
  * @return {Promise}
  */
-export const updateData = (key, value) => {
-  return retrieveData(key).then((item) => {
-    value = typeof value === 'string' ? value : merge({}, item, value);
-    return AsyncStorage.setItem(key, JSON.stringify(value));
+export const updateData = (key, value) =>
+  retrieveData(key).then((item) => {
+    const updateValue =
+      typeof value === 'string' ? value : merge({}, item, value);
+    return AsyncStorage.setItem(key, JSON.stringify(updateValue));
   });
-};
-
 /**
  * Get all keys in AsyncStorage.
  * @return {Promise} A promise which when it resolves gets passed the saved keys in AsyncStorage.
  */
-export const keysData = () => {
-  return AsyncStorage.getAllKeys();
-};
-
+export const keysData = () => AsyncStorage.getAllKeys();
 /**
  * Push a value onto an array stored in AsyncStorage by key or create a new array in AsyncStorage for a key if it's not yet defined.
  * @param {String} key They key
  * @param {Any} value The value to push onto the array
  * @return {Promise}
  */
-export const pushData = (key, value) => {
-  return retrieveData(key).then((currentValue) => {
+export const pushData = (key, value) =>
+  retrieveData(key).then((currentValue) => {
     if (currentValue === null) {
       // if there is no current value populate it with the new value
       return saveData(key, [value]);
@@ -89,4 +76,3 @@ export const pushData = (key, value) => {
       `Existing value for key "${key}" must be of type null or Array, received ${typeof currentValue}.`
     );
   });
-};
