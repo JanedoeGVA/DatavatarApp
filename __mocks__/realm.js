@@ -10,7 +10,9 @@ Realm.open = jest.fn(
 );
 Realm.write = jest.fn((fn) => fn());
 Realm.create = jest.fn(() => {});
+Realm.objects = jest.fn(() => {});
 
+module.exports = Realm;
 // class RealmConst {
 //   constructor(params) {
 //     this.data = {};
@@ -34,4 +36,3 @@ Realm.create = jest.fn(() => {});
 //     });
 //   }
 // }
-module.exports = Realm;
