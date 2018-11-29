@@ -38,15 +38,16 @@ jest.mock('../../models/activityTracker');
 describe('Realm ', () => {
   const store = new DB(config);
   const Realm = require('realm'); // eslint-disable-line global-require
-  jest.mock('realm');
-  Realm.open = jest.fn(
-    () =>
-      new Promise((resolve) => {
-        resolve();
-      })
-  );
-  Realm.write = jest.fn((fn) => fn());
-  Realm.create = jest.fn(() => []);
+  // Realm.open = jest.fn(
+  //   () =>
+  //     new Promise((resolve) => {
+  //       setTimeout(() => {
+  //         resolve(Realm);
+  //       }, 10);
+  //     })
+  // );
+  // Realm.write = jest.fn((fn) => fn());
+  // Realm.create = jest.fn(() => {});
   beforeEach(() => {
     Realm.open.mockClear();
     Realm.create.mockClear();
@@ -54,14 +55,10 @@ describe('Realm ', () => {
   });
 
   describe('insert', () => {
-    it('should return a promise with no errors', () => {
-      store.insert(TBL_ACT_TRACKER_SCHEMA, items.fitbit).then(() => {
-        expect(Realm.open).toBeCalledWith(config);
-        expect(Realm.create).toBeCalledWith(
-          TBL_ACT_TRACKER_SCHEMA,
-          items.fitbit
-        );
-      });
+    it('should return a promise with no errors', async () => {
+      await store.insert(TBL_ACT_TRACKER_SCHEMA, items.fitbit);
+      expect(Realm.open).toBeCalledWith(config);
+      expect(Realm.create).toBeCalledWith(TBL_ACT_TRACKER_SCHEMA, items.fitbit);
     });
   });
 });

@@ -10,12 +10,12 @@ export const schema = {
     protocole: 'string',
     accessTokenKey: 'string',
     refreshTokenKey: { type: 'string', optional: true },
-    accessTokenSecret: { type: 'string', optional: true },
-  },
+    accessTokenSecret: { type: 'string', optional: true }
+  }
 };
 
 export const config = {
   path: 'test.realm',
   schema: [schema],
-  schemaVersion: 0, // optional
+  schemaVersion: 0 // optional
 };

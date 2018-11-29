@@ -6,7 +6,7 @@ export default class DB {
   }
 
   insert = (model, item) =>
-    new Promise((resolve, reject) => {
+    new Promise((resolve, reject) =>
       Realm.open(this.config)
         .then((realm) => {
           realm.write(() => {
@@ -16,8 +16,8 @@ export default class DB {
         })
         .catch((error) => {
           reject(error);
-        });
-    });
+        })
+    );
 
   // nextId = (model) => {
   //   const lastId = realm.objects(model).max('id');
