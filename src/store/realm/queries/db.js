@@ -18,13 +18,12 @@ export default class DB {
         })
     );
 
-  // nextId = (model) => {
-  //   const lastId = realm.objects(model).max('id');
+  // nextId = (objects) => {
+  //   const lastId = objects.max('id');
   //   if (lastId === undefined) {
   //     return 1;
-  //   } else {
-  //     return lastId + 1;
   //   }
+  //   return lastId + 1;
   // };
 
   query = (model, filter = '') =>
@@ -50,9 +49,7 @@ export default class DB {
           realm.write(() => {
             let delItems;
             if (item) {
-              console.log(`item = ${JSON.stringify(item)}`);
               delItems = realm.objectForPrimaryKey(model, item.id);
-              console.log(`delItems = ${JSON.stringify(delItems)}`);
             } else {
               delItems = realm.objects(model);
             }

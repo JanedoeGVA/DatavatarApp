@@ -4,32 +4,7 @@ import {
 } from '../../models/__mocks__/activityTracker';
 import DB from '../db';
 
-const items = {
-  fitbit: {
-    id: 1,
-    provider: 'Fitbit',
-    isValide: true,
-    protocole: 'Oauth2',
-    accessTokenKey: 'h"OdC{.v:ad4yZY',
-    refreshTokenKey: 'ow0bgNuMWL'
-  },
-  withings: {
-    id: 2,
-    provider: 'Withing',
-    isValide: true,
-    protocole: 'Oauth2',
-    accessTokenKey: 'y5rlKeoJ5V',
-    refreshTokenKey: 'CMKeabZv0I'
-  },
-  garmin: {
-    id: 3,
-    provider: 'Garmin',
-    isValide: true,
-    protocole: 'Oauth1',
-    accessTokenKey: 'qJLBH23qxt',
-    accessTokenSecret: 'JCpVSlG2r7'
-  }
-};
+const item = { id: 1, value: 'item' };
 
 const Realm = {
   lstObjects: {
@@ -42,8 +17,11 @@ const Realm = {
     data: {}
   },
   open: jest.fn(
-    () =>
-      new Promise((resolve) => {
+    (conf) =>
+      new Promise((resolve, reject) => {
+        if (!conf) {
+          reject(new Error('no config'));
+        }
         if (!Realm.store.isInitialized) {
           Realm.store.schema = config.schema;
           config.schema.forEach((schema) => {
@@ -58,7 +36,9 @@ const Realm = {
   ),
   write: jest.fn((fn) => fn()),
   create: jest.fn(() => {}),
-  objects: jest.fn(() => Realm.lstObjects)
+  objects: jest.fn(() => Realm.lstObjects),
+  delete: jest.fn(() => {}),
+  objectForPrimaryKey: jest.fn(() => item)
 };
 
 const FILTER = 'filter';
@@ -68,6 +48,7 @@ jest.mock('../../models/activityTracker');
 
 describe('Realm ', () => {
   const store = new DB(config, Realm);
+  const badStore = new DB(null, Realm);
   beforeEach(() => {
     Realm.open.mockClear();
     Realm.create.mockClear();
@@ -80,10 +61,18 @@ describe('Realm ', () => {
   describe('insert', () => {
     it('should call Realm open and create', async () => {
       expect.assertions(3);
-      await store.insert(TBL_ACT_TRACKER_SCHEMA, items.fitbit);
+      await store.insert(TBL_ACT_TRACKER_SCHEMA, item);
       expect(Realm.open).toBeCalledWith(config);
       expect(Realm.store.isInitialized).toBe(true);
-      expect(Realm.create).toBeCalledWith(TBL_ACT_TRACKER_SCHEMA, items.fitbit);
+      expect(Realm.create).toBeCalledWith(TBL_ACT_TRACKER_SCHEMA, item);
+    });
+    it('should reject when the db is not configured', async () => {
+      expect.assertions(1);
+      try {
+        await badStore.insert(TBL_ACT_TRACKER_SCHEMA, item);
+      } catch (error) {
+        expect(error).not.toBe(null);
+      }
     });
   });
 
@@ -101,6 +90,59 @@ describe('Realm ', () => {
       expect(Realm.open).toBeCalledWith(config);
       expect(Realm.objects).toBeCalledWith(TBL_ACT_TRACKER_SCHEMA);
       expect(Realm.objects().filtered).toBeCalledWith(FILTER);
+    });
+    it('should reject when the db is not configured', async () => {
+      expect.assertions(1);
+      try {
+        await badStore.query(TBL_ACT_TRACKER_SCHEMA);
+      } catch (error) {
+        expect(error).not.toBe(null);
+      }
+    });
+  });
+
+  describe('delete', () => {
+    it('should call Realm open and delete is called with only the item to delete', async () => {
+      expect.assertions(3);
+      await store.remove(TBL_ACT_TRACKER_SCHEMA, item);
+      expect(Realm.open).toBeCalledWith(config);
+      expect(Realm.delete).toBeCalledWith(
+        Realm.objectForPrimaryKey(TBL_ACT_TRACKER_SCHEMA, item.id)
+      );
+      expect(Realm.delete).toBeCalledTimes(1);
+    });
+    it('should call Realm open and delete is called with all items', async () => {
+      expect.assertions(2);
+      await store.remove(TBL_ACT_TRACKER_SCHEMA);
+      expect(Realm.open).toBeCalledWith(config);
+      expect(Realm.delete).toBeCalledWith(
+        Realm.objects(TBL_ACT_TRACKER_SCHEMA)
+      );
+    });
+    it('should reject when the db is not configured', async () => {
+      expect.assertions(1);
+      try {
+        await badStore.remove(TBL_ACT_TRACKER_SCHEMA);
+      } catch (error) {
+        expect(error).not.toBe(null);
+      }
+    });
+  });
+
+  describe('update', () => {
+    it('should call Realm open and update', async () => {
+      expect.assertions(2);
+      await store.update(TBL_ACT_TRACKER_SCHEMA, item);
+      expect(Realm.open).toBeCalledWith(config);
+      expect(Realm.create).toBeCalledWith(TBL_ACT_TRACKER_SCHEMA, item, true);
+    });
+    it('should reject when the db is not configured', async () => {
+      expect.assertions(1);
+      try {
+        await badStore.update(TBL_ACT_TRACKER_SCHEMA, item, true);
+      } catch (error) {
+        expect(error).not.toBe(null);
+      }
     });
   });
 });
