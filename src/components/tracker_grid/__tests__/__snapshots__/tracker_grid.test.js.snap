@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`renders a TrackerGrid using Snapshots 1`] = `
+exports[`Tracker Grid Component renders a TrackerGrid using Snapshots 1`] = `
 <RCTScrollView
   data={
     Array [

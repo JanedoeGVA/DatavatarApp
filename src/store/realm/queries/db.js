@@ -1,13 +1,12 @@
-import Realm from 'realm';
-
 export default class DB {
-  constructor(config) {
+  constructor(config, realm) {
     this.config = config;
+    this.Realm = realm;
   }
 
   insert = (model, item) =>
     new Promise((resolve, reject) =>
-      Realm.open(this.config)
+      this.Realm.open(this.config)
         .then((realm) => {
           realm.write(() => {
             realm.create(model, item);
@@ -30,7 +29,7 @@ export default class DB {
 
   query = (model, filter = '') =>
     new Promise((resolve, reject) => {
-      Realm.open(this.config)
+      this.Realm.open(this.config)
         .then((realm) => {
           const objects = realm.objects(model);
           if (filter) {
@@ -46,7 +45,7 @@ export default class DB {
 
   remove = (model, item = undefined) =>
     new Promise((resolve, reject) => {
-      Realm.open(this.config)
+      this.Realm.open(this.config)
         .then((realm) => {
           realm.write(() => {
             let delItems;
@@ -68,7 +67,7 @@ export default class DB {
 
   update = (model, item) =>
     new Promise((resolve, reject) => {
-      Realm.open(this.config)
+      this.Realm.open(this.config)
         .then((realm) => {
           realm.write(() => {
             realm.create(model, item, true);

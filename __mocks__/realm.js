@@ -1,5 +1,10 @@
 const Realm = jest.genMockFromModule('realm');
 
+const itemActTracker = {};
+const store = {
+  data: { itemActTracker }
+};
+
 Realm.open = jest.fn(
   () =>
     new Promise((resolve) => {
@@ -8,9 +13,14 @@ Realm.open = jest.fn(
       }, 10);
     })
 );
+
 Realm.write = jest.fn((fn) => fn());
+
 Realm.create = jest.fn(() => {});
-Realm.objects = jest.fn(() => {});
+Realm.objects = jest.fn((schemaName) => {
+  const objects = Object.values(store.data[schemaName]);
+  objects.values = () => objects;
+});
 
 module.exports = Realm;
 // class RealmConst {

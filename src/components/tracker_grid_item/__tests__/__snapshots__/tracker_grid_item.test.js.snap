@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`renders a TrackerGridItem using Snapshots 1`] = `
+exports[`Tracker Grid Item Component renders a TrackerGridItem using Snapshots 1`] = `
 <View
   accessible={true}
   isTVSelectable={true}
