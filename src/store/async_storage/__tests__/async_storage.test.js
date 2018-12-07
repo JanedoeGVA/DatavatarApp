@@ -88,7 +88,7 @@ describe('AsyncStorage ', () => {
     it('should return a promise with no errors', () => {
       expect(2).toEqual(2);
     });
-    it('should return a promise with no errors', async (done) => {
+    it('should return a promise with no errors', async () => {
       expect.assertions(2);
       await asyncStore
         .saveData('objectOne', JSON.parse(returnValues.objectOne))
@@ -98,10 +98,9 @@ describe('AsyncStorage ', () => {
             'objectOne',
             returnValues.objectOne
           );
-          done();
         });
     });
-    it('should return a promise with no errors', async (done) => {
+    it('should return a promise with no errors', async () => {
       expect.assertions(2);
       await asyncStore
         .saveData('objectOne', JSON.parse(returnValues.objectOne))
@@ -111,7 +110,6 @@ describe('AsyncStorage ', () => {
             'objectOne',
             returnValues.objectOne
           );
-          done();
         });
     });
 

@@ -4,8 +4,6 @@ import {
 } from '../../models/__mocks__/activityTracker';
 import DB from '../db';
 
-// import Realm from '../../mocks/realm';
-
 const Realm = require('realm');
 
 const realmStore = {
@@ -41,10 +39,15 @@ const items = {
   }
 };
 
-const FILTER = `provider == "${items.fitbit.provider}"`;
+const FILTER = 'filter';
 
 jest.unmock('../db');
 jest.mock('../../models/activityTracker');
+
+const objects = {
+  values: jest.fn(),
+  filtered: jest.fn()
+};
 
 jest.mock('realm', () => ({
   open: jest.fn(
@@ -63,37 +66,46 @@ jest.mock('realm', () => ({
       })
   ),
   write: jest.fn((fn) => fn()),
-  create: jest.fn((schema, item) => {})
+  create: jest.fn(() => {}),
+  objects: jest.fn(() => objects)
 }));
 
 describe('Realm ', () => {
   const store = new DB(config, Realm);
   // const Realm = require('realm');
   beforeEach(() => {
-    // Realm.open.mockClear();
-    // Realm.create.mockClear();
-    // Realm.write.mockClear();
+    Realm.open.mockClear();
+    Realm.create.mockClear();
+    Realm.write.mockClear();
+    Realm.objects().values.mockClear();
+    Realm.objects().filtered.mockClear();
+    Realm.objects.mockClear();
   });
 
   describe('insert', () => {
     it('should call Realm open and create', async () => {
-      expect.assertions(2);
+      expect.assertions(3);
       await store.insert(TBL_ACT_TRACKER_SCHEMA, items.fitbit);
       expect(Realm.open).toBeCalledWith(config);
+      expect(realmStore.isInitialized).toBe(true);
       expect(Realm.create).toBeCalledWith(TBL_ACT_TRACKER_SCHEMA, items.fitbit);
     });
   });
 
-  // describe('query', () => {
-  //   it('should call Realm open and objets and return all the objects', async () => {
-  //     await store.query(TBL_ACT_TRACKER_SCHEMA);
-  //     expect(Realm.open).toBeCalledWith(config);
-  //     expect(Realm.objects).toBeCalledWith(TBL_ACT_TRACKER_SCHEMA);
-  //   });
-  //   it('should call Realm open and objects and return filters objects', async () => {
-  //     await store.query(TBL_ACT_TRACKER_SCHEMA, FILTER);
-  //     expect(Realm.open).toBeCalledWith(config);
-  //     expect(Realm.objects).toBeCalledWith(TBL_ACT_TRACKER_SCHEMA);
-  //   });
-  // });
+  describe('query', () => {
+    it('should call Realm open and filtered is not call', async () => {
+      expect.assertions(3);
+      await store.query(TBL_ACT_TRACKER_SCHEMA);
+      expect(Realm.open).toBeCalledWith(config);
+      expect(Realm.objects).toBeCalledWith(TBL_ACT_TRACKER_SCHEMA);
+      expect(Realm.objects().filtered).not.toHaveBeenCalled();
+    });
+    it('should call Realm open and objects and return filters objects', async () => {
+      expect.assertions(3);
+      await store.query(TBL_ACT_TRACKER_SCHEMA, FILTER);
+      expect(Realm.open).toBeCalledWith(config);
+      expect(Realm.objects).toBeCalledWith(TBL_ACT_TRACKER_SCHEMA);
+      expect(Realm.objects().filtered).toBeCalledWith(FILTER);
+    });
+  });
 });
