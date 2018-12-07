@@ -1,5 +1,5 @@
 TN:
-SF:/Users/Xou/react_native_workspace/DatavatarApp/config/jtest/mockData.js
+SF:/Users/janedoe/react-native-workspace/DatavatarApp/config/jtest/mockData.js
 FNF:0
 FNH:0
 DA:1,2
@@ -10,7 +10,7 @@ BRF:0
 BRH:0
 end_of_record
 TN:
-SF:/Users/Xou/react_native_workspace/DatavatarApp/src/assets/images/garmin-logo.png
+SF:/Users/janedoe/react-native-workspace/DatavatarApp/src/assets/images/garmin-logo.png
 FNF:0
 FNH:0
 DA:1,2
@@ -20,7 +20,7 @@ BRF:0
 BRH:0
 end_of_record
 TN:
-SF:/Users/Xou/react_native_workspace/DatavatarApp/src/assets/images/strava-logo.png
+SF:/Users/janedoe/react-native-workspace/DatavatarApp/src/assets/images/strava-logo.png
 FNF:0
 FNH:0
 DA:1,2
@@ -30,7 +30,7 @@ BRF:0
 BRH:0
 end_of_record
 TN:
-SF:/Users/Xou/react_native_workspace/DatavatarApp/src/components/tracker_grid/index.js
+SF:/Users/janedoe/react-native-workspace/DatavatarApp/src/components/tracker_grid/index.js
 FN:7,(anonymous_0)
 FN:7,GridComponent
 FN:7,render
@@ -58,7 +58,7 @@ BRF:0
 BRH:0
 end_of_record
 TN:
-SF:/Users/Xou/react_native_workspace/DatavatarApp/src/components/tracker_grid/styles.js
+SF:/Users/janedoe/react-native-workspace/DatavatarApp/src/components/tracker_grid/styles.js
 FNF:0
 FNH:0
 DA:1,1
@@ -70,7 +70,7 @@ BRF:0
 BRH:0
 end_of_record
 TN:
-SF:/Users/Xou/react_native_workspace/DatavatarApp/src/components/tracker_grid_item/index.js
+SF:/Users/janedoe/react-native-workspace/DatavatarApp/src/components/tracker_grid_item/index.js
 FN:6,(anonymous_0)
 FN:6,TrackerGridItem
 FN:6,render
@@ -97,7 +97,7 @@ BRF:0
 BRH:0
 end_of_record
 TN:
-SF:/Users/Xou/react_native_workspace/DatavatarApp/src/components/tracker_grid_item/styles.js
+SF:/Users/janedoe/react-native-workspace/DatavatarApp/src/components/tracker_grid_item/styles.js
 FNF:0
 FNH:0
 DA:1,2
@@ -109,7 +109,7 @@ BRF:0
 BRH:0
 end_of_record
 TN:
-SF:/Users/Xou/react_native_workspace/DatavatarApp/src/store/async_storage/index.js
+SF:/Users/janedoe/react-native-workspace/DatavatarApp/src/store/async_storage/index.js
 FN:9,saveData
 FN:13,(anonymous_1)
 FN:22,removeData
@@ -185,7 +185,7 @@ BRF:12
 BRH:12
 end_of_record
 TN:
-SF:/Users/Xou/react_native_workspace/DatavatarApp/src/store/realm/queries/db.js
+SF:/Users/janedoe/react-native-workspace/DatavatarApp/src/store/realm/queries/db.js
 FN:2,DB
 FN:7,(anonymous_1)
 FN:8,(anonymous_2)

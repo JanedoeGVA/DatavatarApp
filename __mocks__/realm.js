@@ -1,48 +1,36 @@
-const Realm = jest.genMockFromModule('realm');
-
-const itemActTracker = {};
-const store = {
-  data: { itemActTracker }
+const Realm = {
+  lstObjects: {
+    values: jest.fn(),
+    filtered: jest.fn()
+  },
+  store: {
+    isInitialized: false,
+    schema: {},
+    data: {}
+  },
+  open: jest.fn(
+    (config) =>
+      new Promise((resolve, reject) => {
+        if (!config) {
+          reject(new Error('no config'));
+        }
+        if (!Realm.store.isInitialized) {
+          Realm.store.schema = config.schema;
+          config.schema.forEach((schema) => {
+            Realm.store.data[schema.name] = {};
+          });
+          Realm.store.isInitialized = true;
+        }
+        setTimeout(() => {
+          resolve(Realm);
+        }, 10);
+      })
+  ),
+  write: jest.fn((fn) => fn()),
+  create: jest.fn(() => {}),
+  objects: jest.fn(() => Realm.lstObjects),
+  delete: jest.fn(() => {}),
+  objectForPrimaryKey: jest.fn(() => {})
 };
 
-Realm.open = jest.fn(
-  () =>
-    new Promise((resolve) => {
-      setTimeout(() => {
-        resolve(Realm);
-      }, 10);
-    })
-);
-
-Realm.write = jest.fn((fn) => fn());
-
-Realm.create = jest.fn(() => {});
-Realm.objects = jest.fn((schemaName) => {
-  const objects = Object.values(store.data[schemaName]);
-  objects.values = () => objects;
-});
-
-module.exports = Realm;
-// class RealmConst {
-//   constructor(params) {
-//     this.data = {};
-//     this.schema = {};
-//     params.schema.forEach((schema) => {
-//       this.data[schema.name] = {};
-//     });
-//     params.schema.forEach((schema) => {
-//       this.schema[schema.name] = schema;
-//     });
-//   }
-//   objects(schemaName) {
-//     return this.data[schemaName];
-//   }
-//   write(fn) {
-//     fn();
-//   }
-//   create(schemaName, data) {
-//     return new Promise((resolve) => {
-//       resolve();
-//     });
-//   }
-// }
+export default Realm;

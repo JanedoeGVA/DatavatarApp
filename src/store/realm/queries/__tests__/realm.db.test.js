@@ -1,3 +1,4 @@
+import Realm from '../../../../../__mocks__/realm';
 import {
   TBL_ACT_TRACKER_SCHEMA,
   config
@@ -5,42 +6,6 @@ import {
 import DB from '../db';
 
 const item = { id: 1, value: 'item' };
-
-const Realm = {
-  lstObjects: {
-    values: jest.fn(),
-    filtered: jest.fn()
-  },
-  store: {
-    isInitialized: false,
-    schema: {},
-    data: {}
-  },
-  open: jest.fn(
-    (conf) =>
-      new Promise((resolve, reject) => {
-        if (!conf) {
-          reject(new Error('no config'));
-        }
-        if (!Realm.store.isInitialized) {
-          Realm.store.schema = config.schema;
-          config.schema.forEach((schema) => {
-            Realm.store.data[schema.name] = {};
-          });
-          Realm.store.isInitialized = true;
-        }
-        setTimeout(() => {
-          resolve(Realm);
-        }, 10);
-      })
-  ),
-  write: jest.fn((fn) => fn()),
-  create: jest.fn(() => {}),
-  objects: jest.fn(() => Realm.lstObjects),
-  delete: jest.fn(() => {}),
-  objectForPrimaryKey: jest.fn(() => item)
-};
-
 const FILTER = 'filter';
 
 jest.unmock('../db');
@@ -55,7 +20,9 @@ describe('Realm ', () => {
     Realm.write.mockClear();
     Realm.objects().values.mockClear();
     Realm.objects().filtered.mockClear();
+    Realm.delete.mockClear();
     Realm.objects.mockClear();
+    Realm.objectForPrimaryKey.mockClear();
   });
 
   describe('insert', () => {
