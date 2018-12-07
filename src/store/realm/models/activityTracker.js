@@ -19,5 +19,5 @@ export const schema = {
 export const config = {
   path: 'datavatarApp.realm',
   schema: [schema],
-  schemaVersion: 0 //optional
+  schemaVersion: 0 // optional
 };
