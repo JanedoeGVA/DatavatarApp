@@ -1,7 +1,7 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
 import TrackerGridItem from '../index';
-import { trackers } from '../../../../config/jtest/mockData';
+import trackers from '../../../../config/jtest/mockData';
 
 describe('Tracker Grid Item Component', () => {
   it('renders a TrackerGridItem using Snapshots', () => {

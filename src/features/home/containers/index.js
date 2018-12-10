@@ -1,18 +1,19 @@
 import React from 'react';
 import { View } from 'react-native';
 import { NavigationEvents } from 'react-navigation';
-import TrackerGrid from '../../../components/tracker_grid';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { load } from '../actions';
+import TrackerGrid from '../../../components/tracker_grid';
 import * as Datavatar from '../../../api/datavatar';
 
 const ID_ADD = -1;
+const logoAdd = require('../../../assets/images/add.png');
 
 const ADD_TRACKER = {
   id: ID_ADD,
   provider: 'Subscribe',
-  logo: require('assets/images/add.png')
+  logo: logoAdd
 };
 
 class Home extends React.Component {

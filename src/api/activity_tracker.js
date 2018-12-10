@@ -2,6 +2,11 @@ import PropTypes from 'prop-types';
 import * as Constant from './constant';
 import * as store from '../store';
 
+const FITBIT_LOGO = require('../assets/images/fitbit-logo.png');
+const GARMIN_LOGO = require('../assets/images/garmin-logo.png');
+const WITHINGS_LOGO = require('../assets/images/withings-logo.png');
+const STRAVA_LOGO = require('../assets/images/strava-logo.png');
+
 class ActivityTracker {
   constructor(id, provider, protocol, logo) {
     this.id = id;
@@ -33,28 +38,28 @@ const FITBIT_TRACKER = new ActivityTracker(
   Constant.FITBIT_ID,
   Constant.FITBIT_PROVIDER,
   Constant.OAUTH2,
-  Constant.FITBIT_LOGO
+  FITBIT_LOGO
 );
 
 const GARMIN_TRACKER = new ActivityTracker(
   Constant.GARMIN_ID,
   Constant.GARMIN_PROVIDER,
   Constant.OAUTH1,
-  Constant.GARMIN_LOGO
+  GARMIN_LOGO
 );
 
 const WITHINGS_TRACKER = new ActivityTracker(
   Constant.WITHINGS_ID,
   Constant.WITHINGS_PROVIDER,
   Constant.OAUTH2,
-  Constant.WITHINGS_LOGO
+  WITHINGS_LOGO
 );
 
 const STRAVA_TRACKER = new ActivityTracker(
   Constant.STRAVA_ID,
   Constant.STRAVA_PROVIDER,
   Constant.OAUTH2,
-  Constant.STRAVA_LOGO
+  STRAVA_LOGO
 );
 
 export const lstTrackers = [
@@ -71,10 +76,10 @@ export const getLstActTrackerSubscribed = () =>
     store
       .getLstActTracker()
       .then((dbList) => {
-        let LstActTrackerSubscribed = [];
-        let dbArray = Object.keys(dbList).map((key) =>
+        const LstActTrackerSubscribed = [];
+        const dbArray = Object.keys(dbList).map((key) =>
           LstActTrackerSubscribed.push(lstTrackersSort[dbList[key].id])
-        ); //Object.values(apiLists); /**/ !!!ES7 functions seems works only on debug mod */
+        ); // Object.values(apiLists); /**/ !!!ES7 functions seems works only on debug mod */
         console.log(JSON.stringify(dbArray));
         resolve(dbArray);
       })

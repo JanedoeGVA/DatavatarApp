@@ -15,6 +15,18 @@ const GridComponent = ({ lstTrackers, onPressItem, setItemColor }) => (
   />
 );
 
+GridComponent.propTypes = {
+  onPressItem: PropTypes.func.isRequired,
+  setItemColor: PropTypes.func.isRequired,
+  lstTrackers: PropTypes.arrayOf(
+    PropTypes.shape({
+      // logo: PropTypes.number.isRequired,
+      provider: PropTypes.string.isRequired
+    })
+  ).isRequired
+};
+
+export default GridComponent;
 // export default class GridComponent extends React.Component {
 //   render() {
 //     const { onPressItem, setItemColor, lstTrackers } = this.props;
@@ -30,9 +42,3 @@ const GridComponent = ({ lstTrackers, onPressItem, setItemColor }) => (
 //     );
 //   }
 // }
-
-GridComponent.propTypes = {
-  onPressItem: PropTypes.func.isRequired,
-  setItemColor: PropTypes.func.isRequired,
-  lstTrackers: PropTypes.array.isRequired
-};

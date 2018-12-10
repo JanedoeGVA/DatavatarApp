@@ -1,10 +1,15 @@
-export const trackers = [
+const logoStrava = require('../../src/assets/images/strava-logo.png');
+const logoGarmin = require('../../src/assets/images/garmin-logo.png');
+
+const trackers = [
   {
-    image: require('assets/images/strava-logo.png'),
+    logo: logoStrava,
     provider: 'Strava'
   },
   {
-    image: require('assets/images/garmin-logo.png'),
+    logo: logoGarmin,
     provider: 'Garmin'
   }
 ];
+
+export default trackers;
