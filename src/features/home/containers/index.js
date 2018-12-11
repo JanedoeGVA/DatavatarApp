@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import { NavigationEvents } from 'react-navigation';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { load } from '../actions';
+import { load as actionLoad } from '../actions';
 import TrackerGrid from '../../../components/tracker_grid';
 import * as Datavatar from '../../../api/datavatar';
 
@@ -22,29 +22,30 @@ class Home extends React.Component {
   };
 
   componentDidMount() {
-    this.props.load();
+    const { load } = this.props;
+    load();
   }
 
   onPressItem = (item) => {
+    const { navigation } = this.props;
     console.log(`item press() : ${JSON.stringify(item)}`);
     if (item.id === ID_ADD) {
-      this.props.navigation.navigate('Subscribe');
+      navigation.navigate('Subscribe');
     } else {
       //Explorer(item)
     }
   };
 
-  setItemColor = (item) => {
-    return item.available ? '#8be1b7' : '#c3ddd0';
-  };
+  setItemColor = (item) => (item.available ? '#8be1b7' : '#c3ddd0');
 
   render() {
+    const { lstSubscribedTrackers } = this.props;
     return (
       <View>
         <TrackerGrid
           onPressItem={this.onPressItem}
           setItemColor={this.setItemColor}
-          lstTrackers={this.props.lstSubscribedTrackers.concat(ADD_TRACKER)}
+          lstTrackers={lstSubscribedTrackers.concat(ADD_TRACKER)}
         />
       </View>
     );
@@ -55,17 +56,13 @@ Home.propTypes = {
   lstSubscribedTrackers: PropTypes.array.isRequired
 };
 
-const mapStateToProps = (state) => {
-  return {
-    lstSubscribedTrackers: state.home.lstSubscribedTrackers
-  };
-};
+const mapStateToProps = (state) => ({
+  lstSubscribedTrackers: state.home.lstSubscribedTrackers
+});
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    load: () => dispatch(load())
-  };
-};
+const mapDispatchToProps = (dispatch) => ({
+  load: () => dispatch(actionLoad())
+});
 
 export default connect(
   mapStateToProps,
