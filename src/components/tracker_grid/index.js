@@ -20,7 +20,10 @@ GridComponent.propTypes = {
   setItemColor: PropTypes.func.isRequired,
   lstTrackers: PropTypes.arrayOf(
     PropTypes.shape({
-      // logo: PropTypes.number.isRequired,
+      logo: PropTypes.oneOfType([
+        PropTypes.shape({ testUri: PropTypes.string }),
+        PropTypes.number
+      ]).isRequired,
       provider: PropTypes.string.isRequired
     })
   ).isRequired

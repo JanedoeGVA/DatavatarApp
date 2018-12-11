@@ -31,11 +31,10 @@ export default TrackerGridItem;
 TrackerGridItem.propTypes = {
   onPressItem: PropTypes.func.isRequired,
   setItemColor: PropTypes.func.isRequired,
-  // item: PropTypes.object.isRequired
   item: PropTypes.shape({
     provider: PropTypes.string.isRequired,
     logo: PropTypes.oneOfType([
-      // PropTypes.shape({ testUri: PropTypes.string }),
+      PropTypes.shape({ testUri: PropTypes.string }),
       PropTypes.number
     ]).isRequired
   }).isRequired
