@@ -3,7 +3,7 @@ import thunk from 'redux-thunk';
 import { createLogger } from 'redux-logger';
 import rootReducer from './reducers';
 
-let logger = createLogger({
+const logger = createLogger({
   timestamps: true,
   duration: true
 });

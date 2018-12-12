@@ -8,13 +8,14 @@ import TrackerGrid from '../../../components/tracker_grid';
 import * as Datavatar from '../../../api/datavatar';
 
 const ID_ADD = -1;
-const logoAdd = require('../../../assets/images/add.png');
 
-const ADD_TRACKER = {
-  id: ID_ADD,
-  provider: 'Subscribe',
-  logo: logoAdd
-};
+// const logoAdd = require('../../../assets/images/add.png');
+
+// const ADD_TRACKER = {
+//   id: ID_ADD,
+//   provider: 'Subscribe',
+//   logo: logoAdd
+// };
 
 class Home extends React.Component {
   static navigationOptions = {
@@ -32,7 +33,7 @@ class Home extends React.Component {
     if (item.id === ID_ADD) {
       navigation.navigate('Subscribe');
     } else {
-      //Explorer(item)
+      // Explorer(item)
     }
   };
 
@@ -45,16 +46,25 @@ class Home extends React.Component {
         <TrackerGrid
           onPressItem={this.onPressItem}
           setItemColor={this.setItemColor}
-          lstTrackers={lstSubscribedTrackers.concat(ADD_TRACKER)}
+          lstTrackers={lstSubscribedTrackers}
+          // lstTrackers={lstSubscribedTrackers.concat(ADD_TRACKER)}
         />
       </View>
     );
   }
 }
 
-Home.propTypes = {
-  lstSubscribedTrackers: PropTypes.array.isRequired
-};
+// Home.propTypes = {
+//   lstSubscribedTrackers: PropTypes.arrayOf(
+//     PropTypes.shape({
+//       logo: PropTypes.oneOfType([
+//         PropTypes.shape({ testUri: PropTypes.string }),
+//         PropTypes.number
+//       ]).isRequired,
+//       provider: PropTypes.string.isRequired
+//     })
+//   ).isRequired
+// };
 
 const mapStateToProps = (state) => ({
   lstSubscribedTrackers: state.home.lstSubscribedTrackers

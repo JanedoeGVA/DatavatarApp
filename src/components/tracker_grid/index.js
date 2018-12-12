@@ -30,18 +30,3 @@ GridComponent.propTypes = {
 };
 
 export default GridComponent;
-// export default class GridComponent extends React.Component {
-//   render() {
-//     const { onPressItem, setItemColor, lstTrackers } = this.props;
-//     return (
-//       <GridView
-//         itemDimension={130}
-//         items={lstTrackers}
-//         style={styles.gridView}
-//         renderItem={(item) => (
-//           <TrackerGridItem {...{ onPressItem, setItemColor, item }} />
-//         )}
-//       />
-//     );
-//   }
-// }
