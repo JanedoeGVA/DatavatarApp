@@ -6,6 +6,7 @@ const FITBIT_LOGO = require('../assets/images/fitbit-logo.png');
 const GARMIN_LOGO = require('../assets/images/garmin-logo.png');
 const WITHINGS_LOGO = require('../assets/images/withings-logo.png');
 const STRAVA_LOGO = require('../assets/images/strava-logo.png');
+const ADD_LOGO = require('../assets/images/add.png');
 
 class ActivityTracker {
   constructor(id, provider, protocol, logo) {
@@ -61,6 +62,12 @@ const STRAVA_TRACKER = new ActivityTracker(
   Constant.OAUTH2,
   STRAVA_LOGO
 );
+
+export const ADD_TRACKER = {
+  id: Constant.ADD_ID,
+  provider: Constant.ADD_PROVIDER,
+  logo: ADD_LOGO
+};
 
 export const lstTrackers = [
   FITBIT_TRACKER,

@@ -1,21 +1,9 @@
 import React from 'react';
 import { View } from 'react-native';
-import { NavigationEvents } from 'react-navigation';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { load as actionLoad } from '../actions';
 import TrackerGrid from '../../../components/tracker_grid';
-import * as Datavatar from '../../../api/datavatar';
-
-const ID_ADD = -1;
-
-// const logoAdd = require('../../../assets/images/add.png');
-
-// const ADD_TRACKER = {
-//   id: ID_ADD,
-//   provider: 'Subscribe',
-//   logo: logoAdd
-// };
+import { ADD_TRACKER } from '../../../api/activity_tracker';
 
 class Home extends React.Component {
   static navigationOptions = {
@@ -29,8 +17,7 @@ class Home extends React.Component {
 
   onPressItem = (item) => {
     const { navigation } = this.props;
-    console.log(`item press() : ${JSON.stringify(item)}`);
-    if (item.id === ID_ADD) {
+    if (item.id === ADD_TRACKER.id) {
       navigation.navigate('Subscribe');
     } else {
       // Explorer(item)
@@ -47,24 +34,11 @@ class Home extends React.Component {
           onPressItem={this.onPressItem}
           setItemColor={this.setItemColor}
           lstTrackers={lstSubscribedTrackers}
-          // lstTrackers={lstSubscribedTrackers.concat(ADD_TRACKER)}
         />
       </View>
     );
   }
 }
-
-// Home.propTypes = {
-//   lstSubscribedTrackers: PropTypes.arrayOf(
-//     PropTypes.shape({
-//       logo: PropTypes.oneOfType([
-//         PropTypes.shape({ testUri: PropTypes.string }),
-//         PropTypes.number
-//       ]).isRequired,
-//       provider: PropTypes.string.isRequired
-//     })
-//   ).isRequired
-// };
 
 const mapStateToProps = (state) => ({
   lstSubscribedTrackers: state.home.lstSubscribedTrackers

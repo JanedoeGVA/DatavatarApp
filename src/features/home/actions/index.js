@@ -1,17 +1,17 @@
 import { getLstActTrackerSubscribed } from '../../../api/activity_tracker';
 import {
-  CREATE_IS_PROCESSING,
-  CREATE_ITEM_HAS_ERRORED,
+  LOAD_IS_PROCESSING,
+  LOAD_HAS_ERRORED,
   LOAD_SUCCESS
 } from '../constant';
 
 export const isProcessing = (bool) => ({
-  type: CREATE_IS_PROCESSING,
+  type: LOAD_IS_PROCESSING,
   payload: bool
 });
 
-export const createItemHasErrored = (bool) => ({
-  type: CREATE_ITEM_HAS_ERRORED,
+export const loadHasErrored = (bool) => ({
+  type: LOAD_HAS_ERRORED,
   payload: bool
 });
 
@@ -27,5 +27,5 @@ export const load = () => (dispatch) => {
       dispatch(isProcessing(false));
       dispatch(loadSuccess(lstSubscribedTrackers));
     })
-    .catch(() => dispatch(createItemHasErrored(true)));
+    .catch(() => dispatch(loadHasErrored(true)));
 };
