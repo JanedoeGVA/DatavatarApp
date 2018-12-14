@@ -14,11 +14,11 @@ const INITIAL_STATE = {
 const create = (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case LOAD_HAS_ERRORED:
-      return { ...state, hasErrored: action.payload };
+      return { ...state, hasErrored: action.hasErrored };
     case LOAD_IS_PROCESSING:
-      return { ...state, isProcessing: action.payload };
+      return { ...state, isProcessing: action.isProcessing };
     case LOAD_SUCCESS:
-      return { ...state, lstSubscribedTrackers: action.payload };
+      return { ...state, lstSubscribedTrackers: action.lstSubscribedTrackers };
     default:
       return state;
   }

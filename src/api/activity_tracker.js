@@ -83,14 +83,11 @@ export const getLstActTrackerSubscribed = () =>
     store
       .getLstActTracker()
       .then((dbList) => {
-        console.log('dbList :' + JSON.stringify(dbList));
         const LstActTrackerSubscribed = [];
         const dbArray = Object.keys(dbList).map((key) =>
           LstActTrackerSubscribed.push(lstTrackersSort[dbList[key].id])
         ); // Object.values(apiLists); /**/ !!!ES7 functions seems works only on debug mod */
-        console.log(JSON.stringify(dbArray));
-        const list = [{ id: 3, provider: 'Subscribe', logo: 2 }];
-        resolve(list);
+        resolve(dbArray);
       })
       .catch((error) => {
         reject(error);
