@@ -7,25 +7,35 @@ import {
 
 export const isProcessing = (bool) => ({
   type: LOAD_IS_PROCESSING,
-  payload: bool
+  bool
 });
 
 export const loadHasErrored = (bool) => ({
   type: LOAD_HAS_ERRORED,
-  payload: bool
+  bool
 });
 
 export const loadSuccess = (lstSubscribedTrackers) => ({
   type: LOAD_SUCCESS,
-  payload: lstSubscribedTrackers
+  lstSubscribedTrackers
 });
 
 export const load = () => (dispatch) => {
   dispatch(isProcessing(true));
-  getLstActTrackerSubscribed()
+  return getLstActTrackerSubscribed()
     .then((lstSubscribedTrackers) => {
       dispatch(isProcessing(false));
       dispatch(loadSuccess(lstSubscribedTrackers));
     })
     .catch(() => dispatch(loadHasErrored(true)));
 };
+
+// export const load = () => (dispatch) => {
+//   dispatch(isProcessing(true));
+//   getLstActTrackerSubscribed()
+//     .then((lstSubscribedTrackers) => {
+//       dispatch(isProcessing(false));
+//       dispatch(loadSuccess(lstSubscribedTrackers));
+//     })
+//     .catch(() => dispatch(loadHasErrored(true)));
+// };
