@@ -18,7 +18,13 @@ const create = (state = INITIAL_STATE, action) => {
     case LOAD_IS_PROCESSING:
       return { ...state, isProcessing: action.isProcessing };
     case LOAD_SUCCESS:
-      return { ...state, lstSubscribedTrackers: action.lstSubscribedTrackers };
+      return {
+        ...state,
+        lstSubscribedTrackers: [
+          ...state.lstSubscribedTrackers,
+          action.lstSubscribedTrackers
+        ]
+      };
     default:
       return state;
   }

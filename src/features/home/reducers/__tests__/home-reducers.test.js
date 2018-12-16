@@ -10,41 +10,69 @@ describe('home reducer', () => {
     });
   });
 
-  it('should handle ADD_TODO', () => {
+  it('should ', () => {
     expect(
-      reducer([], {
-        type: types.LOAD_HAS_ERRORED,
-        hasErrored: false
-      })
+      reducer(
+        {},
+        {
+          type: types.LOAD_HAS_ERRORED,
+          hasErrored: true
+        }
+      )
     ).toEqual({
-      hasErrored: false
+      hasErrored: true
     });
-
-    //     expect(
-    //       reducer(
-    //         [
-    //           {
-    //             text: 'Use Redux',
-    //             completed: false,
-    //             id: 0
-    //           }
-    //         ],
-    //         {
-    //           type: types.ADD_TODO,
-    //           text: 'Run the tests'
-    //         }
-    //       )
-    //     ).toEqual([
-    //       {
-    //         text: 'Run the tests',
-    //         completed: false,
-    //         id: 1
-    //       },
-    //       {
-    //         text: 'Use Redux',
-    //         completed: false,
-    //         id: 0
-    //       }
-    //     ]);
   });
+
+  it('should ', () => {
+    expect(
+      reducer(
+        {},
+        {
+          type: types.LOAD_IS_PROCESSING,
+          isProcessing: true
+        }
+      )
+    ).toEqual({
+      isProcessing: true
+    });
+  });
+  it('should ', () => {
+    expect(
+      reducer(
+        {},
+        {
+          type: types.LOAD_SUCCESS,
+          lstSubscribedTrackers: {
+            id: 3,
+            provider: 'Fibit',
+            logo: 2
+          }
+        }
+      )
+    ).toEqual({
+      lstSubscribedTrackers: {
+        id: 3,
+        provider: 'Fibit',
+        logo: 2
+      }
+    });
+  });
+  // it('should ', () => {
+  //   expect(
+  //     reducer(
+  //       {
+  //         lstSubscribedTrackers: [{ id: 3 }],
+  //         isProcessing: false,
+  //         hasErrored: false
+  //       },
+  //       {
+  //         type: types.LOAD_SUCCESS,
+  //         lstSubscribedTrackers: { id: 2 }
+  //       }
+  //     )
+  //   ).toEqual({
+  //     lstSubscribedTrackers: { id: 1 }
+  //   });
+  // });
 });
