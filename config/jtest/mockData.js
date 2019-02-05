@@ -3,12 +3,26 @@ const logoGarmin = require('../../src/assets/images/garmin-logo.png');
 
 const trackers = [
   {
-    logo: logoStrava,
-    provider: 'Strava'
+    id: 10,
+    provider: 'Strava',
+    isAvailable: true,
+    isValide: true,
+    protocol: '',
+    accessTokenKey: '',
+    refreshTokenKey: '',
+    accessTokenSecret: '',
+    logo: logoStrava
   },
   {
-    logo: logoGarmin,
-    provider: 'Garmin'
+    id: 11,
+    provider: 'Garmin',
+    isAvailable: true,
+    isValide: true,
+    protocol: '',
+    accessTokenKey: '',
+    refreshTokenKey: '',
+    accessTokenSecret: '',
+    logo: logoGarmin
   }
 ];
 

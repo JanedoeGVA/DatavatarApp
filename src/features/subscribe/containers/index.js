@@ -1,9 +1,9 @@
 import React from 'react';
 import { View, Linking } from 'react-native';
 import { NavigationEvents } from 'react-navigation';
-import TrackerGrid from '../../../components/tracker_grid';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import TrackerGrid from '../../../components/tracker_grid';
 import { subscribeActTracker } from '../actions';
 import * as Datavatar from '../../../api/datavatar';
 

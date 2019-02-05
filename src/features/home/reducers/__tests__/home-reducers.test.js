@@ -1,16 +1,18 @@
 import reducer from '../index';
 import * as types from '../../constant';
+import trackers from '../../../../../config/jtest/mockData';
+import { ADD_TRACKER } from '../../../../api/activity_tracker';
 
 describe('home reducer', () => {
   it('should return the initial state', () => {
     expect(reducer(undefined, {})).toEqual({
-      lstSubscribedTrackers: [types.ADD_TRACKER],
+      lstSubscribedTrackers: [ADD_TRACKER],
       isProcessing: false,
       hasErrored: false
     });
   });
 
-  it('should ', () => {
+  it('should return has errored to be true', () => {
     expect(
       reducer(
         {},
@@ -24,7 +26,7 @@ describe('home reducer', () => {
     });
   });
 
-  it('should ', () => {
+  it('should return processing to be true', () => {
     expect(
       reducer(
         {},
@@ -37,42 +39,17 @@ describe('home reducer', () => {
       isProcessing: true
     });
   });
-  it('should ', () => {
+
+  it('should return the new state', () => {
     expect(
-      reducer(
-        {},
-        {
-          type: types.LOAD_SUCCESS,
-          lstSubscribedTrackers: {
-            id: 3,
-            provider: 'Fibit',
-            logo: 2
-          }
-        }
-      )
+      reducer(undefined, {
+        type: types.LOAD_SUCCESS,
+        lstSubscribedTrackers: trackers
+      })
     ).toEqual({
-      lstSubscribedTrackers: {
-        id: 3,
-        provider: 'Fibit',
-        logo: 2
-      }
+      lstSubscribedTrackers: [ADD_TRACKER, ...trackers],
+      isProcessing: false,
+      hasErrored: false
     });
   });
-  // it('should ', () => {
-  //   expect(
-  //     reducer(
-  //       {
-  //         lstSubscribedTrackers: [{ id: 3 }],
-  //         isProcessing: false,
-  //         hasErrored: false
-  //       },
-  //       {
-  //         type: types.LOAD_SUCCESS,
-  //         lstSubscribedTrackers: { id: 2 }
-  //       }
-  //     )
-  //   ).toEqual({
-  //     lstSubscribedTrackers: { id: 1 }
-  //   });
-  // });
 });

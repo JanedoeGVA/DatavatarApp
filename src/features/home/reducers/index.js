@@ -1,9 +1,9 @@
 import {
   LOAD_IS_PROCESSING,
   LOAD_HAS_ERRORED,
-  LOAD_SUCCESS,
-  ADD_TRACKER
+  LOAD_SUCCESS
 } from '../constant';
+import { ADD_TRACKER } from '../../../api/activity_tracker';
 
 const INITIAL_STATE = {
   lstSubscribedTrackers: [ADD_TRACKER],
@@ -22,7 +22,7 @@ const create = (state = INITIAL_STATE, action) => {
         ...state,
         lstSubscribedTrackers: [
           ...state.lstSubscribedTrackers,
-          action.lstSubscribedTrackers
+          ...action.lstSubscribedTrackers
         ]
       };
     default:

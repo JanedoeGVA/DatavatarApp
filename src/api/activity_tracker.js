@@ -62,12 +62,17 @@ const STRAVA_TRACKER = new ActivityTracker(
   Constant.OAUTH2,
   STRAVA_LOGO
 );
-
-export const ADD_TRACKER = {
-  id: Constant.ADD_ID,
-  provider: Constant.ADD_PROVIDER,
-  logo: ADD_LOGO
-};
+export const ADD_TRACKER = new ActivityTracker(
+  Constant.ADD_ID,
+  Constant.ADD_PROVIDER,
+  'Subscribe',
+  ADD_LOGO
+);
+// export const ADD_TRACKER = {
+//   id: Constant.ADD_ID,
+//   provider: Constant.ADD_PROVIDER,
+//   logo: ADD_LOGO
+// };
 
 export const lstTrackers = [
   FITBIT_TRACKER,
