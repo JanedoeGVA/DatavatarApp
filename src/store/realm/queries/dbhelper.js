@@ -29,6 +29,18 @@ export const getLstActTracker = () =>
       });
   });
 
+export const getLstActTrackerSubscribed = () =>
+  new Promise((resolve, reject) => {
+    const filter = 'isAvailable == false';
+    db.query(TBL_ACT_TRACKER_SCHEMA, filter)
+      .then((lstActTracker) => {
+        resolve(lstActTracker);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+
 export const removeActTracker = (actTracker) =>
   new Promise((resolve, reject) => {
     db.remove(TBL_ACT_TRACKER_SCHEMA, actTracker)

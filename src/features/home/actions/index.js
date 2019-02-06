@@ -4,6 +4,7 @@ import {
   LOAD_HAS_ERRORED,
   LOAD_SUCCESS
 } from '../constant';
+import Realm from 'realm';
 
 export const isProcessing = (bool) => ({
   type: LOAD_IS_PROCESSING,
@@ -21,6 +22,8 @@ export const loadSuccess = (lstSubscribedTrackers) => ({
 });
 
 export const load = () => (dispatch) => {
+  console.log(`Realm default path = ${Realm.defaultPath}`);
+
   dispatch(isProcessing(true));
   return getLstActTrackerSubscribed()
     .then((lstSubscribedTrackers) => {

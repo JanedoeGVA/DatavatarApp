@@ -6,9 +6,10 @@ export const schema = {
   properties: {
     id: { type: 'int' },
     provider: 'string',
+    isAvailable: 'bool',
     isValide: 'bool',
-    protocole: 'string',
-    accessTokenKey: 'string',
+    protocol: 'string',
+    accessTokenKey: { type: 'string', optional: true },
     refreshTokenKey: { type: 'string', optional: true },
     accessTokenSecret: { type: 'string', optional: true }
   }

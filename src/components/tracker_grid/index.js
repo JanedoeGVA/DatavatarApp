@@ -27,11 +27,11 @@ GridComponent.propTypes = {
       accessTokenKey: PropTypes.string.isRequired,
       accessTokenSecret: PropTypes.string.isRequired,
       protocol: PropTypes.string.isRequired,
-      refreshTokenKey: PropTypes.string.isRequired,
-      logo: PropTypes.oneOfType([
-        PropTypes.shape({ testUri: PropTypes.string }),
-        PropTypes.number
-      ]).isRequired
+      refreshTokenKey: PropTypes.string.isRequired
+      // logo: PropTypes.oneOfType([
+      //   PropTypes.shape({ testUri: PropTypes.string }),
+      //   PropTypes.number
+      // ]).isRequired
     })
   ).isRequired
 };
