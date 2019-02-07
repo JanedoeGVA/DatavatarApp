@@ -6,22 +6,27 @@ const trackers = [
     id: 10,
     provider: 'Strava',
     isAvailable: true,
-    isValide: true,
     protocol: '',
-    accessTokenKey: '',
-    refreshTokenKey: '',
-    accessTokenSecret: '',
+    token: {
+      isValide: true,
+      accessTokenKey: '',
+      refreshTokenKey: '',
+      accessTokenSecret: ''
+    },
     logo: logoStrava
   },
   {
     id: 11,
     provider: 'Garmin',
     isAvailable: true,
-    isValide: true,
     protocol: '',
-    accessTokenKey: '',
-    refreshTokenKey: '',
-    accessTokenSecret: '',
+    token: {
+      isValide: true,
+      accessTokenKey: '',
+      refreshTokenKey: '',
+      accessTokenSecret: ''
+    },
+
     logo: logoGarmin
   }
 ];

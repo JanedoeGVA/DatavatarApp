@@ -53,7 +53,7 @@ exports[`Tracker Grid Item Component renders a TrackerGridItem using Snapshots 1
         }
       }
     >
-      Strava
+      true
     </Text>
   </View>
 </View>

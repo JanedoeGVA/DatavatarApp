@@ -5,6 +5,18 @@ export default class DB {
     this.config = config;
   }
 
+  isEmpty = (model) =>
+    new Promise((resolve, reject) =>
+      Realm.open(this.config)
+        .then((realm) => {
+          const objects = realm.objects(model);
+          resolve(objects.isEmpty);
+        })
+        .catch((error) => {
+          reject(error);
+        })
+    );
+
   insert = (model, item) =>
     new Promise((resolve, reject) =>
       Realm.open(this.config)
@@ -19,6 +31,19 @@ export default class DB {
         })
     );
 
+  insertCollection = (model, arr) =>
+    new Promise((resolve, reject) =>
+      Realm.open(this.config)
+        .then((realm) => {
+          realm.write(() => {
+            arr.map((item) => realm.create(model, item));
+            resolve();
+          });
+        })
+        .catch((error) => {
+          reject(error);
+        })
+    );
   // nextId = (objects) => {
   //   const lastId = objects.max('id');
   //   if (lastId === undefined) {

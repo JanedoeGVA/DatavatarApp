@@ -27,6 +27,10 @@ export const load = () => (dispatch) => {
   dispatch(isProcessing(true));
   return getLstActTrackerSubscribed()
     .then((lstSubscribedTrackers) => {
+      console.log(`load`);
+      console.log(
+        `lstSubscribedTrackers : ${JSON.stringify(lstSubscribedTrackers)}`
+      );
       dispatch(isProcessing(false));
       dispatch(loadSuccess(lstSubscribedTrackers));
     })

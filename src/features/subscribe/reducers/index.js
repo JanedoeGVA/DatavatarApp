@@ -21,9 +21,9 @@ const subscribe = (state = INITIAL_STATE, action) => {
       return { ...state, isProcessing: action.isProcessing };
     case LOAD_SUCCESS:
       return {
-        ...state,
+        [...state,action.lstTrackers]
         // TODO: WARNING IMMUTABLE ????
-        lstTrackers: action.lstTrackers
+        //lstTrackers: action.lstTrackers
       };
     case SUBSCRIBE_HAS_ERRORED:
       return { ...state, hasErrored: action.hasErrored };

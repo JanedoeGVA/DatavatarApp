@@ -4,6 +4,28 @@ import { TBL_ACT_TRACKER_SCHEMA, config } from '../models/activityTracker';
 
 const db = new DB(config, Realm);
 
+export const isEmpty = () =>
+  new Promise((resolve, reject) => {
+    db.isEmpty(TBL_ACT_TRACKER_SCHEMA)
+      .then((empty) => {
+        resolve(empty);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+
+export const addListActTracker = (lstActTracker) =>
+  new Promise((resolve, reject) => {
+    db.insertCollection(TBL_ACT_TRACKER_SCHEMA, lstActTracker)
+      .then(() => {
+        resolve();
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+
 export const addActTracker = (actTracker) =>
   new Promise((resolve, reject) => {
     console.log(

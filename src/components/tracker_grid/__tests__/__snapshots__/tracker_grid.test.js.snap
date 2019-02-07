@@ -6,30 +6,34 @@ exports[`Tracker Grid Component renders a TrackerGrid using Snapshots 1`] = `
     Array [
       Array [
         Object {
-          "accessTokenKey": "",
-          "accessTokenSecret": "",
           "id": 10,
           "isAvailable": true,
-          "isValide": true,
           "logo": Object {
             "testUri": "../../../src/assets/images/strava-logo.png",
           },
           "protocol": "",
           "provider": "Strava",
-          "refreshTokenKey": "",
+          "token": Object {
+            "accessTokenKey": "",
+            "accessTokenSecret": "",
+            "isValide": true,
+            "refreshTokenKey": "",
+          },
         },
         Object {
-          "accessTokenKey": "",
-          "accessTokenSecret": "",
           "id": 11,
           "isAvailable": true,
-          "isValide": true,
           "logo": Object {
             "testUri": "../../../src/assets/images/garmin-logo.png",
           },
           "protocol": "",
           "provider": "Garmin",
-          "refreshTokenKey": "",
+          "token": Object {
+            "accessTokenKey": "",
+            "accessTokenSecret": "",
+            "isValide": true,
+            "refreshTokenKey": "",
+          },
         },
       ],
     ]
@@ -147,7 +151,7 @@ exports[`Tracker Grid Component renders a TrackerGrid using Snapshots 1`] = `
                     }
                   }
                 >
-                  Strava
+                  true
                 </Text>
               </View>
             </View>
@@ -218,7 +222,7 @@ exports[`Tracker Grid Component renders a TrackerGrid using Snapshots 1`] = `
                     }
                   }
                 >
-                  Garmin
+                  true
                 </Text>
               </View>
             </View>

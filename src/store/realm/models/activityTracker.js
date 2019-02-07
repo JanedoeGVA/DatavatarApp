@@ -1,6 +1,17 @@
 // Define your models and their properties
 
 export const TBL_ACT_TRACKER_SCHEMA = 'actTracker';
+const TBL_TOKEN_SCHEMA = 'token';
+
+const tokenSchema = {
+  name: TBL_TOKEN_SCHEMA,
+  properties: {
+    isValide: 'bool',
+    accessTokenKey: { type: 'string', optional: true },
+    refreshTokenKey: { type: 'string', optional: true },
+    accessTokenSecret: { type: 'string', optional: true }
+  }
+};
 
 export const schema = {
   name: TBL_ACT_TRACKER_SCHEMA,
@@ -9,16 +20,14 @@ export const schema = {
     id: { type: 'int' },
     provider: 'string',
     isAvailable: 'bool',
-    isValide: 'bool',
     protocol: 'string',
-    accessTokenKey: { type: 'string', optional: true },
-    refreshTokenKey: { type: 'string', optional: true },
-    accessTokenSecret: { type: 'string', optional: true }
+    token: { type: TBL_TOKEN_SCHEMA },
+    logo: 'int'
   }
 };
 
 export const config = {
   path: 'datavatarApp.realm',
-  schema: [schema],
+  schema: [schema, tokenSchema],
   schemaVersion: 0 // optional
 };

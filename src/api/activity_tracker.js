@@ -8,110 +8,133 @@ const WITHINGS_LOGO = require('../assets/images/withings-logo.png');
 const STRAVA_LOGO = require('../assets/images/strava-logo.png');
 const ADD_LOGO = require('../assets/images/add.png');
 
-export const LOGO = {
-  FITBIT_LOGO,
-  GARMIN_LOGO,
-  WITHINGS_LOGO,
-  STRAVA_LOGO,
-  ADD_LOGO
+const getLogo = (provider) => {
+  switch (provider) {
+    case Constant.FITBIT_PROVIDER:
+      return FITBIT_LOGO;
+    case Constant.GARMIN_PROVIDER:
+      return GARMIN_LOGO;
+    case Constant.STRAVA_PROVIDER:
+      return STRAVA_LOGO;
+    case Constant.WITHINGS_PROVIDER:
+      return WITHINGS_LOGO;
+    default:
+      return ADD_LOGO;
+  }
 };
-
+class Token {
+  constructor() {
+    this.isValide = false;
+    this.accessTokenKey = '';
+    this.accessTokenSecret = '';
+    this.refreshTokenKey = '';
+  }
+}
 class ActivityTracker {
   constructor(id, provider, protocol, isAvailable = true) {
     this.id = id;
     this.provider = provider;
-    // this.isAvailable = store.isExist(provider);
     this.isAvailable = isAvailable;
-    this.isValide = false;
     this.protocol = protocol;
-    this.accessTokenKey = '';
-    this.refreshTokenKey = '';
-    this.accessTokenSecret = '';
-    // this.logo = logo;
+    this.token = new Token();
+    this.logo = getLogo(provider);
   }
 }
 
 ActivityTracker.propTypes = {
   id: PropTypes.number.isRequired,
   provider: PropTypes.string.isRequired,
-  isAvailable: PropTypes.bool.isRequired,
-  isValide: PropTypes.bool.isRequired,
+  isAvailable: PropTypes.bool,
   protocol: PropTypes.string.isRequired,
-  accessTokenKey: PropTypes.string.isRequired,
-  refreshTokenKey: PropTypes.string.isRequired,
-  accessTokenSecret: PropTypes.string.isRequired
-  // logo: PropTypes.element.isRequired
+  logo: PropTypes.number.isRequired,
+  token: PropTypes.objectOf(
+    PropTypes.shape({
+      isValide: PropTypes.bool,
+      accessTokenKey: PropTypes.string,
+      refreshTokenKey: PropTypes.string,
+      accessTokenSecret: PropTypes.string
+    })
+  )
 };
 
 const FITBIT_TRACKER = new ActivityTracker(
   Constant.FITBIT_ID,
   Constant.FITBIT_PROVIDER,
-  Constant.OAUTH2
-  // FITBIT_LOGO
+  Constant.OAUTH2,
+  false
 );
 
 const GARMIN_TRACKER = new ActivityTracker(
   Constant.GARMIN_ID,
   Constant.GARMIN_PROVIDER,
   Constant.OAUTH1
-  // GARMIN_LOGO
 );
 
 const WITHINGS_TRACKER = new ActivityTracker(
   Constant.WITHINGS_ID,
   Constant.WITHINGS_PROVIDER,
   Constant.OAUTH2
-  // WITHINGS_LOGO
 );
 
 const STRAVA_TRACKER = new ActivityTracker(
   Constant.STRAVA_ID,
   Constant.STRAVA_PROVIDER,
   Constant.OAUTH2
-  // STRAVA_LOGO
 );
 export const ADD_TRACKER = new ActivityTracker(
   Constant.ADD_ID,
   Constant.ADD_PROVIDER,
   'Subscribe',
   false
-  // ADD_LOGO
 );
-// export const ADD_TRACKER = {
-//   id: Constant.ADD_ID,
-//   provider: Constant.ADD_PROVIDER,
-//   logo: ADD_LOGO
-// };
 
-export const lstTrackers = {
+export const lstTrackers = [
   FITBIT_TRACKER,
   GARMIN_TRACKER,
   STRAVA_TRACKER,
   WITHINGS_TRACKER
-};
+];
 
-// const lstTrackersSort = lstTrackers.sort((a, b) => a.id - b.id);
-export const getLstActTrackerSubscribed = () =>
+const getLstActTrackerSubscribedUnsafe = () =>
   new Promise((resolve, reject) => {
-    // store.addActTracker(STRAVA_TRACKER).then(() => {
+    console.log(`getLstActTrackerSubscribedUnsafe`);
     store
       .getLstActTrackerSubscribed()
       .then((dbList) => {
-        console.log(`dblist ${JSON.stringify(dbList)}`);
-        // const LstActTrackerSubscribed = [];
+        console.log(`dblist : ${dbList}`);
         const dbArray = Object.keys(dbList).map((key) => dbList[key]);
-        // const dbArray = Object.keys(dbList).map((key) =>
-        // LstActTrackerSubscribed.push(lstTrackers[dbList[key].id])
-        // );
-        // Object.values(apiLists); /**/ !!!ES7 functions seems works only on debug mod */
-        console.log(`dbarray ${JSON.stringify(dbArray)}`);
         resolve(dbArray);
       })
       .catch((error) => {
         reject(error);
-        console.log(`error :${error}`);
       });
-    // });
+  });
+
+export const getLstActTrackerSubscribed = () =>
+  new Promise((resolve, reject) => {
+    console.log(`getLstActTrackerSubscribed`);
+    store.isEmpty().then((empty) => {
+      if (empty) {
+        console.log(`db empty`);
+        store
+          .addListActTracker(lstTrackers)
+          .then(() => {
+            getLstActTrackerSubscribedUnsafe().then((dbArray) =>
+              resolve(dbArray)
+            );
+          })
+          .catch((error) => {
+            reject(error);
+          });
+      } else {
+        console.log(`db not empty`);
+        getLstActTrackerSubscribedUnsafe()
+          .then((dbArray) => resolve(dbArray))
+          .catch((error) => {
+            reject(error);
+          });
+      }
+    });
   });
 
 export const getLstActTracker = () =>
