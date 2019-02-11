@@ -3,7 +3,12 @@ import { Text, View, TouchableHighlight, Image } from 'react-native';
 import PropTypes from 'prop-types';
 import styles from './styles';
 
-const TrackerGridItem = ({ onPressItem, setItemColor, item }) => (
+const TrackerGridItem = ({
+  onPressItem,
+  setItemColor,
+  item,
+  showAvailable
+}) => (
   <TouchableHighlight
     onPress={() => {
       onPressItem(item);
@@ -22,12 +27,25 @@ const TrackerGridItem = ({ onPressItem, setItemColor, item }) => (
         style={styles.logo}
         source={item.logo}
       />
-      <Text style={styles.itemName}>{item.token.isValide.toString()}</Text>
+      <Text style={styles.itemName}>{item.provider.toString()}</Text>
+      {showAvailable && (
+        <Text
+          style={
+            item.isAvailable ? styles.itemAvailable : styles.itemNotAvailable
+          }
+        >
+          {item.isAvailable ? 'Available' : 'Subcribed'}
+        </Text>
+      )}
     </View>
   </TouchableHighlight>
 );
 
 export default TrackerGridItem;
+
+TrackerGridItem.defaultProps = {
+  showAvailable: false
+};
 
 TrackerGridItem.propTypes = {
   onPressItem: PropTypes.func.isRequired,
@@ -38,5 +56,6 @@ TrackerGridItem.propTypes = {
       PropTypes.shape({ testUri: PropTypes.string }),
       PropTypes.number
     ]).isRequired
-  }).isRequired
+  }).isRequired,
+  showAvailable: PropTypes.bool
 };

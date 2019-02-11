@@ -19,6 +19,16 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontWeight: '600'
   },
+  itemAvailable: {
+    fontSize: 16,
+    color: '#008000',
+    fontWeight: '600'
+  },
+  itemNotAvailable: {
+    fontSize: 16,
+    color: '#FF0000',
+    fontWeight: '600'
+  },
   opacity: 50
 });
 

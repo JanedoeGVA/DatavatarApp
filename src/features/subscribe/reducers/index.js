@@ -19,12 +19,32 @@ const subscribe = (state = INITIAL_STATE, action) => {
       return { ...state, hasErrored: action.hasErrored };
     case LOAD_IS_PROCESSING:
       return { ...state, isProcessing: action.isProcessing };
-    case LOAD_SUCCESS:
+    case LOAD_SUCCESS: {
+      // if (state.lstTrackers.length === 0) {
+      //   return {
+      //     ...state,
+      //     lstTrackers: [...state.lstTrackers, ...action.lstTrackers]
+      //   };
+      // }
+      // return state;
+      // TODO: WARNING IMMUTABLE ????
+      // update the list
+      const merge = {};
+      state.lstTrackers.forEach((trackerAct) => {
+        merge[trackerAct.id] = trackerAct;
+      });
+      action.lstTrackers.forEach((trackerAct) => {
+        merge[trackerAct.id] = trackerAct;
+      });
+      const update = [];
+      Object.keys(merge).forEach((key) => {
+        update.push(merge[key]);
+      });
       return {
-        [...state,action.lstTrackers]
-        // TODO: WARNING IMMUTABLE ????
-        //lstTrackers: action.lstTrackers
+        ...state,
+        lstTrackers: update
       };
+    }
     case SUBSCRIBE_HAS_ERRORED:
       return { ...state, hasErrored: action.hasErrored };
     case SUBSCRIBE_IS_PROCESSING:

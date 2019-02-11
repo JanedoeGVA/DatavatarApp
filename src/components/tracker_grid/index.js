@@ -4,16 +4,27 @@ import GridView from 'react-native-super-grid';
 import styles from './styles';
 import TrackerGridItem from '../tracker_grid_item';
 
-const GridComponent = ({ lstTrackers, onPressItem, setItemColor }) => (
+const GridComponent = ({
+  lstTrackers,
+  onPressItem,
+  setItemColor,
+  showAvailable
+}) => (
   <GridView
     itemDimension={130}
     items={lstTrackers}
     style={styles.gridView}
     renderItem={(item) => (
-      <TrackerGridItem {...{ onPressItem, setItemColor, item }} />
+      <TrackerGridItem
+        {...{ onPressItem, setItemColor, item, showAvailable }}
+      />
     )}
   />
 );
+
+GridComponent.defaultProps = {
+  showAvailable: false
+};
 
 GridComponent.propTypes = {
   onPressItem: PropTypes.func.isRequired,
@@ -35,7 +46,8 @@ GridComponent.propTypes = {
         PropTypes.number
       ]).isRequired
     })
-  ).isRequired
+  ).isRequired,
+  showAvailable: PropTypes.bool
 };
 
 export default GridComponent;

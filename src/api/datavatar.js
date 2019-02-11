@@ -22,7 +22,7 @@ export const authorization = (provider, protocol) => {
       console.log(`authorization protocol = ${protocol}`);
       if (protocol === Constant.OAUTH1) {
         console.log('storing requestTokenSecret : ');
-        store.storeData('requestTokenSecret', json.requestTokenSecret);
+        store.saveData('requestTokenSecret', json.requestTokenSecret);
       }
       console.log('linking call');
       Linking.openURL(json.urlVerification);
@@ -52,7 +52,7 @@ const accessToken = (verificationURL) =>
 
 export const verification = (url) =>
   new Promise((resolve, reject) => {
-    console.log(`verification`);
+    console.log(`@datavatar verification(url) call`);
     const uri = new URI(url);
     const provider = uri.host();
     const protocol = uri.segment(0);
@@ -60,7 +60,7 @@ export const verification = (url) =>
       vsprintf(FORMAT_URL, [provider, 'verification'])
     );
     if (protocol === Constant.OAUTH1) {
-      console.log(`oauth1`);
+      console.log(`@datavatar verification(url) type oauth1`);
       store
         .retrieveData('requestTokenSecret')
         .then((requestTokenSecret) => {

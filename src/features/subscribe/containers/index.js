@@ -86,6 +86,7 @@ class Subscribe extends React.Component {
           onPressItem={this.onPressItem}
           setItemColor={this.setItemColor}
           lstTrackers={lstTrackers}
+          showAvailable
         />
       </View>
     );
@@ -99,12 +100,12 @@ Subscribe.propTypes = {
       provider: PropTypes.string.isRequired,
       isAvailable: PropTypes.bool.isRequired,
       protocol: PropTypes.string.isRequired,
-      token: {
+      token: PropTypes.shape({
         isValide: PropTypes.bool.isRequired,
         accessTokenKey: PropTypes.string.isRequired,
         accessTokenSecret: PropTypes.string.isRequired,
         refreshTokenKey: PropTypes.string.isRequired
-      },
+      }),
       logo: PropTypes.oneOfType([
         PropTypes.shape({ testUri: PropTypes.string }),
         PropTypes.number
