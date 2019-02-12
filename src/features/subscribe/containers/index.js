@@ -102,9 +102,9 @@ Subscribe.propTypes = {
       protocol: PropTypes.string.isRequired,
       token: PropTypes.shape({
         isValide: PropTypes.bool.isRequired,
-        accessTokenKey: PropTypes.string.isRequired,
-        accessTokenSecret: PropTypes.string.isRequired,
-        refreshTokenKey: PropTypes.string.isRequired
+        accessTokenKey: PropTypes.string,
+        accessTokenSecret: PropTypes.string,
+        refreshTokenKey: PropTypes.string
       }),
       logo: PropTypes.oneOfType([
         PropTypes.shape({ testUri: PropTypes.string }),

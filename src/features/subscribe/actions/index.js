@@ -55,21 +55,21 @@ export const subscribeSuccess = (actTracker) => ({
   payload: actTracker
 });
 
-export const subscribeActTracker = (actTracker) => (dispatch) => {
+export const subscribeActTracker = (tokenActTracker) => (dispatch) => {
   dispatch(isProcessing(true));
-  console.log(
-    '@actions subscribeActTracker acTracker = ' + JSON.stringify(actTracker)
-  );
-  console.log('store addActTracker');
-
+  console.log(`@subscribeActTracker ${JSON.stringify(tokenActTracker)}`);
+  console.log('store updateActTracker');
   store
-    .addActTracker(actTracker)
-    .then(() => {
+    .updateActTracker(tokenActTracker)
+    .then((actTracker) => {
       dispatch(isProcessing(false));
       return actTracker;
     })
-    .then(() => {
+    .then((actTracker) => {
       dispatch(subscribeSuccess(actTracker));
     })
-    .catch(() => dispatch(subscribeHasErrored(true)));
+    .catch((error) => {
+      console.log(`error : ${error}`);
+      dispatch(subscribeHasErrored(true));
+    });
 };

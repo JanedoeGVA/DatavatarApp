@@ -85,11 +85,31 @@ export const removeAllActTracker = () =>
       });
   });
 
-export const updateActTracker = (actTracker) =>
+export const updateActTracker = (tokenActTracker) =>
   new Promise((resolve, reject) => {
-    db.update(TBL_ACT_TRACKER_SCHEMA, actTracker)
-      .then(() => {
-        resolve();
+    const filter = `provider = "${tokenActTracker.provider}"`;
+    db.query(TBL_ACT_TRACKER_SCHEMA, filter)
+      .then((actTracker) => {
+        console.log(`item not update ${JSON.stringify(actTracker[0])}`);
+        console.log(`id =${actTracker[0].id}`);
+        const updateItem = {
+          id: actTracker[0].id,
+          isAvailable: false,
+          token: {
+            isValide: tokenActTracker.isValide,
+            accessTokenKey: tokenActTracker.accessTokenKey,
+            refreshTokenKey: tokenActTracker.refreshTokenKey,
+            accessTokenSecret: tokenActTracker.accessTokenSecret
+          }
+        };
+        db.update(TBL_ACT_TRACKER_SCHEMA, updateItem)
+          .then(() => {
+            console.log(`item after update ${JSON.stringify(actTracker[0])}`);
+            resolve();
+          })
+          .catch((error) => {
+            reject(error);
+          });
       })
       .catch((error) => {
         reject(error);
