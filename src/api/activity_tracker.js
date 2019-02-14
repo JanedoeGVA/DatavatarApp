@@ -94,9 +94,47 @@ export const lstTrackers = [
   WITHINGS_TRACKER
 ];
 
-const getLstActTrackerSubscribedUnsafe = () =>
+// const getLstActTrackerSubscribedUnsafe = () =>
+//   new Promise((resolve, reject) => {
+//     console.log(`getLstActTrackerSubscribedUnsafe`);
+//     store
+//       .getLstActTrackerSubscribed()
+//       .then((dbList) => {
+//         console.log(`dblist : ${dbList}`);
+//         const dbArray = Object.keys(dbList).map((key) => dbList[key]);
+//         resolve(dbArray);
+//       })
+//       .catch((error) => {
+//         reject(error);
+//       });
+//   });
+
+export const loadIfDBEmpty = () =>
   new Promise((resolve, reject) => {
-    console.log(`getLstActTrackerSubscribedUnsafe`);
+    console.log(`loadIfDBEmpty`);
+    store
+      .isEmpty()
+      .then((empty) => {
+        if (empty) {
+          console.log(`db empty`);
+          store
+            .addListActTracker(lstTrackers)
+            .then(() => resolve())
+            .catch((error) => {
+              reject(error);
+            });
+        } else {
+          resolve();
+        }
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+
+export const getLstActTrackerSubscribed = () =>
+  new Promise((resolve, reject) => {
+    console.log(`getLstActTrackerSubscribed`);
     store
       .getLstActTrackerSubscribed()
       .then((dbList) => {
@@ -107,33 +145,6 @@ const getLstActTrackerSubscribedUnsafe = () =>
       .catch((error) => {
         reject(error);
       });
-  });
-
-export const getLstActTrackerSubscribed = () =>
-  new Promise((resolve, reject) => {
-    console.log(`getLstActTrackerSubscribed`);
-    store.isEmpty().then((empty) => {
-      if (empty) {
-        console.log(`db empty`);
-        store
-          .addListActTracker(lstTrackers)
-          .then(() => {
-            getLstActTrackerSubscribedUnsafe().then((dbArray) =>
-              resolve(dbArray)
-            );
-          })
-          .catch((error) => {
-            reject(error);
-          });
-      } else {
-        console.log(`db not empty`);
-        getLstActTrackerSubscribedUnsafe()
-          .then((dbArray) => resolve(dbArray))
-          .catch((error) => {
-            reject(error);
-          });
-      }
-    });
   });
 
 export const getLstActTracker = () =>
