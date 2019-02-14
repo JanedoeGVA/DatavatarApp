@@ -60,8 +60,7 @@ ActivityTracker.propTypes = {
 const FITBIT_TRACKER = new ActivityTracker(
   Constant.FITBIT_ID,
   Constant.FITBIT_PROVIDER,
-  Constant.OAUTH2,
-  false
+  Constant.OAUTH2
 );
 
 const GARMIN_TRACKER = new ActivityTracker(

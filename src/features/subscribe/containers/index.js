@@ -35,18 +35,11 @@ class Subscribe extends React.Component {
   };
 
   onPressItem = (item) => {
-    console.log(`item.provider: ${item.provider}`);
-    console.log(`item.protocol: ${item.protocol}`);
-    console.log(`item.isAvailable: ${item.isAvailable}`);
     if (item.isAvailable) {
       Datavatar.authorization(item.provider, item.protocol);
     } else {
       Alert.alert(`Already in your list`);
     }
-    // this.props.addTracker(item);
-    // return item.available
-    //   ? authorisation(item.api, item.auth_method)
-    //   : alert(`Already in your list`);
   };
 
   setItemColor = (item) => (item.isAvailable ? '#8be1b7' : '#c3ddd0');

@@ -105,7 +105,7 @@ export const updateActTracker = (tokenActTracker) =>
         db.update(TBL_ACT_TRACKER_SCHEMA, updateItem)
           .then(() => {
             console.log(`item after update ${JSON.stringify(actTracker[0])}`);
-            resolve();
+            resolve(actTracker[0]);
           })
           .catch((error) => {
             reject(error);

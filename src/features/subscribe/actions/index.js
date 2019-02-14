@@ -12,17 +12,17 @@ import {
 
 export const isLoadProcessing = (bool) => ({
   type: LOAD_IS_PROCESSING,
-  bool
+  payload: bool
 });
 
 export const loadHasErrored = (bool) => ({
   type: LOAD_HAS_ERRORED,
-  bool
+  payload: bool
 });
 
 export const loadSuccess = (lstTrackers) => ({
   type: LOAD_SUCCESS,
-  lstTrackers
+  payload: lstTrackers
 });
 
 export const load = () => (dispatch) => {
@@ -40,7 +40,7 @@ export const isMounting = (bool) => ({
   payload: bool
 });
 
-export const isProcessing = (bool) => ({
+export const subscribeIsProcessing = (bool) => ({
   type: SUBSCRIBE_IS_PROCESSING,
   payload: bool
 });
@@ -56,16 +56,22 @@ export const subscribeSuccess = (actTracker) => ({
 });
 
 export const subscribeActTracker = (tokenActTracker) => (dispatch) => {
-  dispatch(isProcessing(true));
+  dispatch(subscribeIsProcessing(true));
   console.log(`@subscribeActTracker ${JSON.stringify(tokenActTracker)}`);
   console.log('store updateActTracker');
   store
     .updateActTracker(tokenActTracker)
     .then((actTracker) => {
-      dispatch(isProcessing(false));
+      console.log('store updateActTracker done');
+      console.log(
+        `store updateActTracker actTracker ${JSON.stringify(actTracker)}`
+      );
+      dispatch(subscribeIsProcessing(false));
+      console.log('store updateActTracker dispatch');
       return actTracker;
     })
     .then((actTracker) => {
+      console.log(' dispatch subscribeSuccess ');
       dispatch(subscribeSuccess(actTracker));
     })
     .catch((error) => {

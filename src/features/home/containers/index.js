@@ -1,7 +1,8 @@
 import React from 'react';
+import { NavigationEvents } from 'react-navigation';
 import { View } from 'react-native';
 import { connect } from 'react-redux';
-import { load as actionLoad } from '../actions';
+import { load as actionLoad, update as actionLoad } from '../actions';
 import TrackerGrid from '../../../components/tracker_grid';
 import { ADD_TRACKER } from '../../../api/activity_tracker';
 
@@ -11,6 +12,7 @@ class Home extends React.Component {
   };
 
   componentDidMount() {
+    console.log('@Home componentDidMount');
     const { load } = this.props;
     load();
   }
@@ -30,6 +32,12 @@ class Home extends React.Component {
     const { lstSubscribedTrackers } = this.props;
     return (
       <View>
+        <NavigationEvents
+          onWillFocus={(payload) => console.log('@Home onWillFocus', payload)}
+          onDidFocus={(payload) => console.log('@Home onDidFocus', payload)}
+          onWillBlur={(payload) => console.log('@Home onWillBlur', payload)}
+          onDidBlur={(payload) => console.log('@Home onDidBlur', payload)}
+        />
         <TrackerGrid
           onPressItem={this.onPressItem}
           setItemColor={this.setItemColor}
@@ -45,7 +53,8 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  load: () => dispatch(actionLoad())
+  load: () => dispatch(actionLoad()),
+  update: () => dispatch(actionUpdate())
 });
 
 export default connect(
