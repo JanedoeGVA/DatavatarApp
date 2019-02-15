@@ -2,7 +2,7 @@ export const FITBIT_ID = 1;
 export const GARMIN_ID = 2;
 export const WITHINGS_ID = 3;
 export const STRAVA_ID = 4;
-export const ADD_ID = -1;
+export const ADD_ID = 0;
 
 export const FITBIT_PROVIDER = 'Fitbit';
 export const GARMIN_PROVIDER = 'Garmin';

@@ -20,24 +20,25 @@ const INITIAL_STATE = {
 const create = (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case LOAD_HAS_ERRORED:
-      return { ...state, loadHasErrored: action.hasErrored };
+      return { ...state, loadHasErrored: action.payload };
     case LOAD_IS_PROCESSING:
-      return { ...state, loadIsProcessing: action.isProcessing };
+      return { ...state, loadIsProcessing: action.payload };
     case LOAD_SUCCESS:
-      return { ...state, loadIsSuccess: action.isProcessing };
+      return { ...state, loadIsSuccess: action.payload };
     case UPDATE_HAS_ERRORED:
-      return { ...state, loadHasErrored: action.hasErrored };
+      return { ...state, loadHasErrored: action.payload };
     case UPDATE_IS_PROCESSING:
-      return { ...state, loadIsProcessing: action.isProcessing };
-    // TODO: need to merge the items  !!!
-    case UPDATE_SUCCESS:
+      return { ...state, loadIsProcessing: action.payload };
+    case UPDATE_SUCCESS: {
+      const oldLstSubscribedTrackers = state.lstSubscribedTrackers.filter(
+        (tracker) =>
+          !action.payload.some((newTracker) => tracker.id === newTracker.id)
+      );
       return {
         ...state,
-        lstSubscribedTrackers: [
-          ...state.lstSubscribedTrackers,
-          ...action.lstSubscribedTrackers
-        ]
+        lstSubscribedTrackers: oldLstSubscribedTrackers.concat(action.payload)
       };
+    }
     default:
       return state;
   }

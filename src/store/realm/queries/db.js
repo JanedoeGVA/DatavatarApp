@@ -5,6 +5,8 @@ export default class DB {
     this.config = config;
   }
 
+  getDefaultPath = () => Realm.defaultPath;
+
   isEmpty = (model) =>
     new Promise((resolve, reject) =>
       Realm.open(this.config)
