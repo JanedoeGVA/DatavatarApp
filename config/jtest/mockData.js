@@ -8,7 +8,6 @@ const trackers = [
     isAvailable: true,
     protocol: '',
     token: {
-      isValide: true,
       accessTokenKey: '',
       refreshTokenKey: '',
       accessTokenSecret: ''
@@ -21,7 +20,6 @@ const trackers = [
     isAvailable: true,
     protocol: '',
     token: {
-      isValide: true,
       accessTokenKey: '',
       refreshTokenKey: '',
       accessTokenSecret: ''

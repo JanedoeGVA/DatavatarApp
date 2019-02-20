@@ -96,7 +96,6 @@ export const updateActTracker = (tokenActTracker) =>
           id: actTracker[0].id,
           isAvailable: false,
           token: {
-            isValide: tokenActTracker.isValide,
             accessTokenKey: tokenActTracker.accessTokenKey,
             refreshTokenKey: tokenActTracker.refreshTokenKey,
             accessTokenSecret: tokenActTracker.accessTokenSecret

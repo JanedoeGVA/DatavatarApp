@@ -36,7 +36,6 @@ GridComponent.propTypes = {
       isAvailable: PropTypes.bool.isRequired,
       protocol: PropTypes.string.isRequired,
       token: PropTypes.shape({
-        isValide: PropTypes.bool.isRequired,
         accessTokenKey: PropTypes.string,
         accessTokenSecret: PropTypes.string,
         refreshTokenKey: PropTypes.string

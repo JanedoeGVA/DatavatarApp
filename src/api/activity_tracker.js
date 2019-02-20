@@ -24,7 +24,6 @@ const getLogo = (provider) => {
 };
 class Token {
   constructor() {
-    this.isValide = false;
     this.accessTokenKey = '';
     this.accessTokenSecret = '';
     this.refreshTokenKey = '';
@@ -49,7 +48,6 @@ ActivityTracker.propTypes = {
   logo: PropTypes.number.isRequired,
   token: PropTypes.objectOf(
     PropTypes.shape({
-      isValide: PropTypes.bool,
       accessTokenKey: PropTypes.string,
       refreshTokenKey: PropTypes.string,
       accessTokenSecret: PropTypes.string

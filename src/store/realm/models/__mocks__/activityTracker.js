@@ -1,4 +1,14 @@
 export const TBL_ACT_TRACKER_SCHEMA = 'actTrackerTest';
+const TBL_TOKEN_SCHEMA = 'tokenTest';
+
+const tokenSchema = {
+  name: TBL_TOKEN_SCHEMA,
+  properties: {
+    accessTokenKey: { type: 'string', optional: true },
+    refreshTokenKey: { type: 'string', optional: true },
+    accessTokenSecret: { type: 'string', optional: true }
+  }
+};
 
 export const schema = {
   name: TBL_ACT_TRACKER_SCHEMA,
@@ -7,16 +17,14 @@ export const schema = {
     id: { type: 'int' },
     provider: 'string',
     isAvailable: 'bool',
-    isValide: 'bool',
     protocol: 'string',
-    accessTokenKey: { type: 'string', optional: true },
-    refreshTokenKey: { type: 'string', optional: true },
-    accessTokenSecret: { type: 'string', optional: true }
+    token: { type: TBL_TOKEN_SCHEMA },
+    logo: 'int'
   }
 };
 
 export const config = {
-  path: 'test.realm',
-  schema: [schema],
+  path: 'datavatarAppTest.realm',
+  schema: [schema, tokenSchema],
   schemaVersion: 0 // optional
 };

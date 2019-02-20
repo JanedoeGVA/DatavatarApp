@@ -6,7 +6,6 @@ const TBL_TOKEN_SCHEMA = 'token';
 const tokenSchema = {
   name: TBL_TOKEN_SCHEMA,
   properties: {
-    isValide: 'bool',
     accessTokenKey: { type: 'string', optional: true },
     refreshTokenKey: { type: 'string', optional: true },
     accessTokenSecret: { type: 'string', optional: true }

@@ -17,12 +17,74 @@ class Home extends React.Component {
     load();
   }
 
+  refreshToken = async (refreshToken) => {
+    try {
+      const response = await fetch(
+        `https://datavatar.sytes.net/api/fitbit/refresh`,
+        {
+          method: 'POST',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            assertion: refreshToken
+          }
+        }
+      );
+      const code = await response.status;
+      console.log(`Response : ${JSON.stringify(code)}`);
+      if (code === 401) {
+        // TODO: invalid tracker
+      }
+      if (code === 200) {
+        // TODO: UPDATE tracker token
+      }
+    } catch (error) {
+      return error;
+    }
+  };
+
+  getDataAsync = async (item) => {
+    try {
+      const date = 'today';
+      const endDate = 'today';
+      const detailLvl = '1min';
+      const response = await fetch(
+        `https://datavatar.sytes.net/api/fitbit/protecteddata/hearthrate?date=${date}&end-date=${endDate}&detail-level=${detailLvl}`,
+        {
+          method: 'POST',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            assertion: item.token.accessTokenKey
+          }
+        }
+      );
+
+      // getData()
+      // if code == 200 je recupere la donnee recu (le token est a jour)
+      // else if code == 401 {
+      //                  refreshToken
+      //                  if code == 200 update token et getData()
+      //                  if code == 401 unvalid actTracker
+      const json = await response.json();
+      console.log(`Response JSON : ${JSON.stringify(json)}`);
+      const code = await response.status;
+      console.log(`Response : ${JSON.stringify(code)}`);
+      if (code === 401) {
+        // refreshToken
+      }
+      return json;
+    } catch (error) {
+      return error;
+    }
+  };
+
   onPressItem = (item) => {
     const { navigation } = this.props;
     if (item.id === ADD_TRACKER.id) {
       navigation.navigate('Subscribe');
     } else {
-      // Explorer(item)
+      this.getDataAsync(item);
     }
   };
 
