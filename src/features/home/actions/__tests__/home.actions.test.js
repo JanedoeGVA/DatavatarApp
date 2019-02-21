@@ -59,12 +59,12 @@ describe('actions features home', () => {
     expect(actions.loadHasErrored(bool)).toEqual(expectedAction);
   });
 
-  it('should create an action load success with a list of lstSubscribedTrackers', () => {
-    const lstSubscribedTrackers = jest.fn();
+  it('should create an action load success', () => {
+    const bool = true;
     const expectedAction = {
       type: types.LOAD_SUCCESS,
-      payload: lstSubscribedTrackers
+      payload: bool
     };
-    expect(actions.loadSuccess(lstSubscribedTrackers)).toEqual(expectedAction);
+    expect(actions.loadSuccess(bool)).toEqual(expectedAction);
   });
 });

@@ -4,7 +4,8 @@ import { View } from 'react-native';
 import { connect } from 'react-redux';
 import { load as actionLoad, update as actionUpdate } from '../actions';
 import TrackerGrid from '../../../components/tracker_grid';
-import { ADD_TRACKER } from '../../../api/activity_tracker';
+import { ADD_TRACKER, Token } from '../../../api/activity_tracker';
+import * as store from '../../../store';
 
 class Home extends React.Component {
   static navigationOptions = {
@@ -17,33 +18,60 @@ class Home extends React.Component {
     load();
   }
 
-  refreshToken = async (refreshToken) => {
-    try {
-      const response = await fetch(
-        `https://datavatar.sytes.net/api/fitbit/refresh`,
-        {
-          method: 'POST',
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-            assertion: refreshToken
-          }
+  refreshToken = async (actTracker) => {
+    const { update } = this.props;
+    console.log(`stringify = ${JSON.stringify(actTracker)}`);
+    console.log(
+      `https://datavatar.sytes.net/api/${actTracker.provider.toLowerCase()}/refresh`
+    );
+    console.log(`refresh : ${actTracker.token.refreshTokenKey}`);
+    let token;
+    let isAvailable = false;
+    fetch(
+      `https://datavatar.sytes.net/api/${actTracker.provider.toLowerCase()}/refresh`,
+      {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          assertion: actTracker.token.refreshTokenKey
         }
-      );
-      const code = await response.status;
-      console.log(`Response : ${JSON.stringify(code)}`);
-      if (code === 401) {
-        // TODO: invalid tracker
       }
-      if (code === 200) {
-        // TODO: UPDATE tracker token
-      }
-    } catch (error) {
-      return error;
-    }
+    )
+      .then((response) => {
+        const code = response.status;
+        const { body } = response;
+        console.log(`Response refresh : ${JSON.stringify(code)}`);
+        if (code === 200) {
+          const key = body.Oauth2AccessToken.accessTokenKey;
+          const refresh = body.Oauth2AccessToken.refreshToken;
+          token = new Token({ key, refresh });
+        } else {
+          token = new Token({});
+          isAvailable = true;
+          console.log('Invalid Token, plz subscribe');
+        }
+        const actTrackerUpdate = {
+          provider: actTracker.provider,
+          isAvailable,
+          token
+        };
+        store
+          .updateActTrackerToken(actTrackerUpdate)
+          .then(() => {
+            update()
+              .then(() => token)
+              .catch((error) => error);
+          })
+          .catch((error) => error);
+      })
+      .catch((error) => error);
   };
 
-  getDataAsync = async (item) => {
+  getDataAsync = async (actTracker) => {
+    console.log(
+      `https://datavatar.sytes.net/api/${actTracker.provider.toLowerCase()}/refresh`
+    );
     try {
       const date = 'today';
       const endDate = 'today';
@@ -55,7 +83,7 @@ class Home extends React.Component {
           headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',
-            assertion: item.token.accessTokenKey
+            assertion: actTracker.token.accessTokenKey
           }
         }
       );
@@ -71,7 +99,7 @@ class Home extends React.Component {
       const code = await response.status;
       console.log(`Response : ${JSON.stringify(code)}`);
       if (code === 401) {
-        // refreshToken
+        this.refreshToken(actTracker);
       }
       return json;
     } catch (error) {
@@ -80,6 +108,7 @@ class Home extends React.Component {
   };
 
   onPressItem = (item) => {
+    console.log(`stringify item = ${JSON.stringify(item)}`);
     const { navigation } = this.props;
     if (item.id === ADD_TRACKER.id) {
       navigation.navigate('Subscribe');

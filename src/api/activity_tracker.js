@@ -22,20 +22,24 @@ const getLogo = (provider) => {
       return ADD_LOGO;
   }
 };
-class Token {
-  constructor() {
-    this.accessTokenKey = '';
-    this.accessTokenSecret = '';
-    this.refreshTokenKey = '';
+export class Token {
+  constructor({
+    accessTokenKey = '',
+    accessTokenSecret = '',
+    refreshTokenKey = ''
+  }) {
+    this.accessTokenKey = accessTokenKey;
+    this.accessTokenSecret = accessTokenSecret;
+    this.refreshTokenKey = refreshTokenKey;
   }
 }
-class ActivityTracker {
+export class ActivityTracker {
   constructor(id, provider, protocol, isAvailable = true) {
     this.id = id;
     this.provider = provider;
     this.isAvailable = isAvailable;
     this.protocol = protocol;
-    this.token = new Token();
+    this.token = new Token({});
     this.logo = getLogo(provider);
   }
 }

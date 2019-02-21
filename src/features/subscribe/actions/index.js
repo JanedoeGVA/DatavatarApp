@@ -55,12 +55,14 @@ export const subscribeSuccess = (actTracker) => ({
   payload: actTracker
 });
 
-export const subscribeActTracker = (tokenActTracker) => (dispatch) => {
+export const subscribeActTracker = (oauthAccessToken) => (dispatch) => {
   dispatch(subscribeIsProcessing(true));
-  console.log(`@subscribeActTracker ${JSON.stringify(tokenActTracker)}`);
+  console.log(
+    `@subscribeActTracker oauthAccessToken ${JSON.stringify(oauthAccessToken)}`
+  );
   console.log('store updateActTracker');
   store
-    .updateActTracker(tokenActTracker)
+    .registerToken(oauthAccessToken)
     .then((actTracker) => {
       console.log('store updateActTracker done');
       console.log(

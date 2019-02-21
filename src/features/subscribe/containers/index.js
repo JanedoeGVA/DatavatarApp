@@ -23,11 +23,11 @@ class Subscribe extends React.Component {
       `_handleOpenURL call vérification url : ${JSON.stringify(event)}`
     );
     Datavatar.verification(event.url)
-      .then((actTracker) => {
+      .then((oauthAccessToken) => {
         console.log(
-          `@_handleOpenURL actTracker = ${JSON.stringify(actTracker)}`
+          `@_handleOpenURL actTracker = ${JSON.stringify(oauthAccessToken)}`
         );
-        subscribe(actTracker);
+        subscribe(oauthAccessToken);
       })
       .catch((error) => {
         console.error(`Promise is rejected with error: ${error}`);
@@ -111,7 +111,8 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  subscribe: (tracker) => dispatch(subscribeActTracker(tracker)),
+  subscribe: (oauthAccessToken) =>
+    dispatch(subscribeActTracker(oauthAccessToken)),
   load: () => dispatch(actionLoad())
 });
 

@@ -43,14 +43,14 @@ describe('home reducer', () => {
     });
   });
 
-  it('should return the new state', () => {
+  it('should return isSuccess to be true and other to be false', () => {
     expect(
       reducer(undefined, {
         type: types.LOAD_SUCCESS,
         payload: true
       })
     ).toEqual({
-      lstSubscribedTrackers: [ADD_TRACKER, ...trackers],
+      lstSubscribedTrackers: [ADD_TRACKER],
       loadIsSuccess: true,
       loadIsProcessing: false,
       loadHasErrored: false,
