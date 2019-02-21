@@ -30,12 +30,9 @@ const mockStore = configureMockStore(middlewares);
 describe('actions features home', () => {
   it('creates LOAD_SUCCESS when fetching load has been done', () => {
     const expectedActions = [
-      { bool: true, type: 'HOME::LOAD_IS_PROCESSING' },
-      { bool: false, type: 'HOME::LOAD_IS_PROCESSING' },
-      {
-        lstSubscribedTrackers: { id: 1 },
-        type: 'HOME::LOAD_SUCCESS'
-      }
+      { payload: true, type: 'HOME::LOAD_IS_PROCESSING' },
+      { payload: false, type: 'HOME::LOAD_IS_PROCESSING' },
+      { payload: true, type: 'HOME::LOAD_SUCCESS' }
     ];
     const store = mockStore({ lstSubscribedTrackers: [] });
 
@@ -48,16 +45,16 @@ describe('actions features home', () => {
     const bool = true;
     const expectedAction = {
       type: types.LOAD_IS_PROCESSING,
-      bool
+      payload: bool
     };
-    expect(actions.isProcessing(bool)).toEqual(expectedAction);
+    expect(actions.loadIsProcessing(bool)).toEqual(expectedAction);
   });
 
   it('should create an action has errored', () => {
     const bool = true;
     const expectedAction = {
       type: types.LOAD_HAS_ERRORED,
-      bool
+      payload: bool
     };
     expect(actions.loadHasErrored(bool)).toEqual(expectedAction);
   });
@@ -66,7 +63,7 @@ describe('actions features home', () => {
     const lstSubscribedTrackers = jest.fn();
     const expectedAction = {
       type: types.LOAD_SUCCESS,
-      lstSubscribedTrackers
+      payload: lstSubscribedTrackers
     };
     expect(actions.loadSuccess(lstSubscribedTrackers)).toEqual(expectedAction);
   });

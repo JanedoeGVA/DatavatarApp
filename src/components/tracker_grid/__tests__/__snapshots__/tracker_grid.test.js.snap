@@ -16,7 +16,6 @@ exports[`Tracker Grid Component renders a TrackerGrid using Snapshots 1`] = `
           "token": Object {
             "accessTokenKey": "",
             "accessTokenSecret": "",
-            "isValide": true,
             "refreshTokenKey": "",
           },
         },
@@ -31,7 +30,6 @@ exports[`Tracker Grid Component renders a TrackerGrid using Snapshots 1`] = `
           "token": Object {
             "accessTokenKey": "",
             "accessTokenSecret": "",
-            "isValide": true,
             "refreshTokenKey": "",
           },
         },
@@ -151,7 +149,7 @@ exports[`Tracker Grid Component renders a TrackerGrid using Snapshots 1`] = `
                     }
                   }
                 >
-                  true
+                  Strava
                 </Text>
               </View>
             </View>
@@ -222,7 +220,7 @@ exports[`Tracker Grid Component renders a TrackerGrid using Snapshots 1`] = `
                     }
                   }
                 >
-                  true
+                  Garmin
                 </Text>
               </View>
             </View>
