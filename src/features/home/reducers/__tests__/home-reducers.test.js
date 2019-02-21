@@ -21,11 +21,11 @@ describe('home reducer', () => {
         {},
         {
           type: types.LOAD_HAS_ERRORED,
-          payload: true
+          hasErrored: true
         }
       )
     ).toEqual({
-      payload: true
+      hasErrored: true
     });
   });
 
@@ -35,11 +35,11 @@ describe('home reducer', () => {
         {},
         {
           type: types.LOAD_IS_PROCESSING,
-          payload: true
+          isProcessing: true
         }
       )
     ).toEqual({
-      payload: true
+      isProcessing: true
     });
   });
 
@@ -47,7 +47,7 @@ describe('home reducer', () => {
     expect(
       reducer(undefined, {
         type: types.LOAD_SUCCESS,
-        payload: trackers
+        lstSubscribedTrackers: trackers
       })
     ).toEqual({
       lstSubscribedTrackers: [ADD_TRACKER, ...trackers],
