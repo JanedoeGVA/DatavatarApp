@@ -36,9 +36,9 @@ GridComponent.propTypes = {
       isAvailable: PropTypes.bool.isRequired,
       protocol: PropTypes.string.isRequired,
       token: PropTypes.shape({
-        accessTokenKey: PropTypes.string,
-        accessTokenSecret: PropTypes.string,
-        refreshTokenKey: PropTypes.string
+        accessToken: PropTypes.string,
+        secret: PropTypes.string,
+        refreshToken: PropTypes.string
       }),
       logo: PropTypes.oneOfType([
         PropTypes.shape({ testUri: PropTypes.string }),

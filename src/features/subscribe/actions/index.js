@@ -55,26 +55,26 @@ export const subscribeSuccess = (actTracker) => ({
   payload: actTracker
 });
 
-export const subscribeActTracker = (oauthAccessToken) => (dispatch) => {
+export const subscribeActTracker = (actTracker) => (dispatch) => {
   dispatch(subscribeIsProcessing(true));
   console.log(
-    `@subscribeActTracker oauthAccessToken ${JSON.stringify(oauthAccessToken)}`
+    `@subscribeActTracker oauthAccessToken ${JSON.stringify(actTracker.token)}`
   );
   console.log('store updateActTracker');
   store
-    .registerToken(oauthAccessToken)
-    .then((actTracker) => {
+    .registerToken(actTracker)
+    .then((actTrackerUpdated) => {
       console.log('store updateActTracker done');
       console.log(
-        `store updateActTracker actTracker ${JSON.stringify(actTracker)}`
+        `store updateActTracker actTracker ${JSON.stringify(actTrackerUpdated)}`
       );
       dispatch(subscribeIsProcessing(false));
       console.log('store updateActTracker dispatch');
-      return actTracker;
+      return actTrackerUpdated;
     })
-    .then((actTracker) => {
+    .then((actTrackerUpdated) => {
       console.log(' dispatch subscribeSuccess ');
-      dispatch(subscribeSuccess(actTracker));
+      dispatch(subscribeSuccess(actTrackerUpdated));
     })
     .catch((error) => {
       console.log(`error : ${error}`);

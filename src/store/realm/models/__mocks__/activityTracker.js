@@ -4,9 +4,9 @@ const TBL_TOKEN_SCHEMA = 'tokenTest';
 const tokenSchema = {
   name: TBL_TOKEN_SCHEMA,
   properties: {
-    accessTokenKey: { type: 'string', optional: true },
-    refreshTokenKey: { type: 'string', optional: true },
-    accessTokenSecret: { type: 'string', optional: true }
+    accessToken: { type: 'string', optional: true },
+    refreshToken: { type: 'string', optional: true },
+    secret: { type: 'string', optional: true }
   }
 };
 

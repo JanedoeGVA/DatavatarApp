@@ -85,28 +85,27 @@ export const removeAllActTracker = () =>
       });
   });
 
-export const registerToken = (oauthAccessToken) =>
+export const registerToken = (actTracker) =>
   new Promise((resolve, reject) => {
-    console.log(`oauthAccessToken ${JSON.stringify(oauthAccessToken)}`);
+    console.log(`oauthAccessToken ${JSON.stringify(actTracker.token)}`);
     console.log(`default path ${JSON.stringify(db.getDefaultPath())}`);
-    const filter = `provider = "${oauthAccessToken.provider}"`;
+    const filter = `provider = "${actTracker.provider}"`;
     db.query(TBL_ACT_TRACKER_SCHEMA, filter)
-      .then((actTracker) => {
-        console.log(`item not update ${JSON.stringify(actTracker[0])}`);
-        console.log(`id =${actTracker[0].id}`);
+      .then((lstActTracker) => {
+        const actTrackerToUpdate = lstActTracker[0];
+        console.log(`item not update ${JSON.stringify(actTrackerToUpdate)}`);
+        console.log(`id =${actTrackerToUpdate.id}`);
         const updateItem = {
-          id: actTracker[0].id,
+          id: actTrackerToUpdate.id,
           isAvailable: false,
-          token: {
-            accessTokenKey: oauthAccessToken.accessTokenKey,
-            refreshTokenKey: oauthAccessToken.refreshTokenKey,
-            accessTokenSecret: oauthAccessToken.accessTokenSecret
-          }
+          token: actTracker.token
         };
         db.update(TBL_ACT_TRACKER_SCHEMA, updateItem)
           .then(() => {
-            console.log(`item after update ${JSON.stringify(actTracker[0])}`);
-            resolve(actTracker[0]);
+            console.log(
+              `item after update ${JSON.stringify(actTrackerToUpdate)}`
+            );
+            resolve(actTrackerToUpdate);
           })
           .catch((error) => {
             reject(error);

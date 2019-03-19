@@ -3,6 +3,7 @@ import { Alert, View, Linking } from 'react-native';
 import { NavigationEvents } from 'react-navigation';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import URI from 'urijs';
 import TrackerGrid from '../../../components/tracker_grid';
 import { load as actionLoad, subscribeActTracker } from '../actions';
 import * as Datavatar from '../../../api/datavatar';
@@ -22,17 +23,19 @@ class Subscribe extends React.Component {
     console.log(
       `_handleOpenURL call vérification url : ${JSON.stringify(event)}`
     );
-    console.log(`_handleOpenURL event url : ${JSON.stringify(event.url)}`);
-    // Datavatar.verification(event.url)
-    //   .then((oauthAccessToken) => {
-    //     console.log(
-    //       `@_handleOpenURL actTracker = ${JSON.stringify(oauthAccessToken)}`
-    //     );
-    //     subscribe(oauthAccessToken);
-    //   })
-    //   .catch((error) => {
-    //     console.error(`Promise is rejected with error: ${error}`);
-    //   });
+    // const uri = new URI(event.url);
+    // const { code } = uri.query(true);
+    // console.log(code);
+    Datavatar.verification(event.url)
+      .then((actTracker) => {
+        console.log(
+          `@_handleOpenURL actTracker = ${JSON.stringify(actTracker)}`
+        );
+        subscribe(actTracker);
+      })
+      .catch((error) => {
+        console.error(`Promise is rejected with error: ${error}`);
+      });
   };
 
   onPressItem = (item) => {
@@ -95,9 +98,9 @@ Subscribe.propTypes = {
       isAvailable: PropTypes.bool.isRequired,
       protocol: PropTypes.string.isRequired,
       token: PropTypes.shape({
-        accessTokenKey: PropTypes.string,
-        accessTokenSecret: PropTypes.string,
-        refreshTokenKey: PropTypes.string
+        accessToken: PropTypes.string,
+        secret: PropTypes.string,
+        refreshToken: PropTypes.string
       }),
       logo: PropTypes.oneOfType([
         PropTypes.shape({ testUri: PropTypes.string }),

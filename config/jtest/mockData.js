@@ -8,9 +8,9 @@ const trackers = [
     isAvailable: true,
     protocol: '',
     token: {
-      accessTokenKey: '',
-      refreshTokenKey: '',
-      accessTokenSecret: ''
+      accessToken: '',
+      refreshToken: '',
+      secret: ''
     },
     logo: logoStrava
   },
@@ -20,9 +20,9 @@ const trackers = [
     isAvailable: true,
     protocol: '',
     token: {
-      accessTokenKey: '',
-      refreshTokenKey: '',
-      accessTokenSecret: ''
+      accessToken: '',
+      refreshToken: '',
+      secret: ''
     },
 
     logo: logoGarmin

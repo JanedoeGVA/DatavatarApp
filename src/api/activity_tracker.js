@@ -23,14 +23,10 @@ const getLogo = (provider) => {
   }
 };
 export class Token {
-  constructor({
-    accessTokenKey = '',
-    accessTokenSecret = '',
-    refreshTokenKey = ''
-  }) {
-    this.accessTokenKey = accessTokenKey;
-    this.accessTokenSecret = accessTokenSecret;
-    this.refreshTokenKey = refreshTokenKey;
+  constructor({ accessToken = '', secret = '', refreshToken = '' }) {
+    this.accessToken = accessToken;
+    this.secret = secret;
+    this.refreshToken = refreshToken;
   }
 }
 export class ActivityTracker {
@@ -52,9 +48,9 @@ ActivityTracker.propTypes = {
   logo: PropTypes.number.isRequired,
   token: PropTypes.objectOf(
     PropTypes.shape({
-      accessTokenKey: PropTypes.string,
-      refreshTokenKey: PropTypes.string,
-      accessTokenSecret: PropTypes.string
+      accessToken: PropTypes.string,
+      refreshToken: PropTypes.string,
+      secret: PropTypes.string
     })
   )
 };
