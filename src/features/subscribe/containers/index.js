@@ -22,16 +22,17 @@ class Subscribe extends React.Component {
     console.log(
       `_handleOpenURL call vérification url : ${JSON.stringify(event)}`
     );
-    Datavatar.verification(event.url)
-      .then((oauthAccessToken) => {
-        console.log(
-          `@_handleOpenURL actTracker = ${JSON.stringify(oauthAccessToken)}`
-        );
-        subscribe(oauthAccessToken);
-      })
-      .catch((error) => {
-        console.error(`Promise is rejected with error: ${error}`);
-      });
+    console.log(`_handleOpenURL event url : ${JSON.stringify(event.url)}`);
+    // Datavatar.verification(event.url)
+    //   .then((oauthAccessToken) => {
+    //     console.log(
+    //       `@_handleOpenURL actTracker = ${JSON.stringify(oauthAccessToken)}`
+    //     );
+    //     subscribe(oauthAccessToken);
+    //   })
+    //   .catch((error) => {
+    //     console.error(`Promise is rejected with error: ${error}`);
+    //   });
   };
 
   onPressItem = (item) => {

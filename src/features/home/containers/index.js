@@ -21,9 +21,8 @@ class Home extends React.Component {
 
   refreshToken = (actTracker) =>
     new Promise((resolve, reject) => {
-      // const tokenRefresh = actTracker.token.refreshTokenKey;
-      const tokenRefresh =
-        'oXGxq1dL1CPsimef-_OMKAW0zsjwrK5gY-4f3vuxj_lO1ShUKUQTNMzkta1FsRo0V31Yk_BjRfOtAXJTK89TPkb-Nt7wDYgmAZMgXEU-VQo';
+      const tokenRefresh = actTracker.token.refreshTokenKey;
+      // 'oXGxq1dL1CPsimef-_OMKAW0zsjwrK5gY-4f3vuxj_lO1ShUKUQTNMzkta1FsRo0V31Yk_BjRfOtAXJTK89TPkb-Nt7wDYgmAZMgXEU-VQo';
       // '0gor3nYWaPQrWpRcxfPU9Z42LEH3b8QhsyiS5qugqwW1Ruvsd36hmcOBwtNv7AmCdtVfH1Z_tDHc1LiyTVMdXUb-Nt7wDYgmAZMgXEU-VQo';
 
       console.log(`@refreshToken actTracker = ${JSON.stringify(actTracker)}`);
@@ -54,8 +53,8 @@ class Home extends React.Component {
               .json()
               .then((json) => {
                 console.log(`Response JSON : ${JSON.stringify(json)}`);
-                const key = json.oauth2AccessToken.accessTokenKey;
-                const refresh = json.oauth2AccessToken.refreshToken;
+                const key = json.token.accessTokenKey;
+                const refresh = json.token.refreshToken;
                 token = new Token({ key, refresh });
                 const actTrackerUpdate = {
                   provider: actTracker.provider,
@@ -87,6 +86,10 @@ class Home extends React.Component {
       const date = 'today';
       const endDate = 'today';
       const detailLvl = '1min';
+      console.log(`actTracker ${JSON.stringify(actTracker)}`);
+      console.log(
+        `accessTokenKey ${JSON.stringify(actTracker.token.accessTokenKey)}`
+      );
       const key = actTracker.token.accessTokenKey;
       // const key =
       //  'UMNkoDBWg1J2kIpWiqQmfuxfcNSe8EkTw8deih0wYrHNZXFIGWSDEWVktxMIa28F7vSHF47GreVxjsR-sDFT3kL7pNo1KazSGq_CGm48k1bMuGPXYsiUafNrca1f2PMEaba8LgCIMx87wAk-gerWSNsj3sXHGOId0kQFfud7yHe-TdX6d4EqiABjlOauOJf-XHlUos1OUHlZeB9fKu1zeYrb3U2kcSjrS9EthvlyWtCCsgQNuUXM1RXO_GuUB1QCuY_W33u0jzrN7PkgeOEVrpoWepLDIfn0fxMfDzk-wykU5UBAQVvy_7Qfc4oWkoJlrm4uj_RUiPhhYbkYMmc6cg';

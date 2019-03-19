@@ -87,6 +87,8 @@ export const removeAllActTracker = () =>
 
 export const registerToken = (oauthAccessToken) =>
   new Promise((resolve, reject) => {
+    console.log(`oauthAccessToken ${JSON.stringify(oauthAccessToken)}`);
+    console.log(`default path ${JSON.stringify(db.getDefaultPath())}`);
     const filter = `provider = "${oauthAccessToken.provider}"`;
     db.query(TBL_ACT_TRACKER_SCHEMA, filter)
       .then((actTracker) => {
