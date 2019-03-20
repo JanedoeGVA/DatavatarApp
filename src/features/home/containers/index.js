@@ -19,132 +19,132 @@ class Home extends React.Component {
     load();
   }
 
-  refreshToken = (actTracker) =>
-    new Promise((resolve, reject) => {
-      const tokenRefresh = actTracker.token.refreshToken;
-      // 'oXGxq1dL1CPsimef-_OMKAW0zsjwrK5gY-4f3vuxj_lO1ShUKUQTNMzkta1FsRo0V31Yk_BjRfOtAXJTK89TPkb-Nt7wDYgmAZMgXEU-VQo';
-      // '0gor3nYWaPQrWpRcxfPU9Z42LEH3b8QhsyiS5qugqwW1Ruvsd36hmcOBwtNv7AmCdtVfH1Z_tDHc1LiyTVMdXUb-Nt7wDYgmAZMgXEU-VQo';
+  // refreshToken = (actTracker) =>
+  //   new Promise((resolve, reject) => {
+  //     const tokenRefresh = actTracker.token.refreshToken;
+  //     // 'oXGxq1dL1CPsimef-_OMKAW0zsjwrK5gY-4f3vuxj_lO1ShUKUQTNMzkta1FsRo0V31Yk_BjRfOtAXJTK89TPkb-Nt7wDYgmAZMgXEU-VQo';
+  //     // '0gor3nYWaPQrWpRcxfPU9Z42LEH3b8QhsyiS5qugqwW1Ruvsd36hmcOBwtNv7AmCdtVfH1Z_tDHc1LiyTVMdXUb-Nt7wDYgmAZMgXEU-VQo';
 
-      console.log(`@refreshToken actTracker = ${JSON.stringify(actTracker)}`);
-      console.log(
-        `https://datavatar.sytes.net/api/${actTracker.provider.toLowerCase()}/refresh`
-      );
-      console.log(
-        `@refreshToken refreshToken : ${actTracker.token.refreshToken}`
-      );
-      let token;
-      let isAvailable = false;
-      fetch(
-        `https://datavatar.sytes.net/api/${actTracker.provider.toLowerCase()}/refresh`,
-        {
-          method: 'POST',
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-            assertion: tokenRefresh
-          }
-        }
-      )
-        .then((response) => {
-          const code = response.status;
-          console.log(`Response refresh code : ${JSON.stringify(code)}`);
-          if (code === 200) {
-            response
-              .json()
-              .then((json) => {
-                console.log(`Response JSON : ${JSON.stringify(json)}`);
-                const { accessToken, refreshToken } = json.token;
+  //     console.log(`@refreshToken actTracker = ${JSON.stringify(actTracker)}`);
+  //     console.log(
+  //       `https://datavatar.sytes.net/api/${actTracker.provider.toLowerCase()}/refresh`
+  //     );
+  //     console.log(
+  //       `@refreshToken refreshToken : ${actTracker.token.refreshToken}`
+  //     );
+  //     let token;
+  //     let isAvailable = false;
+  //     fetch(
+  //       `https://datavatar.sytes.net/api/${actTracker.provider.toLowerCase()}/refresh`,
+  //       {
+  //         method: 'POST',
+  //         headers: {
+  //           Accept: 'application/json',
+  //           'Content-Type': 'application/json',
+  //           assertion: tokenRefresh
+  //         }
+  //       }
+  //     )
+  //       .then((response) => {
+  //         const code = response.status;
+  //         console.log(`Response refresh code : ${JSON.stringify(code)}`);
+  //         if (code === 200) {
+  //           response
+  //             .json()
+  //             .then((json) => {
+  //               console.log(`Response JSON : ${JSON.stringify(json)}`);
+  //               const { accessToken, refreshToken } = json.token;
 
-                token = new Token({ accessToken, refreshToken });
-                const actTrackerUpdate = {
-                  provider: actTracker.provider,
-                  isAvailable,
-                  token
-                };
-                console.log(
-                  `@refreshToken actTrackerUpdate :${JSON.stringify(
-                    actTrackerUpdate
-                  )}`
-                );
-                resolve(actTrackerUpdate);
-              })
-              .catch((error) => reject(error));
-          } else {
-            token = new Token({});
-            isAvailable = true;
-            console.log('Invalid Token, plz subscribe');
-          }
-        })
-        .catch((error) => reject(error));
-    });
+  //               token = new Token({ accessToken, refreshToken });
+  //               const actTrackerUpdate = {
+  //                 provider: actTracker.provider,
+  //                 isAvailable,
+  //                 token
+  //               };
+  //               console.log(
+  //                 `@refreshToken actTrackerUpdate :${JSON.stringify(
+  //                   actTrackerUpdate
+  //                 )}`
+  //               );
+  //               resolve(actTrackerUpdate);
+  //             })
+  //             .catch((error) => reject(error));
+  //         } else {
+  //           token = new Token({});
+  //           isAvailable = true;
+  //           console.log('Invalid Token, plz subscribe');
+  //         }
+  //       })
+  //       .catch((error) => reject(error));
+  //   });
 
-  getDataAsync = (actTracker) =>
-    new Promise((resolve, reject) => {
-      const { update } = this.props;
-      const date = formatDate('Sun February 24,2019');
-      const endDate = formatDate('Sun February 24,2019');
-      // const date = 'today';
-      // const endDate = 'today';
-      const detailLvl = '1min';
-      console.log(`actTracker ${JSON.stringify(actTracker)}`);
-      console.log(
-        `accessToken ${JSON.stringify(actTracker.token.accessToken)}`
-      );
-      const { accessToken } = actTracker.token;
-      // const accessToken =
-      //  'UMNkoDBWg1J2kIpWiqQmfuxfcNSe8EkTw8deih0wYrHNZXFIGWSDEWVktxMIa28F7vSHF47GreVxjsR-sDFT3kL7pNo1KazSGq_CGm48k1bMuGPXYsiUafNrca1f2PMEaba8LgCIMx87wAk-gerWSNsj3sXHGOId0kQFfud7yHe-TdX6d4EqiABjlOauOJf-XHlUos1OUHlZeB9fKu1zeYrb3U2kcSjrS9EthvlyWtCCsgQNuUXM1RXO_GuUB1QCuY_W33u0jzrN7PkgeOEVrpoWepLDIfn0fxMfDzk-wykU5UBAQVvy_7Qfc4oWkoJlrm4uj_RUiPhhYbkYMmc6cg';
-      fetch(
-        `https://datavatar.sytes.net/api/fitbit/protecteddata/hearthrate?date=${date}&end-date=${endDate}&detail-level=${detailLvl}`,
-        {
-          method: 'POST',
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-            assertion: accessToken
-          }
-        }
-      )
-        .then((response) => {
-          const code = response.status;
-          console.log(`Response code : ${JSON.stringify(code)}`);
-          console.log(`Response : ${JSON.stringify(response)}`);
-          response
-            .json()
-            .then((json) => {
-              console.log(`Response JSON : ${JSON.stringify(json)}`);
-              if (code === 401) {
-                this.refreshToken(actTracker)
-                  .then((actTrackerUpdate) => {
-                    store
-                      .updateActTrackerToken(actTrackerUpdate)
-                      .then(() => {
-                        update()
-                          .then(() => resolve())
-                          .catch((error) => reject(error));
-                      })
-                      .catch((error) => reject(error));
-                    resolve(json);
-                  })
-                  .catch((error) => {
-                    reject(error);
-                  });
-              } else {
-                resolve(json);
-              }
-            })
-            .catch((error) => reject(error));
-          // getData()
-          // if code == 200 je recupere la donnee recu (le token est a jour)
-          // else if code == 401 {
-          //                  refreshToken
-          //                  if code == 200 update token et getData()
-          //                  if code == 401 unvalid actTracker
-        })
-        .catch((error) => {
-          console.log(error);
-          reject(error);
-        });
-    });
+  // getDataAsync = (actTracker) =>
+  //   new Promise((resolve, reject) => {
+  //     const { update } = this.props;
+  //     const date = formatDate('Sun February 24,2019');
+  //     const endDate = formatDate('Sun February 24,2019');
+  //     // const date = 'today';
+  //     // const endDate = 'today';
+  //     const detailLvl = '1min';
+  //     console.log(`actTracker ${JSON.stringify(actTracker)}`);
+  //     console.log(
+  //       `accessToken ${JSON.stringify(actTracker.token.accessToken)}`
+  //     );
+  //     const { accessToken } = actTracker.token;
+  //     // const accessToken =
+  //     //  'UMNkoDBWg1J2kIpWiqQmfuxfcNSe8EkTw8deih0wYrHNZXFIGWSDEWVktxMIa28F7vSHF47GreVxjsR-sDFT3kL7pNo1KazSGq_CGm48k1bMuGPXYsiUafNrca1f2PMEaba8LgCIMx87wAk-gerWSNsj3sXHGOId0kQFfud7yHe-TdX6d4EqiABjlOauOJf-XHlUos1OUHlZeB9fKu1zeYrb3U2kcSjrS9EthvlyWtCCsgQNuUXM1RXO_GuUB1QCuY_W33u0jzrN7PkgeOEVrpoWepLDIfn0fxMfDzk-wykU5UBAQVvy_7Qfc4oWkoJlrm4uj_RUiPhhYbkYMmc6cg';
+  //     fetch(
+  //       `https://datavatar.sytes.net/api/fitbit/protecteddata/hearthrate?date=${date}&end-date=${endDate}&detail-level=${detailLvl}`,
+  //       {
+  //         method: 'POST',
+  //         headers: {
+  //           Accept: 'application/json',
+  //           'Content-Type': 'application/json',
+  //           assertion: accessToken
+  //         }
+  //       }
+  //     )
+  //       .then((response) => {
+  //         const code = response.status;
+  //         console.log(`Response code : ${JSON.stringify(code)}`);
+  //         console.log(`Response : ${JSON.stringify(response)}`);
+  //         response
+  //           .json()
+  //           .then((json) => {
+  //             console.log(`Response JSON : ${JSON.stringify(json)}`);
+  //             if (code === 401) {
+  //               this.refreshToken(actTracker)
+  //                 .then((actTrackerUpdate) => {
+  //                   store
+  //                     .updateActTrackerToken(actTrackerUpdate)
+  //                     .then(() => {
+  //                       4()
+  //                         .then(() => resolve())
+  //                         .catch((error) => reject(error));
+  //                     })
+  //                     .catch((error) => reject(error));
+  //                   resolve(json);
+  //                 })
+  //                 .catch((error) => {
+  //                   reject(error);
+  //                 });
+  //             } else {
+  //               resolve(json);
+  //             }
+  //           })
+  //           .catch((error) => reject(error));
+  //         // getData()
+  //         // if code == 200 je recupere la donnee recu (le token est a jour)
+  //         // else if code == 401 {
+  //         //                  refreshToken
+  //         //                  if code == 200 update token et getData()
+  //         //                  if code == 401 unvalid actTracker
+  //       })
+  //       .catch((error) => {
+  //         console.log(error);
+  //         reject(error);
+  //       });
+  //   });
 
   onPressItem = (item) => {
     console.log(`stringify item = ${JSON.stringify(item)}`);
@@ -152,9 +152,9 @@ class Home extends React.Component {
     if (item.id === ADD_TRACKER.id) {
       navigation.navigate('Subscribe');
     } else {
-      this.getDataAsync(item)
-        .then(() => {})
-        .catch((error) => console.log(error));
+      // this.getDataAsync(item)
+      //   .then(() => {})
+      //   .catch((error) => console.log(error));
     }
   };
 

@@ -14,3 +14,7 @@ export const OAUTH2 = 'oauth2';
 export const OAUTH1 = 'oauth1';
 
 export const DATAVATAR_BASE_URL = 'https://datavatar.sytes.net';
+export const URL_PATH_API = 'api';
+export const URL_PATH_REFRESH = 'refresh';
+export const URL_PATH_AUTORIZATION = 'authorization';
+export const URL_PATH_VERIFICATION = 'verification';
