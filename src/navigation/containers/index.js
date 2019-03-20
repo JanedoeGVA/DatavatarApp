@@ -6,11 +6,10 @@ import {
   createAppContainer
 } from 'react-navigation';
 import ProvidersScreen from '../../features/home/containers';
-import SettingsScreen from '../../features/subscribe/containers';
-import ExplorateurScreen from '../../features/subscribe/containers';
-import FolderScreen from '../../features/subscribe/containers';
+import SettingsScreen from '../../features/settings/containers';
 import SubscribeScreen from '../../features/subscribe/containers';
-import GridScreen from '../../features/subscribe/containers';
+import FetchScreen from '../../features/fetch/containers';
+import StorageScreen from '../../features/storage/containers';
 
 const HomeStack = createStackNavigator(
   {
@@ -25,10 +24,9 @@ const HomeStack = createStackNavigator(
 const Tabs = createBottomTabNavigator(
   {
     Home: { screen: HomeStack },
-    Explorateur: { screen: ExplorateurScreen },
-    Folder: { screen: FolderScreen },
-    Settings: { screen: SettingsScreen },
-    Grid: { screen: GridScreen }
+    Fetching: { screen: FetchScreen },
+    Storage: { screen: StorageScreen },
+    Settings: { screen: SettingsScreen }
   },
   {
     defaultNavigationOptions: ({ navigation }) => ({
@@ -40,13 +38,16 @@ const Tabs = createBottomTabNavigator(
             iconName = 'ios-home';
             break;
           case 'Settings':
-            iconName = 'ios-list-box';
+            iconName = 'ios-cog';
             break;
-          case 'Folder':
+          case 'Fetching':
+            iconName = 'ios-cloud-download';
+            break;
+          case 'Storage':
             iconName = 'ios-archive';
             break;
           default:
-            iconName = 'ios-eye';
+            iconName = 'ios-help-circle-outline';
             break;
         }
         return <Ionicons name={iconName} size={25} color={tintColor} />;
