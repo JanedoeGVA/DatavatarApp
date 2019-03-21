@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { View, Text, StyleSheet, Button } from 'react-native';
 import * as Datavatar from '../../../api/datavatar';
 import { Token, ActivityTracker } from '../../../api/activity_tracker';
+import Graph from '../../../components/graph';
 import * as store from '../../../store';
 import { formatDate } from '../../../api/date';
 
@@ -59,7 +60,7 @@ class Fetch extends React.Component {
                           .then((dataset) => {
                             console.log(`dataset ${JSON.stringify(dataset)}`);
                             // return data
-                            return null;
+                            this.setState({ isData: true, data: dataset });
                           })
                           .catch((error) => error);
                       })
@@ -81,7 +82,7 @@ class Fetch extends React.Component {
             } else {
               // return data
               console.log(`data ${JSON.stringify(data)}`);
-              return null;
+              this.setState({ isData: true, data });
             }
           })
           .catch((error) => error);
@@ -133,6 +134,7 @@ class Fetch extends React.Component {
           {this.state.endDate && `end date :${this.state.endDate.format('LL')}`}
         </Text> */}
         <Button onPress={this.getData} title="Fetch" color="#841584" />
+        {this.state.isData && <Graph data={this.state.data} />}
       </View>
     );
   }
