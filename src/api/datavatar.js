@@ -17,6 +17,9 @@ export const getData = (actTracker, date, endDate) =>
     const detailLvl = '1min';
     console.log(`actTracker ${JSON.stringify(actTracker)}`);
     console.log(`accessToken ${JSON.stringify(actTracker.token.accessToken)}`);
+    console.log(
+      `https://datavatar.sytes.net/api/fitbit/protecteddata/hearthrate?date=${date}&end-date=${endDate}&detail-level=${detailLvl}`
+    );
     const { accessToken } = actTracker.token;
     fetch(
       `https://datavatar.sytes.net/api/fitbit/protecteddata/hearthrate?date=${date}&end-date=${endDate}&detail-level=${detailLvl}`,
@@ -73,10 +76,7 @@ export const refresh = (provider, refreshToken) =>
             .json()
             .then((json) => {
               console.log(`Response JSON : ${JSON.stringify(json)}`);
-              const { accessToken } = json.token;
-              const newRefreshToken = json.token.refreshToken;
-              const token = new Token({ accessToken, newRefreshToken });
-              resolve(token);
+              resolve(json);
             })
             .catch((error) => reject(error));
         } else {

@@ -58,6 +58,7 @@ export default class DB {
     new Promise((resolve, reject) => {
       Realm.open(this.config)
         .then((realm) => {
+          console.log(this.getDefaultPath());
           const objects = realm.objects(model);
           if (filter) {
             resolve(objects.filtered(filter));

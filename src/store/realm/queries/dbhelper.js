@@ -1,6 +1,10 @@
 import Realm from 'realm';
 import DB from './db';
-import { TBL_ACT_TRACKER_SCHEMA, config } from '../models/activityTracker';
+import {
+  TBL_ACT_TRACKER_SCHEMA,
+  TBL_TOKEN_SCHEMA,
+  config
+} from '../models/activityTracker';
 
 const db = new DB(config, Realm);
 
@@ -85,27 +89,31 @@ export const removeAllActTracker = () =>
       });
   });
 
-export const registerToken = (actTracker) =>
+export const updateActTrackerToken = (tracker, refreshToken, isAvailable) =>
   new Promise((resolve, reject) => {
-    console.log(`oauthAccessToken ${JSON.stringify(actTracker.token)}`);
-    console.log(`default path ${JSON.stringify(db.getDefaultPath())}`);
-    const filter = `provider = "${actTracker.provider}"`;
+    console.log(
+      `stringify ${JSON.stringify(tracker)} ${JSON.stringify(
+        refreshToken
+      )} ${JSON.stringify(isAvailable)}`
+    );
+    const filter = `provider = "${tracker.provider}"`;
     db.query(TBL_ACT_TRACKER_SCHEMA, filter)
       .then((lstActTracker) => {
-        const actTrackerToUpdate = lstActTracker[0];
-        console.log(`item not update ${JSON.stringify(actTrackerToUpdate)}`);
-        console.log(`id =${actTrackerToUpdate.id}`);
-        const updateItem = {
-          id: actTrackerToUpdate.id,
-          isAvailable: false,
-          token: actTracker.token
+        const actTracker = lstActTracker[0];
+        const { id } = actTracker;
+        const item = {
+          id,
+          isAvailable
         };
-        db.update(TBL_ACT_TRACKER_SCHEMA, updateItem)
+        db.update(TBL_ACT_TRACKER_SCHEMA, item)
           .then(() => {
-            console.log(
-              `item after update ${JSON.stringify(actTrackerToUpdate)}`
-            );
-            resolve(actTrackerToUpdate);
+            db.update(TBL_TOKEN_SCHEMA, { id, ...refreshToken })
+              .then(() => {
+                resolve(actTracker);
+              })
+              .catch((error) => {
+                reject(error);
+              });
           })
           .catch((error) => {
             reject(error);
@@ -116,26 +124,11 @@ export const registerToken = (actTracker) =>
       });
   });
 
-export const updateActTrackerToken = (item) =>
+export const registerToken = (tracker) =>
   new Promise((resolve, reject) => {
-    const filter = `provider = "${item.provider}"`;
-    db.query(TBL_ACT_TRACKER_SCHEMA, filter)
+    updateActTrackerToken(tracker, tracker.token, false)
       .then((actTracker) => {
-        console.log(`item not update ${JSON.stringify(actTracker[0])}`);
-        console.log(`id =${actTracker[0].id}`);
-        const updateItem = {
-          id: actTracker[0].id,
-          isAvailable: item.isAvailable,
-          token: item.token
-        };
-        db.update(TBL_ACT_TRACKER_SCHEMA, updateItem)
-          .then(() => {
-            console.log(`item after update ${JSON.stringify(actTracker[0])}`);
-            resolve(actTracker[0]);
-          })
-          .catch((error) => {
-            reject(error);
-          });
+        resolve(actTracker);
       })
       .catch((error) => {
         reject(error);

@@ -23,19 +23,21 @@ const getLogo = (provider) => {
   }
 };
 export class Token {
-  constructor({ accessToken = '', secret = '', refreshToken = '' }) {
+  constructor({ id, accessToken = null, secret = null, refreshToken = null }) {
+    this.id = id;
     this.accessToken = accessToken;
     this.secret = secret;
     this.refreshToken = refreshToken;
   }
 }
+
 export class ActivityTracker {
   constructor(id, provider, protocol, isAvailable = true) {
     this.id = id;
     this.provider = provider;
     this.isAvailable = isAvailable;
     this.protocol = protocol;
-    this.token = new Token({});
+    this.token = new Token({ id });
     this.logo = getLogo(provider);
   }
 }

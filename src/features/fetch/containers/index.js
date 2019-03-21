@@ -4,7 +4,7 @@ import Dates from 'react-native-dates';
 import { connect } from 'react-redux';
 import { View, Text, StyleSheet, Button } from 'react-native';
 import * as Datavatar from '../../../api/datavatar';
-import { Token } from '../../../api/activity_tracker';
+import { Token, ActivityTracker } from '../../../api/activity_tracker';
 import * as store from '../../../store';
 import { formatDate } from '../../../api/date';
 
@@ -27,42 +27,66 @@ class Fetch extends React.Component {
     store
       .getLstActTrackerSubscribed()
       .then((lstActTracker) => {
+        console.log(`lstActTracker ${lstActTracker}`);
         const actTracker = lstActTracker[0];
-        Datavatar.getData(actTracker, startDate, endDate).then((data) => {
-          if (data.tokenNotValid) {
-            Datavatar.refresh(actTracker).then((token) => {
-              if (token) {
-                // update token
-                actTracker.token = token;
-                store.updateActTrackerToken(actTracker);
-                // getData again...
-
-                Datavatar.getData(actTracker, startDate, endDate)
-                  .then((dataset) => {
-                    console.log(JSON.stringify(dataset));
-                    // return data
-                    return null;
-                  })
-                  .catch((error) => console.log(error));
-              } else {
-                // invalid actTracker
-                actTracker.isAvailable = true;
-                actTracker.token = new Token({});
-                store.updateActTrackerToken(actTracker);
-                // return go subscribe
-                return null;
-              }
-            });
-          } else {
-            // return data
-            console.log(JSON.stringify(data));
-            return null;
-          }
-        });
+        console.log(`actTracker ${actTracker}`);
+        Datavatar.getData(actTracker, startDate, endDate)
+          .then((data) => {
+            if (data.tokenNotValid) {
+              console.log(`token not valid`);
+              Datavatar.refresh(
+                actTracker.provider,
+                actTracker.token.refreshToken
+              )
+                .then((token) => {
+                  if (token) {
+                    console.log(`token recreate`);
+                    // update token
+                    console.log(
+                      `token before ${JSON.stringify(actTracker.token)}`
+                    );
+                    console.log(`token received ${JSON.stringify(token)}`);
+                    store
+                      .updateActTrackerToken(actTracker, token, false)
+                      .then((actTrackerUpdated) => {
+                        // getData again...
+                        console.log(
+                          `token after ${JSON.stringify(
+                            actTrackerUpdated.token
+                          )}`
+                        );
+                        Datavatar.getData(actTrackerUpdated, startDate, endDate)
+                          .then((dataset) => {
+                            console.log(`dataset ${JSON.stringify(dataset)}`);
+                            // return data
+                            return null;
+                          })
+                          .catch((error) => error);
+                      })
+                      .catch((error) => error);
+                  } else {
+                    console.log(`invalid token`);
+                    // invalid actTracker
+                    store
+                      .updateActTrackerToken(
+                        actTracker,
+                        { accessToken: null, refreshToken: null, secret: null },
+                        true
+                      )
+                      .then(() => null)
+                      .catch((error) => error);
+                  }
+                })
+                .catch((error) => error);
+            } else {
+              // return data
+              console.log(`data ${JSON.stringify(data)}`);
+              return null;
+            }
+          })
+          .catch((error) => error);
       })
-      .catch((error) => {
-        console.log(error);
-      });
+      .catch((error) => error);
   };
 
   render() {
@@ -86,7 +110,7 @@ class Fetch extends React.Component {
           range
         />
 
-        {this.state.date && (
+        {/* {this.state.date && (
           <Text style={styles.date}>
             {this.state.date && this.state.date.format('LL')}
           </Text>
@@ -107,7 +131,7 @@ class Fetch extends React.Component {
           ]}
         >
           {this.state.endDate && `end date :${this.state.endDate.format('LL')}`}
-        </Text>
+        </Text> */}
         <Button onPress={this.getData} title="Fetch" color="#841584" />
       </View>
     );

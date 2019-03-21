@@ -60,13 +60,14 @@ export const subscribeActTracker = (actTracker) => (dispatch) => {
   console.log(
     `@subscribeActTracker oauthAccessToken ${JSON.stringify(actTracker.token)}`
   );
+  console.log(`@subscribeActTracker actTracker ${JSON.stringify(actTracker)}`);
   console.log('store updateActTracker');
   store
     .registerToken(actTracker)
     .then((actTrackerUpdated) => {
       console.log('store updateActTracker done');
       console.log(
-        `store updateActTracker actTracker ${JSON.stringify(actTrackerUpdated)}`
+        `store updateActTracker actTracker ${JSON.stringify(actTracker)}`
       );
       dispatch(subscribeIsProcessing(false));
       console.log('store updateActTracker dispatch');

@@ -1,11 +1,13 @@
 // Define your models and their properties
 
 export const TBL_ACT_TRACKER_SCHEMA = 'actTracker';
-const TBL_TOKEN_SCHEMA = 'token';
+export const TBL_TOKEN_SCHEMA = 'token';
 
-const tokenSchema = {
+export const tokenSchema = {
   name: TBL_TOKEN_SCHEMA,
+  primaryKey: 'id',
   properties: {
+    id: { type: 'int' },
     accessToken: { type: 'string', optional: true },
     refreshToken: { type: 'string', optional: true },
     secret: { type: 'string', optional: true }
