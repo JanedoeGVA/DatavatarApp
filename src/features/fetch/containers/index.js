@@ -23,13 +23,16 @@ class Fetch extends React.Component {
 
   getData = () => {
     // const { startDate, endDate } = this.state;
-    const startDate = formatDate(this.state.startDate);
-    const endDate = formatDate(this.state.endDate);
+    const startDate = this.state.startDate / 1000;
+    const endDate = moment(formatDate(this.state.startDate), 'YYYY-MM-DD')
+      .add(1, 'day')
+      .unix();
+    console.log(`timestamp = ${startDate} ${endDate}`);
     store
       .getLstActTrackerSubscribed()
       .then((lstActTracker) => {
         console.log(`lstActTracker ${lstActTracker}`);
-        const actTracker = lstActTracker[0];
+        const actTracker = lstActTracker[1];
         console.log(`actTracker ${actTracker}`);
         Datavatar.getData(actTracker, startDate, endDate)
           .then((data) => {

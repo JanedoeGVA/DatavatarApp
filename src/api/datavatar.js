@@ -14,24 +14,19 @@ import { formatDate } from './date';
 export const getData = (actTracker, date, endDate) =>
   new Promise((resolve, reject) => {
     // const { update } = this.props;
-    const detailLvl = '1min';
+    const url = `https://datavatar.sytes.net/api/${actTracker.provider.toLowerCase()}/protecteddata/hearthrate?date=${date}&end-date=${endDate}`;
     console.log(`actTracker ${JSON.stringify(actTracker)}`);
     console.log(`accessToken ${JSON.stringify(actTracker.token.accessToken)}`);
-    console.log(
-      `https://datavatar.sytes.net/api/fitbit/protecteddata/hearthrate?date=${date}&end-date=${endDate}&detail-level=${detailLvl}`
-    );
+    console.log(url);
     const { accessToken } = actTracker.token;
-    fetch(
-      `https://datavatar.sytes.net/api/fitbit/protecteddata/hearthrate?date=${date}&end-date=${endDate}&detail-level=${detailLvl}`,
-      {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-          assertion: accessToken
-        }
+    fetch(url, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        assertion: accessToken
       }
-    )
+    })
       .then((response) => {
         const code = response.status;
         response
