@@ -43,21 +43,24 @@ const Shadow = ({ line }) => (
     fill="none"
   />
 );
-const Graph = ({ data }) => (
-  <LineChart
-    style={{ height: 200 }}
-    data={data.lstHearthRate}
-    contentInset={{ top: 20, bottom: 20 }}
-    svg={{
-      stroke: 'rgb(134, 65, 244)',
-      strokeWidth: 2,
-      clipPath: 'url(#clip-path-1)'
-    }}
-  >
-    <Clips />
-    <Shadow />
-    <DashedLine />
-  </LineChart>
-);
+const Graph = ({ data }) => {
+  const items = data.lstHeartRate.map((item) => item['heart-rate']);
+  return (
+    <LineChart
+      style={{ height: 200 }}
+      data={items}
+      contentInset={{ top: 20, bottom: 20 }}
+      svg={{
+        stroke: 'rgb(134, 65, 244)',
+        strokeWidth: 2,
+        clipPath: 'url(#clip-path-1)'
+      }}
+    >
+      <Clips />
+      <Shadow />
+      <DashedLine />
+    </LineChart>
+  );
+};
 
 export default Graph;

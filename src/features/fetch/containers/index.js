@@ -35,8 +35,12 @@ class Fetch extends React.Component {
         const actTracker = lstActTracker[1];
         console.log(`actTracker ${actTracker}`);
         Datavatar.getData(actTracker, startDate, endDate)
-          .then((data) => {
-            if (data.tokenNotValid) {
+          .then((response) => {
+            console.log(`data received : ${JSON.stringify(response.data)}`);
+            if (response.data) {
+              console.log(`data ${JSON.stringify(response.data)}`);
+              this.setState({ isData: true, data: response.data });
+            } else if (response.tokenNotValid) {
               console.log(`token not valid`);
               Datavatar.refresh(
                 actTracker.provider,
@@ -83,9 +87,7 @@ class Fetch extends React.Component {
                 })
                 .catch((error) => error);
             } else {
-              // return data
-              console.log(`data ${JSON.stringify(data)}`);
-              this.setState({ isData: true, data });
+              console.log(`error server ${response.error}`);
             }
           })
           .catch((error) => error);

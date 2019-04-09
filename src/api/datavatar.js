@@ -28,17 +28,19 @@ export const getData = (actTracker, date, endDate) =>
       }
     })
       .then((response) => {
+        console.log(`response ${JSON.stringify(response)}`);
         const code = response.status;
-        response
-          .json()
-          .then((json) => {
-            if (code === 401) {
-              resolve({ tokenNotValid: true });
-            } else {
-              resolve(json);
-            }
-          })
-          .catch((error) => reject(error));
+        console.log(`code ${JSON.stringify(code)}`);
+        if (code === 200) {
+          response.json().then((json) => {
+            console.log(`json ${JSON.stringify(json)}`);
+            resolve({ data: json });
+          });
+        } else if (code === 401) {
+          resolve({ tokenNotValid: true });
+        } else {
+          resolve({ error: response.body });
+        }
       })
       .catch((error) => {
         console.log(error);
