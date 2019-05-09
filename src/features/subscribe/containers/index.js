@@ -3,10 +3,10 @@ import { Alert, View, Linking } from 'react-native';
 import { NavigationEvents } from 'react-navigation';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import URI from 'urijs';
 import TrackerGrid from '../../../components/tracker_grid';
 import { load as actionLoad, subscribeActTracker } from '../actions';
 import * as Datavatar from '../../../api/datavatar';
+import subscribeType from '../type';
 
 class Subscribe extends React.Component {
   static navigationOptions = {
@@ -27,11 +27,10 @@ class Subscribe extends React.Component {
     // const { code } = uri.query(true);
     // console.log(code);
     Datavatar.verification(event.url)
-      .then((actTracker) => {
-        console.log(
-          `@_handleOpenURL actTracker = ${JSON.stringify(actTracker)}`
-        );
-        subscribe(actTracker);
+      .then((tracker) => {
+        console.log(`@_handleOpenURL tracker = ${JSON.stringify(tracker)}`);
+        // TODO: WARNING NEED TO SUBSCRIBE a Subscribe not a TRACKER !!!!!!
+        subscribe(tracker);
       })
       .catch((error) => {
         console.error(`Promise is rejected with error: ${error}`);
@@ -90,25 +89,7 @@ class Subscribe extends React.Component {
   }
 }
 
-Subscribe.propTypes = {
-  lstTrackers: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      provider: PropTypes.string.isRequired,
-      isAvailable: PropTypes.bool.isRequired,
-      protocol: PropTypes.string.isRequired,
-      token: PropTypes.shape({
-        accessToken: PropTypes.string,
-        secret: PropTypes.string,
-        refreshToken: PropTypes.string
-      }),
-      logo: PropTypes.oneOfType([
-        PropTypes.shape({ testUri: PropTypes.string }),
-        PropTypes.number
-      ]).isRequired
-    })
-  ).isRequired
-};
+Subscribe.propTypes = subscribeType.isRequired;
 
 const mapStateToProps = (state) => ({
   lstTrackers: state.subscribe.lstTrackers

@@ -1,30 +1,91 @@
 import { Linking } from 'react-native';
 import URI from 'urijs';
 import { vsprintf } from 'sprintf-js';
+import base64 from 'react-native-base64';
 import { ADD_TRACKER, Token } from './activity_tracker';
 import * as store from '../store';
 import * as Constant from './constant';
 import { formatDate } from './date';
+import * as Status from './http_status';
 
-// const { removeData, storeData, retrieveData } = store;
-// const FORMAT_URL = `${Constant.DATAVATAR_BASE_URL}/${
-//   Constant.URL_PATH_API
-// }/%s/%s`;
-
-export const getData = (actTracker, date, endDate) =>
+export const revoke = (actTracker) =>
   new Promise((resolve, reject) => {
-    // const { update } = this.props;
-    const url = `https://datavatar.sytes.net/api/${actTracker.provider.toLowerCase()}/protecteddata/hearthrate?date=${date}&end-date=${endDate}`;
-    console.log(`actTracker ${JSON.stringify(actTracker)}`);
-    console.log(`accessToken ${JSON.stringify(actTracker.token.accessToken)}`);
-    console.log(url);
     const { accessToken } = actTracker.token;
-    fetch(url, {
+    const { provider } = actTracker.provider;
+    const authHeader = `Bearer ${accessToken}`;
+    const uri = new URI(Constant.DATAVATAR_BASE_URL);
+    uri.segment([
+      Constant.URL_PATH_API,
+      provider.toLowerCase(),
+      Constant.URL_PATH_REVOKE
+    ]);
+    fetch(uri, {
       method: 'POST',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
-        assertion: accessToken
+        Authorization: authHeader
+      }
+    })
+      .then((response) => {
+        console.log(`response ${JSON.stringify(response)}`);
+        const code = response.status;
+        console.log(`code ${JSON.stringify(code)}`);
+        if (code === Status.OK.statusCode) {
+          // token a bien ete supprimé
+          resolve();
+        } else if (code === Status.SEE_OTHER.statusCode) {
+          // api n'a pas implemente de fonction revoke, il faut aller sur la page web
+          resolve({ redirect: response.headers.Location });
+        } else {
+          // il y a eu un probleme
+          throw response.body;
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        reject(error);
+      });
+  });
+
+export const getData = (actTracker, date, endDate) =>
+  new Promise((resolve, reject) => {
+    // const { update } = this.props;
+
+    console.log(`actTracker ${JSON.stringify(actTracker)}`);
+    console.log(`accessToken ${JSON.stringify(actTracker.token.accessToken)}`);
+
+    const { accessToken } = actTracker.token;
+    const { provider } = actTracker.provider;
+    let authHeader;
+    if (actTracker.protocol === Constant.OAUTH2) {
+      authHeader = `Bearer ${accessToken}`;
+    } else {
+      const oauth1Token = {
+        accessToken,
+        secret: actTracker.token.secret
+      };
+      console.log(accessToken);
+      console.log(actTracker.token.secret);
+      console.log(JSON.stringify(oauth1Token));
+      authHeader = `Bearer ${base64.encode(JSON.stringify(oauth1Token))}`;
+    }
+    console.log(`authHeader ${authHeader}`);
+    const uri = new URI(Constant.DATAVATAR_BASE_URL);
+    uri.segment([
+      Constant.URL_PATH_API,
+      provider.toLowerCase(),
+      'protecteddata',
+      'heart-rate'
+    ]);
+    uri.addSearch('date', date);
+    uri.addSearch('end-date', endDate);
+    fetch(uri, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: authHeader
       }
     })
       .then((response) => {
@@ -57,12 +118,13 @@ export const refresh = (provider, refreshToken) =>
       provider.toLowerCase(),
       Constant.URL_PATH_REFRESH
     ]);
+    const authHeader = `Bearer ${refreshToken}`;
     fetch(uri, {
       method: 'POST',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
-        assertion: refreshToken
+        Authorization: authHeader
       }
     })
       .then((response) => {
@@ -102,14 +164,27 @@ export const authorization = (provider, protocol) => {
     .then((response) => response.json())
     .then((json) => {
       console.log(json);
+
       // store requestTokenSecret if oauth1
       console.log(`authorization protocol = ${protocol}`);
       if (protocol === Constant.OAUTH1) {
         console.log('storing requestTokenSecret : ');
         store.saveData('requestTokenSecret', json.requestTokenSecret);
       }
-      console.log('linking call');
-      Linking.openURL(json.urlVerification);
+      let urlVerification;
+      if (json.provider === 'Fitbit') {
+        urlVerification = new URI(json.urlVerification)
+          .addSearch('prompt', 'login consent')
+          .toString();
+      } else if (json.provider === 'Strava') {
+        urlVerification = new URI(json.urlVerification)
+          .addSearch('approval_prompt', 'force')
+          .toString();
+      } else {
+        urlVerification = json.urlVerification;
+      }
+      console.log(`linking call ${JSON.stringify(urlVerification)}`);
+      Linking.openURL(urlVerification);
     })
     .catch((error) => {
       console.error(error);

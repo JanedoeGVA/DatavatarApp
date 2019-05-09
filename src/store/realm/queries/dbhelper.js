@@ -1,16 +1,25 @@
 import Realm from 'realm';
 import DB from './db';
 import {
-  TBL_ACT_TRACKER_SCHEMA,
+  TBL_TRACKER_SCHEMA,
+  TBL_SUBSCRIBED_SCHEMA,
   TBL_TOKEN_SCHEMA,
   config
-} from '../models/activityTracker';
+} from '../models/tracker';
+import {
+  SubscribedTracker,
+  Tracker
+} from '../../../api/activity_tracker/index';
 
 const db = new DB(config, Realm);
 
+/**
+ * - Check if Realm is Empty
+ * @return {Boolean}
+ */
 export const isEmpty = () =>
   new Promise((resolve, reject) => {
-    db.isEmpty(TBL_ACT_TRACKER_SCHEMA)
+    db.isEmpty()
       .then((empty) => {
         resolve(empty);
       })
@@ -19,9 +28,13 @@ export const isEmpty = () =>
       });
   });
 
-export const addListActTracker = (lstActTracker) =>
+/**
+ * - Add a list of Tracker in Realm, used at the first launch for init Trackers list
+ * @param {Array<Tracker>} lstActTracker
+ */
+export const addListTracker = (lstActTracker) =>
   new Promise((resolve, reject) => {
-    db.insertCollection(TBL_ACT_TRACKER_SCHEMA, lstActTracker)
+    db.insertCollection(TBL_TRACKER_SCHEMA, lstActTracker)
       .then(() => {
         resolve();
       })
@@ -30,46 +43,72 @@ export const addListActTracker = (lstActTracker) =>
       });
   });
 
-export const addActTracker = (actTracker) =>
+/**
+ * - Return the subscribed tracker after is adding in the Realm
+ * @param {SubscribedTracker} subscribed
+ * -The schema name where we want to query in the Realm config
+ * @return {Promise.<SubscribedTracker>}
+ */
+export const addSubscribed = (subscribed) =>
   new Promise((resolve, reject) => {
     console.log(
-      `@db addActTracker : actTracker = ${JSON.stringify(actTracker)}`
+      `@db addActTracker : actTracker = ${JSON.stringify(subscribed)}`
     );
-    db.insert(TBL_ACT_TRACKER_SCHEMA, actTracker)
+    db.insert(TBL_SUBSCRIBED_SCHEMA, subscribed)
       .then(() => {
-        resolve(actTracker);
+        resolve(subscribed);
       })
       .catch((error) => {
         reject(error);
       });
   });
 
-export const getLstActTracker = () =>
+/**
+ * - Return all the trackers
+ * @param {SubscribedTracker} subscribed
+ * -The schema name where we want to query in the Realm config
+ * @return {Promise.<Array<Tracker>>}
+ */
+export const getLstTracker = () =>
   new Promise((resolve, reject) => {
-    db.query(TBL_ACT_TRACKER_SCHEMA)
-      .then((lstActTracker) => {
-        resolve(lstActTracker);
+    db.query(TBL_TRACKER_SCHEMA)
+      .then((realmResults) => {
+        const lstTrackers = Object.keys(realmResults).map(
+          (key) => realmResults[key]
+        );
+        resolve(lstTrackers);
       })
       .catch((error) => {
         reject(error);
       });
   });
 
-export const getLstActTrackerSubscribed = () =>
+/**
+ * - Return all the trackers subscribed
+ * @return {Promise.<Array<SubscribedTracker>>}
+ */
+export const getAllSubscribed = () =>
   new Promise((resolve, reject) => {
-    const filter = 'isAvailable == false';
-    db.query(TBL_ACT_TRACKER_SCHEMA, filter)
-      .then((lstActTracker) => {
-        resolve(lstActTracker);
+    db.query(TBL_SUBSCRIBED_SCHEMA)
+      .then((realmResults) => {
+        const lstSubscribed = Object.keys(realmResults).map(
+          (key) => realmResults[key]
+        );
+        resolve(lstSubscribed);
       })
       .catch((error) => {
         reject(error);
       });
   });
 
-export const removeActTracker = (actTracker) =>
+/**
+ * - Remove a Subscribed Tracker
+ * @param {SubscribedTracker} subscribed
+ * @return {Promise<null>}
+ */
+export const removeSubscribed = (subscribed) =>
   new Promise((resolve, reject) => {
-    db.remove(TBL_ACT_TRACKER_SCHEMA, actTracker)
+    db.remove(TBL_SUBSCRIBED_SCHEMA, subscribed)
       .then(() => {
         resolve();
       })
@@ -78,9 +117,13 @@ export const removeActTracker = (actTracker) =>
       });
   });
 
-export const removeAllActTracker = () =>
+/**
+ * - Remove all Subscribed Trackers
+ * @return {Promise<null>}
+ */
+export const removeAllSubscribed = () =>
   new Promise((resolve, reject) => {
-    db.remove(TBL_ACT_TRACKER_SCHEMA)
+    db.remove(TBL_SUBSCRIBED_SCHEMA)
       .then(() => {
         resolve();
       })
@@ -89,57 +132,54 @@ export const removeAllActTracker = () =>
       });
   });
 
-export const updateActTrackerToken = (tracker, refreshToken, isAvailable) =>
+/**
+ * - Update token
+ * @param {SubscribedTracker} subscribed
+ * @param {string} refreshToken
+ * @return {Promise<SubscribedTracker>}
+ */
+export const updateSubscribedToken = (subscribed, refreshToken) =>
   new Promise((resolve, reject) => {
     console.log(
-      `stringify ${JSON.stringify(tracker)} ${JSON.stringify(
-        refreshToken
-      )} ${JSON.stringify(isAvailable)}`
+      `stringify ${JSON.stringify(subscribed)} ${JSON.stringify(refreshToken)}`
     );
-    const filter = `provider = "${tracker.provider}"`;
-    db.query(TBL_ACT_TRACKER_SCHEMA, filter)
-      .then((lstActTracker) => {
-        const actTracker = lstActTracker[0];
-        const { id } = actTracker;
-        const item = {
-          id,
-          isAvailable
-        };
-        db.update(TBL_ACT_TRACKER_SCHEMA, item)
-          .then(() => {
-            db.update(TBL_TOKEN_SCHEMA, { id, ...refreshToken })
-              .then(() => {
-                resolve(actTracker);
-              })
-              .catch((error) => {
-                reject(error);
-              });
-          })
-          .catch((error) => {
-            reject(error);
-          });
+    const { id } = subscribed;
+    db.update(TBL_TOKEN_SCHEMA, { id, ...refreshToken })
+      .then(() => {
+        resolve(token);
       })
       .catch((error) => {
         reject(error);
       });
   });
 
-export const registerToken = (tracker) =>
-  new Promise((resolve, reject) => {
-    updateActTrackerToken(tracker, tracker.token, false)
-      .then((actTracker) => {
-        resolve(actTracker);
-      })
-      .catch((error) => {
-        reject(error);
-      });
-  });
+//   /**
+//  * - add aSubscribed
+//  * @param {SubscribedTracker} subscribed
+//  * @param {string} refreshToken
+//  * @return {Promise<SubscribedTracker>}
+//  */
+// export const addSubscribed = (subscribed) =>
+//   new Promise((resolve, reject) => {
+//     updateRegisterToken(subscribed, tracker.token, false)
+//       .then((actTracker) => {
+//         resolve(actTracker);
+//       })
+//       .catch((error) => {
+//         reject(error);
+//       });
+//   });
 
-export const isExist = (item) =>
+/**
+ * - Check if a Tracker already exist
+ * @param {Tracker} tracker
+ * @return {Promise.<boolean>}
+ */
+export const isExist = (tracker) =>
   new Promise((resolve, reject) => {
-    db.query(TBL_ACT_TRACKER_SCHEMA, `provider == "${item.provider}"`)
-      .then((lstActTracker) => {
-        resolve(lstActTracker.length !== 0);
+    db.query(TBL_TRACKER_SCHEMA, `provider == "${tracker.provider}"`)
+      .then((lstTracker) => {
+        resolve(lstTracker.length !== 0);
       })
       .catch((error) => {
         reject(error);

@@ -7,17 +7,17 @@ export default class DB {
 
   getDefaultPath = () => Realm.defaultPath;
 
-  isEmpty = (model) =>
-    new Promise((resolve, reject) =>
+  isEmpty = () =>
+    new Promise((resolve, reject) => {
       Realm.open(this.config)
         .then((realm) => {
-          const objects = realm.objects(model);
-          resolve(objects.isEmpty);
+          resolve(realm.empty);
         })
         .catch((error) => {
+          console.log(`error ${error}`);
           reject(error);
-        })
-    );
+        });
+    });
 
   insert = (model, item) =>
     new Promise((resolve, reject) =>
@@ -46,14 +46,48 @@ export default class DB {
           reject(error);
         })
     );
-  // nextId = (objects) => {
-  //   const lastId = objects.max('id');
-  //   if (lastId === undefined) {
-  //     return 1;
-  //   }
-  //   return lastId + 1;
-  // };
 
+  /**
+   * - Return the next id of the objects type
+   * @param {String} model
+   * The type of an object as a string equal to the name in a ObjectSchema definition, that was specified in the configuration schema.
+   * @return {number}
+   */
+  getNextid = (model) =>
+    new Promise((resolve, reject) => {
+      Realm.open(this.config)
+        .then((realm) => {
+          const objects = realm.objects(model);
+          const nextID = this.nextId(objects);
+          resolve(nextID);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+
+  /**
+   * - Return the next id of the objects type
+   * @param {Realm.Results} objects
+   * -the objects from a schema, result of Realm.objects(type)
+   * @return {number}
+   */
+  nextId = (objects) => {
+    const lastId = objects.max('id');
+    if (lastId === undefined) {
+      return 1;
+    }
+    return lastId + 1;
+  };
+
+  /**
+   * - Return objects from a model with a filter
+   * @param {string} model
+   * -The schema name where we want to query in the Realm config
+   * @param {string} filter
+   * Optional, if not set return all objects from the schema
+   * @return {Promise.<Realm.Results>}
+   */
   query = (model, filter = '') =>
     new Promise((resolve, reject) => {
       Realm.open(this.config)

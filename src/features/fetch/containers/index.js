@@ -14,12 +14,23 @@ class Fetch extends React.Component {
     title: 'Fetch'
   };
 
-  state = {
-    date: null,
-    focus: 'startDate',
-    startDate: null,
-    endDate: null
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      date: null,
+      focus: 'startDate',
+      startDate: null,
+      endDate: null,
+      currentActTracker: {}
+    };
+  }
+
+  componentWillMount() {
+    const { navigation } = this.props;
+    this.setState({
+      currentActTracker: navigation.state.params.currentActTracker
+    });
+  }
 
   getData = () => {
     // const { startDate, endDate } = this.state;
@@ -28,71 +39,79 @@ class Fetch extends React.Component {
       .add(1, 'day')
       .unix();
     console.log(`timestamp = ${startDate} ${endDate}`);
-    store
-      .getLstActTrackerSubscribed()
-      .then((lstActTracker) => {
-        console.log(`lstActTracker ${lstActTracker}`);
-        const actTracker = lstActTracker[1];
-        console.log(`actTracker ${actTracker}`);
-        Datavatar.getData(actTracker, startDate, endDate)
-          .then((response) => {
-            console.log(`data received : ${JSON.stringify(response.data)}`);
-            if (response.data) {
-              console.log(`data ${JSON.stringify(response.data)}`);
-              this.setState({ isData: true, data: response.data });
-            } else if (response.tokenNotValid) {
-              console.log(`token not valid`);
-              Datavatar.refresh(
-                actTracker.provider,
-                actTracker.token.refreshToken
-              )
-                .then((token) => {
-                  if (token) {
-                    console.log(`token recreate`);
-                    // update token
+    // store
+    //   .getLstActTrackerSubscribed()
+    //   .then((lstActTracker) => {
+    //     console.log(`lstActTracker ${lstActTracker}`);
+    //     const actTracker = lstActTracker[0];
+    //     console.log(`actTracker ${actTracker}`);
+    const { currentActTracker } = this.state;
+    console.log(`currentActTracker = ${JSON.stringify(currentActTracker)}`);
+    Datavatar.getData(currentActTracker, startDate, endDate)
+      .then((response) => {
+        console.log(`response : ${JSON.stringify(response)}`);
+        if (response.data) {
+          console.log(`data ${JSON.stringify(response.data)}`);
+          this.setState({ isData: true, data: response.data });
+        } else if (response.tokenNotValid) {
+          console.log(`token not valid`);
+          Datavatar.refresh(
+            currentActTracker.provider,
+            currentActTracker.token.refreshToken
+          )
+            .then((token) => {
+              if (token) {
+                console.log(`token recreate`);
+                // update token
+                console.log(
+                  `token before ${JSON.stringify(currentActTracker.token)}`
+                );
+                console.log(`token received ${JSON.stringify(token)}`);
+                store
+                  .updateActTrackerToken(currentActTracker, token, false)
+                  .then((actTrackerUpdated) => {
+                    this.setState({ currentActTracker: actTrackerUpdated });
+                    // getData again...
                     console.log(
-                      `token before ${JSON.stringify(actTracker.token)}`
+                      `token after ${JSON.stringify(actTrackerUpdated.token)}`
                     );
-                    console.log(`token received ${JSON.stringify(token)}`);
-                    store
-                      .updateActTrackerToken(actTracker, token, false)
-                      .then((actTrackerUpdated) => {
-                        // getData again...
-                        console.log(
-                          `token after ${JSON.stringify(
-                            actTrackerUpdated.token
-                          )}`
-                        );
-                        Datavatar.getData(actTrackerUpdated, startDate, endDate)
-                          .then((dataset) => {
-                            console.log(`dataset ${JSON.stringify(dataset)}`);
-                            // return data
-                            this.setState({ isData: true, data: dataset });
-                          })
-                          .catch((error) => error);
-                      })
-                      .catch((error) => error);
-                  } else {
-                    console.log(`invalid token`);
-                    // invalid actTracker
-                    store
-                      .updateActTrackerToken(
-                        actTracker,
-                        { accessToken: null, refreshToken: null, secret: null },
-                        true
-                      )
-                      .then(() => null)
-                      .catch((error) => error);
-                  }
-                })
-                .catch((error) => error);
-            } else {
-              console.log(`error server ${response.error}`);
-            }
-          })
-          .catch((error) => error);
+                    // TODO infinite loop when bad token :O
+                    this.getData();
+                    // Datavatar.getData(actTrackerUpdated, startDate, endDate)
+                    //   .then((dataset) => {
+                    //     console.log(`dataset ${JSON.stringify(dataset)}`);
+                    //     // return data
+                    //     this.setState({ isData: true, data: dataset });
+                    //   })
+                    //   .catch((error) => error);
+                  })
+                  .catch((error) => error);
+              } else {
+                console.log(`invalid token`);
+                // invalid actTracker
+                store
+                  .updateActTrackerToken(
+                    currentActTracker,
+                    { accessToken: null, refreshToken: null, secret: null },
+                    true
+                  )
+                  .then(() => {
+                    this.setState({
+                      currentActTracker: {}
+                    });
+                    return null;
+                  })
+                  .catch((error) => error);
+              }
+            })
+            .catch((error) => error);
+        } else {
+          console.log(`error server ${response.error}`);
+        }
       })
       .catch((error) => error);
+    // })
+    // .catch((error) => error);
   };
 
   render() {

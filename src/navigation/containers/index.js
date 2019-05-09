@@ -5,6 +5,8 @@ import {
   createStackNavigator,
   createAppContainer
 } from 'react-navigation';
+import ProvidersListScreen from '../../features/fetch/containers/list_provider';
+import RequestDataListScreen from '../../features/fetch/containers/list_request_data';
 import ProvidersScreen from '../../features/home/containers';
 import SettingsScreen from '../../features/settings/containers';
 import SubscribeScreen from '../../features/subscribe/containers';
@@ -21,10 +23,21 @@ const HomeStack = createStackNavigator(
   }
 );
 
+const FetchStack = createStackNavigator(
+  {
+    Providers: ProvidersListScreen,
+    RequestData: RequestDataListScreen,
+    Fetch: FetchScreen
+  },
+  {
+    initialRouteName: 'Providers'
+  }
+);
+
 const Tabs = createBottomTabNavigator(
   {
     Home: { screen: HomeStack },
-    Fetching: { screen: FetchScreen },
+    Fetching: { screen: FetchStack },
     Storage: { screen: StorageScreen },
     Settings: { screen: SettingsScreen }
   },

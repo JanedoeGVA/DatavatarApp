@@ -1,7 +1,4 @@
-import {
-  getLstActTrackerSubscribed,
-  loadIfDBEmpty
-} from '../../../api/activity_tracker';
+import { getSubscribed, loadIfDBEmpty } from '../../../api/activity_tracker';
 import {
   LOAD_IS_PROCESSING,
   LOAD_HAS_ERRORED,
@@ -54,7 +51,7 @@ export const load = () => (dispatch) => {
 
 export const update = () => (dispatch) => {
   dispatch(updateIsProcessing(true));
-  return getLstActTrackerSubscribed()
+  return getSubscribed()
     .then((lstSubscribedTrackers) => {
       console.log(`update`);
       console.log(

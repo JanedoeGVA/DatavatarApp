@@ -1,5 +1,5 @@
 import * as store from '../../../store';
-import { getLstActTracker } from '../../../api/activity_tracker';
+import { getTrackers } from '../../../api/activity_tracker';
 import {
   SUBSCRIBE_HAS_ERRORED,
   SUBSCRIBE_IS_PROCESSING,
@@ -27,7 +27,7 @@ export const loadSuccess = (lstTrackers) => ({
 
 export const load = () => (dispatch) => {
   dispatch(isLoadProcessing(true));
-  return getLstActTracker()
+  return getTrackers()
     .then((lstTrackers) => {
       dispatch(isLoadProcessing(false));
       dispatch(loadSuccess(lstTrackers));

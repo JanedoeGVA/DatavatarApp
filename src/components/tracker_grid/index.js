@@ -1,52 +1,20 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import GridView from 'react-native-super-grid';
 import styles from './styles';
 import TrackerGridItem from '../tracker_grid_item';
+import gridComponentType from './type';
 
-const GridComponent = ({
-  lstTrackers,
-  onPressItem,
-  setItemColor,
-  showAvailable
-}) => (
+const GridComponent = ({ lstTrackers, onPressItem, setItemColor }) => (
   <GridView
     itemDimension={130}
     items={lstTrackers}
     style={styles.gridView}
     renderItem={(item) => (
-      <TrackerGridItem
-        {...{ onPressItem, setItemColor, item, showAvailable }}
-      />
+      <TrackerGridItem {...{ onPressItem, setItemColor, item }} />
     )}
   />
 );
 
-GridComponent.defaultProps = {
-  showAvailable: false
-};
-
-GridComponent.propTypes = {
-  onPressItem: PropTypes.func.isRequired,
-  setItemColor: PropTypes.func.isRequired,
-  lstTrackers: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      provider: PropTypes.string.isRequired,
-      isAvailable: PropTypes.bool.isRequired,
-      protocol: PropTypes.string.isRequired,
-      token: PropTypes.shape({
-        accessToken: PropTypes.string,
-        secret: PropTypes.string,
-        refreshToken: PropTypes.string
-      }),
-      logo: PropTypes.oneOfType([
-        PropTypes.shape({ testUri: PropTypes.string }),
-        PropTypes.number
-      ]).isRequired
-    })
-  ).isRequired,
-  showAvailable: PropTypes.bool
-};
+GridComponent.propTypes = gridComponentType.isRequired;
 
 export default GridComponent;

@@ -9,7 +9,9 @@ import {
 import { ADD_TRACKER } from '../../../api/activity_tracker';
 
 const INITIAL_STATE = {
-  lstSubscribedTrackers: [ADD_TRACKER],
+  lstSubscribedTrackers: [
+    { id: -1, avatar: 'subscribed', token: { id: -1 }, tracker: ADD_TRACKER }
+  ],
   loadIsSuccess: false,
   loadIsProcessing: false,
   loadHasErrored: false,
