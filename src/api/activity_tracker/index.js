@@ -24,7 +24,17 @@ const ADD_LOGO = require('../../assets/images/add.png');
 // };
 
 export class Token {
-  constructor({ id, accessToken = null, secret = null, refreshToken = null }) {
+  /**
+   * @param {Number} id
+   * -The id of the subscribedTracker
+   * @param {String} accessToken
+   * -The token key
+   * @param {String} secret
+   * -The secret token if OAuth1
+   * @param {String} refreshToken
+   * -The refresh token if OAuth2
+   */
+  constructor(id, accessToken, secret = null, refreshToken = null) {
     this.id = id;
     this.accessToken = accessToken;
     this.secret = secret;
@@ -34,11 +44,16 @@ export class Token {
 Token.propTypes = tokenType.isRequired;
 
 export class SubscribedTracker {
-  constructor(id, avatar, tracker) {
+  /**
+   * @param {Number} id
+   * @param {String} avatar
+   * @param {Tracker} tracker
+   */
+  constructor(id, avatar, tracker, token) {
     this.id = id;
     this.tracker = tracker;
     this.avatar = avatar;
-    this.token = new Token({ id });
+    this.token = token;
   }
 }
 SubscribedTracker.propTypes = subscribedTrackerType;

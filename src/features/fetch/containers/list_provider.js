@@ -3,7 +3,7 @@ import { NavigationEvents } from 'react-navigation';
 import { View, Text, Button, ActivityIndicator } from 'react-native';
 
 import ListTrackers from '../../../components/tracker_list';
-import { getLstActTrackerSubscribed } from '../../../api/activity_tracker';
+import { getTrackers } from '../../../api/activity_tracker';
 
 class ListProviders extends React.Component {
   static navigationOptions = {
@@ -15,9 +15,9 @@ class ListProviders extends React.Component {
     lstTracker: []
   };
 
-  navigate = (actTracker) => {
+  navigate = (tracker) => {
     const { navigation } = this.props;
-    navigation.navigate('RequestData', { currentActTracker: actTracker });
+    navigation.navigate('RequestData', { currentActTracker: tracker });
   };
 
   onPressItem = (item) => {
@@ -27,15 +27,13 @@ class ListProviders extends React.Component {
   load = () => {
     setTimeout(
       () =>
-        getLstActTrackerSubscribed()
-          .then((lstSubscribedTrackers) => {
+        getTrackers()
+          .then((lstTrackers) => {
             console.log(`update`);
-            console.log(
-              `lstSubscribedTrackers : ${JSON.stringify(lstSubscribedTrackers)}`
-            );
+            console.log(`lstTrackers : ${JSON.stringify(lstTrackers)}`);
             this.setState({
               isLoading: false,
-              lstTracker: lstSubscribedTrackers
+              lstTracker: lstTrackers
             });
           })
           .catch((error) => {

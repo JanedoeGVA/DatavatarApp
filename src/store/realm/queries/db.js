@@ -53,12 +53,12 @@ export default class DB {
    * The type of an object as a string equal to the name in a ObjectSchema definition, that was specified in the configuration schema.
    * @return {number}
    */
-  getNextid = (model) =>
+  getNextID = (model) =>
     new Promise((resolve, reject) => {
       Realm.open(this.config)
         .then((realm) => {
           const objects = realm.objects(model);
-          const nextID = this.nextId(objects);
+          const nextID = this.nextID(objects);
           resolve(nextID);
         })
         .catch((error) => {
@@ -72,7 +72,8 @@ export default class DB {
    * -the objects from a schema, result of Realm.objects(type)
    * @return {number}
    */
-  nextId = (objects) => {
+  nextID = (objects) => {
+    console.log(JSON.stringify(objects));
     const lastId = objects.max('id');
     if (lastId === undefined) {
       return 1;

@@ -50,32 +50,34 @@ export const subscribeHasErrored = (bool) => ({
   payload: bool
 });
 
-export const subscribeSuccess = (actTracker) => ({
+export const subscribeSuccess = (subscribedTracker) => ({
   type: SUBSCRIBE_SUCCESS,
-  payload: actTracker
+  payload: subscribedTracker
 });
 
-export const subscribeActTracker = (actTracker) => (dispatch) => {
+export const subscribeActTracker = (
+  avatar,
+  provider,
+  accessToken,
+  secret,
+  refresh
+) => (dispatch) => {
   dispatch(subscribeIsProcessing(true));
-  console.log(
-    `@subscribeActTracker oauthAccessToken ${JSON.stringify(actTracker.token)}`
-  );
-  console.log(`@subscribeActTracker actTracker ${JSON.stringify(actTracker)}`);
-  console.log('store updateActTracker');
+  console.log(`@subscribeActTracker subscription`);
+  console.log('store addSubscribed');
+
   store
-    .registerToken(actTracker)
-    .then((actTrackerUpdated) => {
+    .addSubscribed(avatar, provider, accessToken, secret, refresh)
+    .then((subscribedTracker) => {
       console.log('store updateActTracker done');
-      console.log(
-        `store updateActTracker actTracker ${JSON.stringify(actTracker)}`
-      );
+
       dispatch(subscribeIsProcessing(false));
       console.log('store updateActTracker dispatch');
-      return actTrackerUpdated;
+      return subscribedTracker;
     })
-    .then((actTrackerUpdated) => {
+    .then((subscribedTracker) => {
       console.log(' dispatch subscribeSuccess ');
-      dispatch(subscribeSuccess(actTrackerUpdated));
+      dispatch(subscribeSuccess(subscribedTracker));
     })
     .catch((error) => {
       console.log(`error : ${error}`);

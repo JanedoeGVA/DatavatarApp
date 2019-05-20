@@ -8,7 +8,8 @@ import {
 } from '../models/tracker';
 import {
   SubscribedTracker,
-  Tracker
+  Tracker,
+  Token
 } from '../../../api/activity_tracker/index';
 
 const db = new DB(config, Realm);
@@ -45,22 +46,46 @@ export const addListTracker = (lstActTracker) =>
 
 /**
  * - Return the subscribed tracker after is adding in the Realm
- * @param {SubscribedTracker} subscribed
- * -The schema name where we want to query in the Realm config
+ * @param {String} avatar
+ * -The avatar of the account set by the user
+ * @param {String} provider
+ * -The provider name of the Tracker
+ * @param {String} accessToken
+ * -The token key generate by the authorisation tracker
+ * @param {String} secret
+ * -The secret token if OAuth1
+ *  @param {String} refresh
+ * -The refresh token if OAuth2
  * @return {Promise.<SubscribedTracker>}
  */
-export const addSubscribed = (subscribed) =>
+export const addSubscribed = (avatar, provider, accessToken, secret, refresh) =>
   new Promise((resolve, reject) => {
-    console.log(
-      `@db addActTracker : actTracker = ${JSON.stringify(subscribed)}`
-    );
-    db.insert(TBL_SUBSCRIBED_SCHEMA, subscribed)
-      .then(() => {
-        resolve(subscribed);
+    db.getNextID(TBL_SUBSCRIBED_SCHEMA)
+      .then((id) => {
+        db.query(TBL_TRACKER_SCHEMA, `provider == "${provider}"`)
+          .then((trackers) => {
+            const token = new Token(id, accessToken, secret, refresh);
+            const tracker = trackers[0];
+            const subscribed = new SubscribedTracker(
+              id,
+              avatar,
+              tracker,
+              token
+            );
+            console.log(
+              `@db addActTracker : actTracker = ${JSON.stringify(subscribed)}`
+            );
+            db.insert(TBL_SUBSCRIBED_SCHEMA, subscribed)
+              .then(() => {
+                resolve(subscribed);
+              })
+              .catch((error) => {
+                reject(error);
+              });
+          })
+          .catch((error) => reject(error));
       })
-      .catch((error) => {
-        reject(error);
-      });
+      .catch((error) => reject(error));
   });
 
 /**

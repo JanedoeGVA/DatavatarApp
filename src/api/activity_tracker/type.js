@@ -3,7 +3,7 @@ import { LIST_PROTOCOL } from '../constant';
 
 export const tokenType = shape({
   id: number.isRequired,
-  accessToken: string,
+  accessToken: string.isRequired,
   secret: string,
   refreshToken: string
 });

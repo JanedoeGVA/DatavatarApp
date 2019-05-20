@@ -41,16 +41,17 @@ const subscribe = (state = INITIAL_STATE, action) => {
     case SUBSCRIBE_IS_PROCESSING:
       return { ...state, isProcessing: action.payload };
     case SUBSCRIBE_SUCCESS: {
-      const merge = {};
-      state.lstTrackers.forEach((trackerAct) => {
-        merge[trackerAct.id] = trackerAct;
-      });
-      merge[action.payload.id] = action.payload;
-      const update = [];
-      Object.keys(merge).forEach((key) => {
-        update.push(merge[key]);
-      });
-      return { ...state, lstTrackers: update };
+      // const merge = {};
+      // state.lstTrackers.forEach((trackerAct) => {
+      //   merge[trackerAct.id] = trackerAct;
+      // });
+      // merge[action.payload.id] = action.payload;
+      // const update = [];
+      // Object.keys(merge).forEach((key) => {
+      //   update.push(merge[key]);
+      // });
+      // return { ...state, lstTrackers: update };
+      return state;
     }
 
     default:
