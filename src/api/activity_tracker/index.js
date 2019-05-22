@@ -48,6 +48,7 @@ export class SubscribedTracker {
    * @param {Number} id
    * @param {String} avatar
    * @param {Tracker} tracker
+   * @param {Token} token
    */
   constructor(id, avatar, tracker, token) {
     this.id = id;
@@ -59,6 +60,12 @@ export class SubscribedTracker {
 SubscribedTracker.propTypes = subscribedTrackerType;
 
 export class Tracker {
+  /**
+   * @param {Number} id
+   * @param {String} provider
+   * @param {String} protocol
+   * @param {Number} logo
+   */
   constructor(id, provider, protocol, logo) {
     this.id = id;
     this.provider = provider;
@@ -189,7 +196,7 @@ export const getSubscribed = () =>
 
 /**
  * - Return an array of the Trackers
- * @return {Promise.<Array<SubscribedTracker>}
+ * @return {Promise.<Array<Tracker>}
  */
 export const getTrackers = () =>
   new Promise((resolve, reject) => {

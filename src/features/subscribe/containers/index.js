@@ -1,10 +1,9 @@
 import React from 'react';
-import { Text, TouchableOpacity, View, Linking } from 'react-native';
+import { View, Linking } from 'react-native';
 import { NavigationEvents } from 'react-navigation';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import Dialog from 'react-native-dialog';
 import TrackerGrid from '../../../components/tracker_grid';
+import DialogAvatar from '../../../components/dialog_avatar';
 import { load as actionLoad, subscribeActTracker } from '../actions';
 import * as Datavatar from '../../../api/datavatar';
 import subscribeType from '../type';
@@ -14,30 +13,33 @@ class Subscribe extends React.Component {
     title: 'AddApi'
   };
 
-  state = {
-    dialogVisible: false,
-    avatar: '',
-    subscriction: {}
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      dialogVisible: false,
+      avatar: '',
+      isAvatarEmpty: true,
+      subscriction: {}
+    };
+    this._handleOk = this._handleOk.bind(this);
+    this._onDialogAvatarChangeText = this._onDialogAvatarChangeText.bind(this);
+  }
 
   componentDidMount() {
     const { load } = this.props;
     load();
   }
 
-  showDialog = () => {};
-
-  handleOk = () => {
+  _handleOk = () => {
     const { subscribe } = this.props;
     const { avatar, subscriction } = this.state;
     const { provider, token } = subscriction;
     const { accessToken, secret, refreshToken } = token;
-    this.setState({ dialogVisible: false });
+    this.setState({ isAvatarEmpty: true, dialogVisible: false });
     subscribe(avatar, provider, accessToken, secret, refreshToken);
   };
 
   _handleOpenURL = (event) => {
-    const { subscribe } = this.props;
     console.log(
       `_handleOpenURL call vérification url : ${JSON.stringify(event)}`
     );
@@ -61,12 +63,21 @@ class Subscribe extends React.Component {
       })
       .catch((error) => {
         console.error(`Promise is rejected with error: ${error}`);
+        return error;
       });
   };
 
   onPressItem = (item) => Datavatar.authorization(item.provider, item.protocol);
 
-  setItemColor = (item) => (item.isAvailable ? '#8be1b7' : '#c3ddd0');
+  setItemColor = (item) => {
+    const ind = item.id % 4;
+    return ind > 1 ? '#8be1b7' : '#c3ddd0';
+  };
+
+  _onDialogAvatarChangeText = (text) => {
+    this.setState({ avatar: text });
+    this.setState({ isAvatarEmpty: !text });
+  };
 
   didFocus(payload) {
     console.log('did focus', payload);
@@ -85,6 +96,7 @@ class Subscribe extends React.Component {
 
   render() {
     const { lstTrackers } = this.props;
+    const { dialogVisible, isAvatarEmpty } = this.state;
     return (
       <View>
         <NavigationEvents
@@ -99,8 +111,14 @@ class Subscribe extends React.Component {
           }}
           onDidBlur={(payload) => console.log('did blur', payload)}
         />
-        <View>
-          <Dialog.Container visible={this.state.dialogVisible}>
+        <DialogAvatar
+          dialogVisible={dialogVisible}
+          onPress={this._handleOk}
+          disabled={isAvatarEmpty}
+          onChangeText={this._onDialogAvatarChangeText}
+        />
+        {/* <View>
+          <Dialog.Container visible={dialogVisible}>
             <Dialog.Title>Register Tracker</Dialog.Title>
             <Dialog.Description>
               Please provide an avatar name for the registered tracker.
@@ -111,7 +129,7 @@ class Subscribe extends React.Component {
             />
             <Dialog.Button label="Ok" onPress={this.handleOk} />
           </Dialog.Container>
-        </View>
+        </View> */}
         <TrackerGrid
           onPressItem={this.onPressItem}
           setItemColor={this.setItemColor}

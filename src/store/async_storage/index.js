@@ -59,7 +59,7 @@ export const updateData = (key, value) =>
 export const keysData = () => AsyncStorage.getAllKeys();
 /**
  * Push a value onto an array stored in AsyncStorage by key or create a new array in AsyncStorage for a key if it's not yet defined.
- * @param {String} key They key
+ * @param {String} key The key
  * @param {Any} value The value to push onto the array
  * @return {Promise}
  */

@@ -6,11 +6,7 @@ import {
   TBL_TOKEN_SCHEMA,
   config
 } from '../models/tracker';
-import {
-  SubscribedTracker,
-  Tracker,
-  Token
-} from '../../../api/activity_tracker/index';
+import { SubscribedTracker, Token } from '../../../api/activity_tracker/index';
 
 const db = new DB(config, Realm);
 
@@ -30,6 +26,8 @@ export const isEmpty = () =>
   });
 
 /**
+ * /**
+ * @typedef {import('../../../api/activity_tracker/index').Tracker} Tracker
  * - Add a list of Tracker in Realm, used at the first launch for init Trackers list
  * @param {Array<Tracker>} lstActTracker
  */

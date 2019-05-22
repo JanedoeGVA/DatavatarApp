@@ -1,15 +1,12 @@
 import Realm from 'realm';
-import {
-  TBL_ACT_TRACKER_SCHEMA,
-  config
-} from '../../models/__mocks__/activityTracker';
+import { TBL_SUBSCRIBED_SCHEMA, config } from '../../models/__mocks__/tracker';
 import DB from '../db';
 
 const item = { id: 1, value: 'item' };
 const FILTER = 'filter';
 
 jest.unmock('../db');
-jest.mock('../../models/activityTracker');
+jest.mock('../../models/tracker');
 jest.mock('realm');
 
 describe('Realm ', () => {
@@ -29,15 +26,15 @@ describe('Realm ', () => {
   describe('insert', () => {
     it('should call Realm open and create', async () => {
       expect.assertions(3);
-      await store.insert(TBL_ACT_TRACKER_SCHEMA, item);
+      await store.insert(TBL_SUBSCRIBED_SCHEMA, item);
       expect(Realm.open).toBeCalledWith(config);
       expect(Realm.store.isInitialized).toBe(true);
-      expect(Realm.create).toBeCalledWith(TBL_ACT_TRACKER_SCHEMA, item);
+      expect(Realm.create).toBeCalledWith(TBL_SUBSCRIBED_SCHEMA, item);
     });
     it('should reject when the db is not configured', async () => {
       expect.assertions(1);
       try {
-        await badStore.insert(TBL_ACT_TRACKER_SCHEMA, item);
+        await badStore.insert(TBL_SUBSCRIBED_SCHEMA, item);
       } catch (error) {
         expect(error).not.toBe(null);
       }
@@ -47,22 +44,22 @@ describe('Realm ', () => {
   describe('query', () => {
     it('should call Realm open and filtered is not call', async () => {
       expect.assertions(3);
-      await store.query(TBL_ACT_TRACKER_SCHEMA);
+      await store.query(TBL_SUBSCRIBED_SCHEMA);
       expect(Realm.open).toBeCalledWith(config);
-      expect(Realm.objects).toBeCalledWith(TBL_ACT_TRACKER_SCHEMA);
+      expect(Realm.objects).toBeCalledWith(TBL_SUBSCRIBED_SCHEMA);
       expect(Realm.objects().filtered).not.toHaveBeenCalled();
     });
     it('should call Realm open and filtered is call with a filter', async () => {
       expect.assertions(3);
-      await store.query(TBL_ACT_TRACKER_SCHEMA, FILTER);
+      await store.query(TBL_SUBSCRIBED_SCHEMA, FILTER);
       expect(Realm.open).toBeCalledWith(config);
-      expect(Realm.objects).toBeCalledWith(TBL_ACT_TRACKER_SCHEMA);
+      expect(Realm.objects).toBeCalledWith(TBL_SUBSCRIBED_SCHEMA);
       expect(Realm.objects().filtered).toBeCalledWith(FILTER);
     });
     it('should reject when the db is not configured', async () => {
       expect.assertions(1);
       try {
-        await badStore.query(TBL_ACT_TRACKER_SCHEMA);
+        await badStore.query(TBL_SUBSCRIBED_SCHEMA);
       } catch (error) {
         expect(error).not.toBe(null);
       }
@@ -72,25 +69,23 @@ describe('Realm ', () => {
   describe('delete', () => {
     it('should call Realm open and delete is called with only the item to delete', async () => {
       expect.assertions(3);
-      await store.remove(TBL_ACT_TRACKER_SCHEMA, item);
+      await store.remove(TBL_SUBSCRIBED_SCHEMA, item);
       expect(Realm.open).toBeCalledWith(config);
       expect(Realm.delete).toBeCalledWith(
-        Realm.objectForPrimaryKey(TBL_ACT_TRACKER_SCHEMA, item.id)
+        Realm.objectForPrimaryKey(TBL_SUBSCRIBED_SCHEMA, item.id)
       );
       expect(Realm.delete).toBeCalledTimes(1);
     });
     it('should call Realm open and delete is called with all items', async () => {
       expect.assertions(2);
-      await store.remove(TBL_ACT_TRACKER_SCHEMA);
+      await store.remove(TBL_SUBSCRIBED_SCHEMA);
       expect(Realm.open).toBeCalledWith(config);
-      expect(Realm.delete).toBeCalledWith(
-        Realm.objects(TBL_ACT_TRACKER_SCHEMA)
-      );
+      expect(Realm.delete).toBeCalledWith(Realm.objects(TBL_SUBSCRIBED_SCHEMA));
     });
     it('should reject when the db is not configured', async () => {
       expect.assertions(1);
       try {
-        await badStore.remove(TBL_ACT_TRACKER_SCHEMA);
+        await badStore.remove(TBL_SUBSCRIBED_SCHEMA);
       } catch (error) {
         expect(error).not.toBe(null);
       }
@@ -100,14 +95,14 @@ describe('Realm ', () => {
   describe('update', () => {
     it('should call Realm open and update', async () => {
       expect.assertions(2);
-      await store.update(TBL_ACT_TRACKER_SCHEMA, item);
+      await store.update(TBL_SUBSCRIBED_SCHEMA, item);
       expect(Realm.open).toBeCalledWith(config);
-      expect(Realm.create).toBeCalledWith(TBL_ACT_TRACKER_SCHEMA, item, true);
+      expect(Realm.create).toBeCalledWith(TBL_SUBSCRIBED_SCHEMA, item, true);
     });
     it('should reject when the db is not configured', async () => {
       expect.assertions(1);
       try {
-        await badStore.update(TBL_ACT_TRACKER_SCHEMA, item, true);
+        await badStore.update(TBL_SUBSCRIBED_SCHEMA, item, true);
       } catch (error) {
         expect(error).not.toBe(null);
       }

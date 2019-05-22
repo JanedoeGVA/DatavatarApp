@@ -8,10 +8,10 @@ import * as Constant from './constant';
 import { formatDate } from './date';
 import * as Status from './http_status';
 
-export const revoke = (actTracker) =>
+export const revoke = (subscribed) =>
   new Promise((resolve, reject) => {
-    const { accessToken } = actTracker.token;
-    const { provider } = actTracker.provider;
+    const { accessToken } = subscribed.token;
+    const { provider } = subscribed.tracker;
     const authHeader = `Bearer ${accessToken}`;
     const uri = new URI(Constant.DATAVATAR_BASE_URL);
     uri.segment([
@@ -48,25 +48,25 @@ export const revoke = (actTracker) =>
       });
   });
 
-export const getData = (actTracker, date, endDate) =>
+export const getData = (subscribed, date, endDate) =>
   new Promise((resolve, reject) => {
     // const { update } = this.props;
 
-    console.log(`actTracker ${JSON.stringify(actTracker)}`);
-    console.log(`accessToken ${JSON.stringify(actTracker.token.accessToken)}`);
+    console.log(`subscribed ${JSON.stringify(subscribed)}`);
+    console.log(`accessToken ${JSON.stringify(subscribed.token.accessToken)}`);
 
-    const { accessToken } = actTracker.token;
-    const { provider } = actTracker.provider;
+    const { accessToken } = subscribed.token;
+    const { provider } = subscribed.tracker;
     let authHeader;
-    if (actTracker.protocol === Constant.OAUTH2) {
+    if (subscribed.tracker.protocol === Constant.OAUTH2) {
       authHeader = `Bearer ${accessToken}`;
     } else {
       const oauth1Token = {
         accessToken,
-        secret: actTracker.token.secret
+        secret: subscribed.token.secret
       };
       console.log(accessToken);
-      console.log(actTracker.token.secret);
+      console.log(subscribed.token.secret);
       console.log(JSON.stringify(oauth1Token));
       authHeader = `Bearer ${base64.encode(JSON.stringify(oauth1Token))}`;
     }
