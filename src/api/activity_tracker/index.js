@@ -25,6 +25,7 @@ const ADD_LOGO = require('../../assets/images/add.png');
 
 export class Token {
   /**
+   * Represents a token.
    * @param {Number} id
    * -The id of the subscribedTracker
    * @param {String} accessToken

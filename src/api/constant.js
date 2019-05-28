@@ -19,6 +19,7 @@ export const LIST_PROTOCOL = [OAUTH1, OAUTH2, SUBSCRIBE];
 export const DATAVATAR_BASE_URL = 'https://datavatar.sytes.net';
 export const URL_PATH_API = 'api';
 export const URL_PATH_REFRESH = 'refresh';
+export const URL_PATH_REVOKE_METHOD = 'revoke-method';
 export const URL_PATH_REVOKE = 'revoke';
 export const URL_PATH_AUTORIZATION = 'authorization';
 export const URL_PATH_VERIFICATION = 'verification';

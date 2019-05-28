@@ -8,7 +8,38 @@ import * as Constant from './constant';
 import { formatDate } from './date';
 import * as Status from './http_status';
 
-export const revoke = (subscribed) =>
+const getRevokeMethod = (provider) =>
+  new Promise((resolve, reject) => {
+    const uri = new URI(Constant.DATAVATAR_BASE_URL);
+    uri.segment([
+      Constant.URL_PATH_API,
+      provider.toLowerCase(),
+      Constant.URL_PATH_REVOKE_METHOD
+    ]);
+    fetch(uri, {
+      method: 'GET'
+    })
+      .then((response) => {
+        console.log(JSON.stringify(response));
+        response
+          .json()
+          .then((data) => {
+            console.log('json');
+            console.log(JSON.stringify(data));
+            resolve(data);
+          })
+          .catch((error) => {
+            console.log(JSON.stringify(error));
+            return error;
+          });
+      })
+      .catch((error) => {
+        console.log(error);
+        reject(error);
+      });
+  });
+
+const postRevokeToken = (subscribed) =>
   new Promise((resolve, reject) => {
     const { accessToken } = subscribed.token;
     const { provider } = subscribed.tracker;
@@ -28,15 +59,17 @@ export const revoke = (subscribed) =>
       }
     })
       .then((response) => {
-        console.log(`response ${JSON.stringify(response)}`);
         const code = response.status;
         console.log(`code ${JSON.stringify(code)}`);
+        console.log(`response ${JSON.stringify(response)}`);
         if (code === Status.OK.statusCode) {
           // token a bien ete supprimé
-          resolve();
-        } else if (code === Status.SEE_OTHER.statusCode) {
-          // api n'a pas implemente de fonction revoke, il faut aller sur la page web
-          resolve({ redirect: response.headers.Location });
+          resolve({ message: 'Le token a bien été revoke' });
+        } else if (code === Status.BAD_REQUEST) {
+          // le token a deja ete revoked ou n'est plus valide
+          resolve({
+            message: `Le token n'est plus valide ou a deja ete revoke`
+          });
         } else {
           // il y a eu un probleme
           throw response.body;
@@ -46,6 +79,28 @@ export const revoke = (subscribed) =>
         console.log(error);
         reject(error);
       });
+  });
+
+/**
+ * Revoke a token from a subscribed tracker
+ * @typedef {import('./activity_tracker/index').SubscribedTracker} SubscribedTracker
+ * @param {SubscribedTracker} subscribed
+ * @return {Promise.<null> | String}
+ */
+export const revoke = (subscribed) =>
+  new Promise((resolve, reject) => {
+    console.log(`subscribed : ${JSON.stringify(subscribed)}`);
+
+    getRevokeMethod(subscribed.tracker.provider)
+      .then((revokeMethod) => {
+        if (revokeMethod.method === 'post') {
+          postRevokeToken(subscribed).then(() => resolve());
+        } else {
+          Linking.openURL(revokeMethod.uri);
+          resolve();
+        }
+      })
+      .catch((error) => error);
   });
 
 export const getData = (subscribed, date, endDate) =>

@@ -117,19 +117,6 @@ class Subscribe extends React.Component {
           disabled={isAvatarEmpty}
           onChangeText={this._onDialogAvatarChangeText}
         />
-        {/* <View>
-          <Dialog.Container visible={dialogVisible}>
-            <Dialog.Title>Register Tracker</Dialog.Title>
-            <Dialog.Description>
-              Please provide an avatar name for the registered tracker.
-            </Dialog.Description>
-            <Dialog.Input
-              placeholder="avatar.."
-              onChangeText={(text) => this.setState({ avatar: text })}
-            />
-            <Dialog.Button label="Ok" onPress={this.handleOk} />
-          </Dialog.Container>
-        </View> */}
         <TrackerGrid
           onPressItem={this.onPressItem}
           setItemColor={this.setItemColor}

@@ -10,8 +10,8 @@ const styles = StyleSheet.create({
   },
   itemContainer: {
     justifyContent: 'flex-end',
-    borderRadius: 5,
-    padding: 10,
+    borderRadius: 8,
+    padding: 8,
     height: 150
   },
   itemName: {
