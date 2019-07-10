@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavigationEvents } from 'react-navigation';
-import { View } from 'react-native';
+import { View, Text } from 'react-native';
 import { connect } from 'react-redux';
 import { load as actionLoad, update as actionUpdate } from '../actions';
 import SubscribedGrid from '../../../components/subscribed_grid';

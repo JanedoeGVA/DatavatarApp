@@ -16,6 +16,7 @@ const getRevokeMethod = (provider) =>
       provider.toLowerCase(),
       Constant.URL_PATH_REVOKE_METHOD
     ]);
+    console.log(`uri revokeMethod = ${uri.toString()}`);
     fetch(uri, {
       method: 'GET'
     })
@@ -89,13 +90,15 @@ const postRevokeToken = (subscribed) =>
  */
 export const revoke = (subscribed) =>
   new Promise((resolve, reject) => {
-    console.log(`subscribed : ${JSON.stringify(subscribed)}`);
+    console.log(`@revoke subscribed : ${JSON.stringify(subscribed)}`);
 
     getRevokeMethod(subscribed.tracker.provider)
       .then((revokeMethod) => {
         if (revokeMethod.method === 'post') {
+          console.log(`revoke post`);
           postRevokeToken(subscribed).then(() => resolve());
         } else {
+          console.log(`revoke browser`);
           Linking.openURL(revokeMethod.uri);
           resolve();
         }
@@ -205,41 +208,50 @@ export const refresh = (provider, refreshToken) =>
 export const authorization = (provider, protocol) => {
   console.log('authorization call');
   const uri = new URI(Constant.DATAVATAR_BASE_URL);
+  console.log(`uri ${JSON.stringify(uri)}`);
   uri.segment([
     Constant.URL_PATH_API,
     provider.toLowerCase(),
     Constant.URL_PATH_AUTORIZATION
   ]);
+  console.log(`uri ${uri.toString()}`);
   // const authorizationURL = vsprintf(FORMAT_URL, [
   //   provider.toLowerCase(),
   //   'authorization'
   // ]);
   // console.log(`authorizationURL : ${authorizationURL}`);
-  fetch(uri)
-    .then((response) => response.json())
-    .then((json) => {
-      console.log(json);
+  fetch(uri.toString())
+    .then((response) => {
+      console.log(`response ${JSON.stringify(response)}`);
+      response
+        .json()
+        .then((json) => {
+          console.log(json);
 
-      // store requestTokenSecret if oauth1
-      console.log(`authorization protocol = ${protocol}`);
-      if (protocol === Constant.OAUTH1) {
-        console.log('storing requestTokenSecret : ');
-        store.saveData('requestTokenSecret', json.requestTokenSecret);
-      }
-      let urlVerification;
-      if (json.provider === 'Fitbit') {
-        urlVerification = new URI(json.urlVerification)
-          .addSearch('prompt', 'login consent')
-          .toString();
-      } else if (json.provider === 'Strava') {
-        urlVerification = new URI(json.urlVerification)
-          .addSearch('approval_prompt', 'force')
-          .toString();
-      } else {
-        urlVerification = json.urlVerification;
-      }
-      console.log(`linking call ${JSON.stringify(urlVerification)}`);
-      Linking.openURL(urlVerification);
+          // store requestTokenSecret if oauth1
+          console.log(`authorization protocol = ${protocol}`);
+          if (protocol === Constant.OAUTH1) {
+            console.log('storing requestTokenSecret : ');
+            store.saveData('requestTokenSecret', json.requestTokenSecret);
+          }
+          let urlVerification;
+          if (json.provider === 'Fitbit') {
+            urlVerification = new URI(json.urlVerification)
+              .addSearch('prompt', 'login consent')
+              .toString();
+          } else if (json.provider === 'Strava') {
+            urlVerification = new URI(json.urlVerification)
+              .addSearch('approval_prompt', 'force')
+              .toString();
+          } else {
+            urlVerification = json.urlVerification;
+          }
+          console.log(`linking call ${JSON.stringify(urlVerification)}`);
+          Linking.openURL(urlVerification);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
     })
     .catch((error) => {
       console.error(error);
