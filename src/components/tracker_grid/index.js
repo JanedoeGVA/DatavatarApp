@@ -1,15 +1,15 @@
 import React from 'react';
-import GridView from 'react-native-super-grid';
+import { FlatGrid } from 'react-native-super-grid';
 import styles from './styles';
 import TrackerGridItem from '../tracker_grid_item';
 import gridComponentType from './type';
 
 const GridComponent = ({ lstTrackers, onPressItem, setItemColor }) => (
-  <GridView
+  <FlatGrid
     itemDimension={130}
     items={lstTrackers}
     style={styles.gridView}
-    renderItem={(item) => (
+    renderItem={({ item, index }) => (
       <TrackerGridItem {...{ onPressItem, setItemColor, item }} />
     )}
   />
