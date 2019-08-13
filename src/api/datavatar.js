@@ -96,11 +96,14 @@ export const revoke = (subscribed) =>
       .then((revokeMethod) => {
         if (revokeMethod.method === 'post') {
           console.log(`revoke post`);
-          postRevokeToken(subscribed).then(() => resolve());
+          postRevokeToken(subscribed).then(() => {
+            resolve();
+          });
         } else {
           console.log(`revoke browser`);
-          Linking.openURL(revokeMethod.uri);
-          resolve();
+          console.log(`revokeMethod : ${JSON.stringify(revokeMethod)}`);
+          console.log(`uri : ${JSON.stringify(revokeMethod.uri)}`);
+          resolve({ uri: revokeMethod.uri });
         }
       })
       .catch((error) => error);
@@ -247,7 +250,9 @@ export const authorization = (provider, protocol) => {
             urlVerification = json.urlVerification;
           }
           console.log(`linking call ${JSON.stringify(urlVerification)}`);
-          Linking.openURL(urlVerification);
+          Linking.openURL(urlVerification).catch((err) =>
+            console.error('An error occurred', err)
+          );
         })
         .catch((error) => {
           console.error(error);

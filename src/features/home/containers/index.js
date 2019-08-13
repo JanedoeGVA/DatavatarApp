@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavigationEvents } from 'react-navigation';
-import { View, Text } from 'react-native';
+import { Linking, View, Text } from 'react-native';
 import { connect } from 'react-redux';
 import { load as actionLoad, update as actionUpdate } from '../actions';
 import SubscribedGrid from '../../../components/subscribed_grid';
@@ -25,14 +25,18 @@ class Home extends React.Component {
     if (item.tracker.id === ADD_TRACKER.id) {
       navigation.navigate('Subscribe');
     } else {
-      // TODO: revoke token and remove subscribed
       revoke(item)
-        .then((response) => {
-          if (response.redirect) {
-            console.log(`response${JSON.stringify(response)}`);
-          } else {
-            console.log(`it works`);
+        .then((redirect) => {
+          // TODO: delete Subscribed (with token)
+          if (redirect) {
+            console.log(
+              `redirect on API revoke url at : ${JSON.stringify(redirect.uri)}`
+            );
+            Linking.openURL(redirect.uri).catch((err) =>
+              console.error('An error occurred', err)
+            );
           }
+          console.log(`revoke done`);
         })
         .catch((error) => console.log(`not working ${JSON.stringify(error)}`));
     }

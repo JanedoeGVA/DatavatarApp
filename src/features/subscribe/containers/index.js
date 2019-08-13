@@ -26,6 +26,7 @@ class Subscribe extends React.Component {
   }
 
   componentDidMount() {
+    console.log(` Subsribed Feature compenentDidMount()`);
     const { load } = this.props;
     load();
   }
@@ -51,7 +52,7 @@ class Subscribe extends React.Component {
         console.log(
           `@_handleOpenURL subscribe = ${JSON.stringify(subscriction)}`
         );
-        // TODO: WARNING NEED TO SUBSCRIBE a Subscribe not a TRACKER !!!!!!
+        // FIXME: WARNING NEED TO SUBSCRIBE a Subscribe not a TRACKER !!!!!!
         // Open a form to set the avatar
         this.setState({ subscriction });
         this.setState({ dialogVisible: true });
