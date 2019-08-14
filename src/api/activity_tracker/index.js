@@ -212,3 +212,21 @@ export const getTrackers = () =>
         reject(error);
       });
   });
+
+/**
+ * - Remove a Subscribed Tracker and the token
+ * @param {SubscribedTracker} subscribed
+ * @return {Promise<null>}
+ */
+export const revokeSubscribed = (subscribed) =>
+  new Promise((resolve, reject) => {
+    store
+      .removeSubscribed(subscribed)
+      .then(() => {
+        resolve();
+      })
+      .catch((error) => {
+        console.log(`error :${error}`);
+        reject(error);
+      });
+  });

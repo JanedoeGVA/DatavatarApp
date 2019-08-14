@@ -2,7 +2,11 @@ import React from 'react';
 import { NavigationEvents } from 'react-navigation';
 import { Linking, View, Text } from 'react-native';
 import { connect } from 'react-redux';
-import { load as actionLoad, update as actionUpdate } from '../actions';
+import {
+  load as actionLoad,
+  update as actionUpdate,
+  revoke as actionRevoke
+} from '../actions';
 import SubscribedGrid from '../../../components/subscribed_grid';
 import { ADD_TRACKER } from '../../../api/activity_tracker';
 import { revoke } from '../../../api/datavatar';
@@ -27,7 +31,13 @@ class Home extends React.Component {
     } else {
       revoke(item)
         .then((redirect) => {
-          // TODO: delete Subscribed (with token)
+          // FIXME:
+          // FIXME: delete Subscribed (with token) ca l air de planter ici
+          // FIXME:
+          const { revokeSubscribed } = this.props;
+          revokeSubscribed(item);
+          // FIXME:
+          // FIXME:
           if (redirect) {
             console.log(
               `redirect on API revoke url at : ${JSON.stringify(redirect.uri)}`
@@ -42,8 +52,8 @@ class Home extends React.Component {
     }
   };
 
-  setItemColor = (item) =>
-    item.tracker.protocol !== 'subscribe' ? '#8be1b7' : '#c3ddd0';
+  // setItemColor = (item) =>
+  //   item.tracker.protocol !== 'subscribe' ? '#8be1b7' : '#c3ddd0';
 
   render() {
     const { lstSubscribedTrackers } = this.props;
@@ -61,7 +71,6 @@ class Home extends React.Component {
         />
         <SubscribedGrid
           onPressItem={this.onPressItem}
-          setItemColor={this.setItemColor}
           lstSubscribed={lstSubscribedTrackers}
         />
       </View>
@@ -74,6 +83,8 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
+  revokeSubscribed: (subscribedTracker) =>
+    dispatch(actionRevoke(subscribedTracker)),
   load: () => dispatch(actionLoad()),
   update: () => dispatch(actionUpdate())
 });

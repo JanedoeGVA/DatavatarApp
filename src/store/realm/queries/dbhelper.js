@@ -125,7 +125,7 @@ export const getAllSubscribed = () =>
   });
 
 /**
- * - Remove a Subscribed Tracker
+ * - Remove a Subscribed Tracker and the token
  * @param {SubscribedTracker} subscribed
  * @return {Promise<null>}
  */

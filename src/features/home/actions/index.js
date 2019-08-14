@@ -1,12 +1,20 @@
-import { getSubscribed, loadIfDBEmpty } from '../../../api/activity_tracker';
+import {
+  getSubscribed,
+  loadIfDBEmpty,
+  revokeSubscribed
+} from '../../../api/activity_tracker';
 import {
   LOAD_IS_PROCESSING,
   LOAD_HAS_ERRORED,
   LOAD_SUCCESS,
   UPDATE_IS_PROCESSING,
   UPDATE_HAS_ERRORED,
-  UPDATE_SUCCESS
+  UPDATE_SUCCESS,
+  REVOKE_IS_PROCESSING,
+  REVOKE_HAS_ERRORED,
+  REVOKE_SUCCESS
 } from '../constant';
+import { removeSubscribed } from '../../../store';
 
 export const loadIsProcessing = (bool) => ({
   type: LOAD_IS_PROCESSING,
@@ -20,6 +28,21 @@ export const loadHasErrored = (bool) => ({
 
 export const loadSuccess = (bool) => ({
   type: LOAD_SUCCESS,
+  payload: bool
+});
+
+export const revokeSuccess = (bool) => ({
+  type: REVOKE_SUCCESS,
+  payload: bool
+});
+
+export const revokeIsProcessing = (bool) => ({
+  type: REVOKE_IS_PROCESSING,
+  payload: bool
+});
+
+export const revokeHasErrored = (bool) => ({
+  type: REVOKE_HAS_ERRORED,
   payload: bool
 });
 
@@ -47,6 +70,16 @@ export const load = () => (dispatch) => {
       dispatch(loadSuccess(true));
     })
     .catch(() => dispatch(loadHasErrored(true)));
+};
+
+export const revoke = (subscribed) => {
+  dispatch(revokeIsProcessing(true));
+  return revokeSubscribed(subscribed)
+    .then(() => {
+      dispatch(revokeIsProcessing(false));
+      dispatch(revokeSuccess(true));
+    })
+    .catch(() => dispatch(revokeHasErrored(true)));
 };
 
 export const update = () => (dispatch) => {

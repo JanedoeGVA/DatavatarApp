@@ -3,7 +3,6 @@ import { trackerType } from '../../api/activity_tracker/type';
 
 const gridComponentType = {
   onPressItem: func.isRequired,
-  setItemColor: func.isRequired,
   lstTrackers: arrayOf(trackerType).isRequired
 };
 
