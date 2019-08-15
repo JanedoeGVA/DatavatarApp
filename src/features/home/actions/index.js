@@ -36,9 +36,9 @@ export const revokeSuccess = (bool) => ({
   payload: bool
 });
 
-export const revokeIsProcessing = (bool) => ({
+export const revokeIsProcessing = (id) => ({
   type: REVOKE_IS_PROCESSING,
-  payload: bool
+  payload: id
 });
 
 export const revokeHasErrored = (bool) => ({
@@ -72,14 +72,17 @@ export const load = () => (dispatch) => {
     .catch(() => dispatch(loadHasErrored(true)));
 };
 
-export const revoke = (subscribed) => {
-  dispatch(revokeIsProcessing(true));
+// OPTIMIZE: usually we modify data before view, but if we delete
+// object in realm before delete in the redux state app crash. ATM dont find another solution
+export const revoke = (subscribed) => (dispatch) => {
+  dispatch(revokeIsProcessing(subscribed));
   return revokeSubscribed(subscribed)
     .then(() => {
-      dispatch(revokeIsProcessing(false));
       dispatch(revokeSuccess(true));
     })
-    .catch(() => dispatch(revokeHasErrored(true)));
+    .catch((error) => {
+      dispatch(revokeHasErrored(true));
+    });
 };
 
 export const update = () => (dispatch) => {

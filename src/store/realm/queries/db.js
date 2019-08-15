@@ -126,6 +126,16 @@ export default class DB {
         });
     });
 
+  objectByID = (model, id) =>
+    new Promise((resolve, reject) => {
+      Realm.open(this.config)
+        .then((realm) => {
+          const object = realm.objectForPrimaryKey(model, id);
+          resolve(object);
+        })
+        .catch((error) => reject(error));
+    });
+
   update = (model, item) =>
     new Promise((resolve, reject) => {
       Realm.open(this.config)

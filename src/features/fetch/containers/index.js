@@ -16,22 +16,20 @@ class Fetch extends React.Component {
 
   constructor(props) {
     super(props);
-    const { navigation } = this.props;
     this.state = {
       date: null,
       focus: 'startDate',
       startDate: null,
-      endDate: null,
-      currentActTracker: navigation.state.params.currentActTracker
+      endDate: null
     };
   }
 
-  // componentWillMount() {
-  //   const { navigation } = this.props;
-  //   this.setState({
-  //     currentActTracker: navigation.state.params.currentActTracker
-  //   });
-  // }
+  componentWillMount() {
+    const { navigation } = this.props;
+    this.setState({
+      currentActTracker: navigation.state.params.currentActTracker
+    });
+  }
 
   getData = () => {
     // const { startDate, endDate } = this.state;

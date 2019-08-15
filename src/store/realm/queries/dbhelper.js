@@ -127,13 +127,20 @@ export const getAllSubscribed = () =>
 /**
  * - Remove a Subscribed Tracker and the token
  * @param {SubscribedTracker} subscribed
- * @return {Promise<null>}
+ * @return {Promise<>}
  */
 export const removeSubscribed = (subscribed) =>
   new Promise((resolve, reject) => {
-    db.remove(TBL_SUBSCRIBED_SCHEMA, subscribed)
+    console.log('dbhelper removeSubscribed call');
+    db.remove(TBL_TOKEN_SCHEMA, subscribed.token)
       .then(() => {
-        resolve();
+        db.remove(TBL_SUBSCRIBED_SCHEMA, subscribed)
+          .then(() => {
+            resolve();
+          })
+          .catch((error) => {
+            reject(error);
+          });
       })
       .catch((error) => {
         reject(error);

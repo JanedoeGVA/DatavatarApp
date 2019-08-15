@@ -23,21 +23,16 @@ class Home extends React.Component {
     load();
   }
 
-  onPressItem = (item) => {
-    console.log(`click on = ${JSON.stringify(item)}`);
+  onPressItem = (subscribed) => {
+    console.log(`click on = ${JSON.stringify(subscribed)}`);
     const { navigation } = this.props;
-    if (item.tracker.id === ADD_TRACKER.id) {
+    if (subscribed.tracker.id === ADD_TRACKER.id) {
       navigation.navigate('Subscribe');
     } else {
-      revoke(item)
+      revoke(subscribed)
         .then((redirect) => {
-          // FIXME:
-          // FIXME: delete Subscribed (with token) ca l air de planter ici
-          // FIXME:
           const { revokeSubscribed } = this.props;
-          revokeSubscribed(item);
-          // FIXME:
-          // FIXME:
+          revokeSubscribed(subscribed);
           if (redirect) {
             console.log(
               `redirect on API revoke url at : ${JSON.stringify(redirect.uri)}`
@@ -83,8 +78,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  revokeSubscribed: (subscribedTracker) =>
-    dispatch(actionRevoke(subscribedTracker)),
+  revokeSubscribed: (id) => dispatch(actionRevoke(id)),
   load: () => dispatch(actionLoad()),
   update: () => dispatch(actionUpdate())
 });

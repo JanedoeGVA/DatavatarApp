@@ -216,7 +216,7 @@ export const getTrackers = () =>
 /**
  * - Remove a Subscribed Tracker and the token
  * @param {SubscribedTracker} subscribed
- * @return {Promise<null>}
+ * @return {Promise<>}
  */
 export const revokeSubscribed = (subscribed) =>
   new Promise((resolve, reject) => {

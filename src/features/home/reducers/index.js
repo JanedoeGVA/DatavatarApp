@@ -46,19 +46,28 @@ const create = (state = INITIAL_STATE, action) => {
         lstSubscribedTrackers: oldLstSubscribedTrackers.concat(action.payload)
       };
     case REVOKE_IS_PROCESSING:
-      return { ...state, revokeIsProcessing: action.payload };
-    case REVOKE_HAS_ERRORED:
-      return { ...state, revokeHasErrored: action.payload };
-    case REVOKE_SUCCESS:
-      const index = lstSubscribedTrackers.findIndex(
+      const index = state.lstSubscribedTrackers.findIndex(
         (subscribed) => subscribed.id === action.payload.id
       );
+      console.log(`index = ${index}`);
       return {
         ...state,
         lstSubscribedTrackers: [
-          ...lstSubscribedTrackers.slice(0, index),
-          ...lstSubscribedTrackers.slice(1 + index)
-        ]
+          ...state.lstSubscribedTrackers.slice(0, index),
+          ...state.lstSubscribedTrackers.slice(1 + index)
+        ],
+        revokeIsProcessing: true
+      };
+    case REVOKE_HAS_ERRORED:
+      return {
+        ...state,
+        revokeHasErrored: action.payload,
+        revokeIsProcessing: false
+      };
+    case REVOKE_SUCCESS:
+      return {
+        ...state,
+        revokeIsProcessing: false
       };
     default:
       return state;
