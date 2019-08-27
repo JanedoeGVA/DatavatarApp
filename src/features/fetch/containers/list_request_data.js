@@ -14,22 +14,25 @@ class RequestData extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentActTracker: {}
+      currentSubscribedTracker: {}
     };
     this._onClick = this._onClick.bind(this);
   }
 
   load = () => {
     const { navigation } = this.props;
-    const current = navigation.getParam('currentActTracker', 'default-value');
-    this.setState({ currentActTracker: current });
+    const current = navigation.getParam(
+      'currentSubscribedTracker',
+      'default-value'
+    );
+    this.setState({ currentSubscribedTracker: current });
     console.log(`current : ${JSON.stringify(current)}`);
   };
 
   _onClick = () => {
     const { navigation } = this.props;
-    const { currentActTracker } = this.state;
-    navigation.navigate('Fetch', { currentActTracker });
+    const { currentSubscribedTracker } = this.state;
+    navigation.navigate('Fetch', { currentSubscribedTracker });
   };
 
   render() {

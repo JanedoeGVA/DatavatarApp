@@ -5,7 +5,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 8,
-    marginTop: 30,
+    marginTop: 0,
     flexDirection: 'column', // main axis
     justifyContent: 'center', // main axis
     alignItems: 'center', // cross axis

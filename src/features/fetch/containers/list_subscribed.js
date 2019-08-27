@@ -1,23 +1,26 @@
 import React from 'react';
 import { NavigationEvents } from 'react-navigation';
 import { View, Text, Button, ActivityIndicator } from 'react-native';
+import * as store from '../../../store';
 
 import ListTrackers from '../../../components/tracker_list';
 import { getTrackers } from '../../../api/activity_tracker';
 
-class ListProviders extends React.Component {
+class ListSubscribed extends React.Component {
   static navigationOptions = {
     title: 'Activity Trackers'
   };
 
   state = {
     isLoading: true,
-    lstTracker: []
+    lstSubscribed: []
   };
 
-  navigate = (tracker) => {
+  navigate = (subscribed) => {
     const { navigation } = this.props;
-    navigation.navigate('RequestData', { currentActTracker: tracker });
+    navigation.navigate('RequestData', {
+      currentSubscribedTracker: subscribed
+    });
   };
 
   onPressItem = (item) => {
@@ -25,26 +28,23 @@ class ListProviders extends React.Component {
   };
 
   load = () => {
-    setTimeout(
-      () =>
-        getTrackers()
-          .then((lstTrackers) => {
-            console.log(`update`);
-            console.log(`lstTrackers : ${JSON.stringify(lstTrackers)}`);
-            this.setState({
-              isLoading: false,
-              lstTracker: lstTrackers
-            });
-          })
-          .catch((error) => {
-            console.log(error);
-          }),
-      900
-    );
+    // TODO: GET Subscribed Trackers not Tracker List !!!!!
+    store
+      .getAllSubscribed()
+      .then((lstSubscribed) => {
+        console.log(`lstSubscribed : ${JSON.stringify(lstSubscribed)}`);
+        this.setState({
+          isLoading: false,
+          lstSubscribed: lstSubscribed
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   render() {
-    const { isLoading, lstTracker } = this.state;
+    const { isLoading, lstSubscribed } = this.state;
 
     return (
       <View style={{ flex: 1 }}>
@@ -65,11 +65,11 @@ class ListProviders extends React.Component {
           />
         )}
         {!isLoading && (
-          <ListTrackers data={lstTracker} onPressItem={this.onPressItem} />
+          <ListTrackers data={lstSubscribed} onPressItem={this.onPressItem} />
         )}
       </View>
     );
   }
 }
 
-export default ListProviders;
+export default ListSubscribed;

@@ -5,13 +5,15 @@ import {
   createStackNavigator,
   createAppContainer
 } from 'react-navigation';
-import ProvidersListScreen from '../../features/fetch/containers/list_provider';
+import SubscribedListScreen from '../../features/fetch/containers/list_subscribed';
 import RequestDataListScreen from '../../features/fetch/containers/list_request_data';
 import ProvidersScreen from '../../features/home/containers';
 import SettingsScreen from '../../features/settings/containers';
 import SubscribeScreen from '../../features/subscribe/containers';
 import FetchScreen from '../../features/fetch/containers';
 import StorageScreen from '../../features/storage/containers';
+import TestScreen from '../../features/fetch/containers/test';
+import GraphScreen from '../../features/fetch/containers/graph';
 
 const HomeStack = createStackNavigator(
   {
@@ -25,12 +27,14 @@ const HomeStack = createStackNavigator(
 
 const FetchStack = createStackNavigator(
   {
-    Providers: ProvidersListScreen,
+    Subscribed: SubscribedListScreen,
     RequestData: RequestDataListScreen,
-    Fetch: FetchScreen
+    Fetch: FetchScreen,
+    Test: TestScreen,
+    Graph: GraphScreen
   },
   {
-    initialRouteName: 'Providers'
+    initialRouteName: 'Subscribed'
   }
 );
 

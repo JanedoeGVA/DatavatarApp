@@ -27,27 +27,24 @@ class Fetch extends React.Component {
   componentWillMount() {
     const { navigation } = this.props;
     this.setState({
-      currentActTracker: navigation.state.params.currentActTracker
+      currentSubscribedTracker: navigation.state.params.currentSubscribedTracker
     });
   }
 
   getData = () => {
     // const { startDate, endDate } = this.state;
     console.log('getdata');
+    console.log('getdata');
     const startDate = this.state.startDate / 1000;
     const endDate = moment(formatDate(this.state.startDate), 'YYYY-MM-DD')
       .add(1, 'day')
       .unix();
     console.log(`timestamp = ${startDate} ${endDate}`);
-    // store
-    //   .getLstActTrackerSubscribed()
-    //   .then((lstActTracker) => {
-    //     console.log(`lstActTracker ${lstActTracker}`);
-    //     const actTracker = lstActTracker[0];
-    //     console.log(`actTracker ${actTracker}`);
-    const { currentActTracker } = this.state;
-    console.log(`currentActTracker = ${JSON.stringify(currentActTracker)}`);
-    Datavatar.getData(currentActTracker, startDate, endDate)
+    const { currentSubscribedTracker } = this.state;
+    console.log(
+      `trackerSubscribed ${JSON.stringify(currentSubscribedTracker)}`
+    );
+    Datavatar.getData(currentSubscribedTracker, startDate, endDate)
       .then((response) => {
         console.log(`response : ${JSON.stringify(response)}`);
         if (response.data) {
@@ -56,21 +53,25 @@ class Fetch extends React.Component {
         } else if (response.tokenNotValid) {
           console.log(`token not valid`);
           Datavatar.refresh(
-            currentActTracker.provider,
-            currentActTracker.token.refreshToken
+            currentSubscribedTracker.tracker.provider,
+            currentSubscribedTracker.token.refreshToken
           )
             .then((token) => {
               if (token) {
                 console.log(`token recreate`);
                 // update token
                 console.log(
-                  `token before ${JSON.stringify(currentActTracker.token)}`
+                  `token before ${JSON.stringify(
+                    currentSubscribedTracker.token
+                  )}`
                 );
                 console.log(`token received ${JSON.stringify(token)}`);
                 store
-                  .updateActTrackerToken(currentActTracker, token, false)
+                  .updateActTrackerToken(currentSubscribedTracker, token, false)
                   .then((actTrackerUpdated) => {
-                    this.setState({ currentActTracker: actTrackerUpdated });
+                    this.setState({
+                      currentSubscribedTracker: actTrackerUpdated
+                    });
                     // getData again...
                     console.log(
                       `token after ${JSON.stringify(actTrackerUpdated.token)}`
@@ -91,13 +92,13 @@ class Fetch extends React.Component {
                 // invalid actTracker
                 store
                   .updateActTrackerToken(
-                    currentActTracker,
+                    currentSubscribedTracker,
                     { accessToken: null, refreshToken: null, secret: null },
                     true
                   )
                   .then(() => {
                     this.setState({
-                      currentActTracker: {}
+                      currentSubscribedTracker: {}
                     });
                     return null;
                   })
@@ -110,8 +111,6 @@ class Fetch extends React.Component {
         }
       })
       .catch((error) => error);
-    // })
-    // .catch((error) => error);
   };
 
   render() {
@@ -126,14 +125,16 @@ class Fetch extends React.Component {
 
     return (
       <View style={styles.container}>
-        <Dates
-          onDatesChange={onDatesChange}
-          isDateBlocked={isDateBlocked}
-          startDate={this.state.startDate}
-          endDate={this.state.endDate}
-          focusedInput={this.state.focus}
-          range
-        />
+        {!this.state.isData && (
+          <Dates
+            onDatesChange={onDatesChange}
+            isDateBlocked={isDateBlocked}
+            startDate={this.state.startDate}
+            endDate={this.state.endDate}
+            focusedInput={this.state.focus}
+            range
+          />
+        )}
 
         {/* {this.state.date && (
           <Text style={styles.date}>
@@ -157,7 +158,19 @@ class Fetch extends React.Component {
         >
           {this.state.endDate && `end date :${this.state.endDate.format('LL')}`}
         </Text> */}
-        <Button onPress={this.getData} title="Fetch" color="#841584" />
+
+        {!this.state.isData && (
+          <Button onPress={this.getData} title="Fetch" color="#841584" />
+        )}
+        <Button
+          onPress={() => {
+            const { navigation } = this.props;
+            navigation.navigate('Test');
+          }}
+          title="Test"
+          color="#841584"
+        />
+
         {this.state.isData && <Graph data={this.state.data} />}
       </View>
     );

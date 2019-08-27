@@ -125,6 +125,24 @@ export const getAllSubscribed = () =>
   });
 
 /**
+ * - Return the tracker subscribed corresponding to the ID
+ * @param {number} id
+ * @return {Promise.<SubscribedTracker>}
+ */
+export const getSubscribed = (id) =>
+  new Promise((resolve, reject) => {
+    db.query(TBL_SUBSCRIBED_SCHEMA, `id == "${id}"`)
+      .then((realmResults) => {
+        const lstSubscribed = Object.keys(realmResults).map(
+          (key) => realmResults[key]
+        );
+        resolve(lstSubscribed[0]);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+/**
  * - Remove a Subscribed Tracker and the token
  * @param {SubscribedTracker} subscribed
  * @return {Promise<>}
