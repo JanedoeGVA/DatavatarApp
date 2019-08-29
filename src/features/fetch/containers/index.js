@@ -2,12 +2,14 @@ import React from 'react';
 import moment from 'moment';
 import Dates from 'react-native-dates';
 import { connect } from 'react-redux';
-import { View, Text, StyleSheet, Button } from 'react-native';
+import { View, Alert, StyleSheet, Button } from 'react-native';
 import * as Datavatar from '../../../api/datavatar';
+import { revoke as actionRevoke } from '../../home/actions';
 import { Token, ActivityTracker } from '../../../api/activity_tracker';
 import Graph from '../../../components/graph';
 import * as store from '../../../store';
 import { formatDate } from '../../../api/date';
+import * as Constant from '../../../api/constant';
 
 class Fetch extends React.Component {
   static navigationOptions = {
@@ -24,90 +26,117 @@ class Fetch extends React.Component {
     };
   }
 
-  componentWillMount() {
+  componentDidMount() {
     const { navigation } = this.props;
     this.setState({
       currentSubscribedTracker: navigation.state.params.currentSubscribedTracker
     });
   }
 
+  refresh = () =>
+    new Promise((resolve, reject) => {
+      const { currentSubscribedTracker } = this.state;
+      Datavatar.refresh(
+        currentSubscribedTracker.tracker.provider,
+        currentSubscribedTracker.token.refreshToken
+      )
+        .then((token) => {
+          if (token) {
+            const updateToken = new Token({
+              id: currentSubscribedTracker.id,
+              accessToken: token.accessToken,
+              refreshToken: token.refreshToken
+            });
+            console.log(`refresh received : ${JSON.stringify(updateToken)}`);
+            store
+              .updateToken(updateToken)
+              .then(() => {
+                console.log(`updateToken done`);
+                this.setState(
+                  {
+                    currentSubscribedTracker: { token: updateToken }
+                  },
+                  () => resolve()
+                );
+              })
+              .catch((error) => error);
+          } else {
+            reject(Constant.INVALID_TOKEN);
+          }
+        })
+        .catch((error) => error);
+    });
+
   getData = () => {
-    // const { startDate, endDate } = this.state;
-    console.log('getdata');
-    console.log('getdata');
+    const { currentSubscribedTracker } = this.state;
     const startDate = this.state.startDate / 1000;
     const endDate = moment(formatDate(this.state.startDate), 'YYYY-MM-DD')
       .add(1, 'day')
       .unix();
-    console.log(`timestamp = ${startDate} ${endDate}`);
-    const { currentSubscribedTracker } = this.state;
-    console.log(
-      `trackerSubscribed ${JSON.stringify(currentSubscribedTracker)}`
-    );
+    const { navigation } = this.props;
     Datavatar.getData(currentSubscribedTracker, startDate, endDate)
       .then((response) => {
-        console.log(`response : ${JSON.stringify(response)}`);
         if (response.data) {
-          console.log(`data ${JSON.stringify(response.data)}`);
-          this.setState({ isData: true, data: response.data });
+          navigation.navigate('ListHeartRate', { data: response.data });
         } else if (response.tokenNotValid) {
-          console.log(`token not valid`);
-          Datavatar.refresh(
-            currentSubscribedTracker.tracker.provider,
-            currentSubscribedTracker.token.refreshToken
-          )
-            .then((token) => {
-              if (token) {
-                console.log(`token recreate`);
-                // update token
-                console.log(
-                  `token before ${JSON.stringify(
-                    currentSubscribedTracker.token
-                  )}`
-                );
-                console.log(`token received ${JSON.stringify(token)}`);
-                store
-                  .updateActTrackerToken(currentSubscribedTracker, token, false)
-                  .then((actTrackerUpdated) => {
-                    this.setState({
-                      currentSubscribedTracker: actTrackerUpdated
+          this.refresh()
+            .then(() => {
+              console.log(`refresh done`);
+              Datavatar.getData(currentSubscribedTracker, startDate, endDate)
+                .then((response) => {
+                  if (response.data) {
+                    navigation.navigate('ListHeartRate', {
+                      data: response.data
                     });
-                    // getData again...
-                    console.log(
-                      `token after ${JSON.stringify(actTrackerUpdated.token)}`
+                  } else {
+                    Alert.alert(
+                      'Network error',
+                      'Please try again',
+                      [
+                        {
+                          text: 'OK',
+                          onPress: () => {}
+                        }
+                      ],
+                      { cancelable: true }
                     );
-                    // TODO infinite loop when bad token :O
-                    this.getData();
-                    // Datavatar.getData(actTrackerUpdated, startDate, endDate)
-                    //   .then((dataset) => {
-                    //     console.log(`dataset ${JSON.stringify(dataset)}`);
-                    //     // return data
-                    //     this.setState({ isData: true, data: dataset });
-                    //   })
-                    //   .catch((error) => error);
-                  })
-                  .catch((error) => error);
-              } else {
-                console.log(`invalid token`);
-                // invalid actTracker
-                store
-                  .updateActTrackerToken(
-                    currentSubscribedTracker,
-                    { accessToken: null, refreshToken: null, secret: null },
-                    true
-                  )
-                  .then(() => {
-                    this.setState({
-                      currentSubscribedTracker: {}
-                    });
-                    return null;
-                  })
-                  .catch((error) => error);
-              }
+                  }
+                })
+                .catch((error) => error);
             })
-            .catch((error) => error);
+            .catch((error) => {
+              console.log(error);
+              if (error === Constant.INVALID_TOKEN) {
+                Alert.alert(
+                  'Authorisation denied',
+                  'The authorisation was removed,please subscribed again',
+                  [
+                    {
+                      text: 'OK',
+                      onPress: () => {
+                        const { revoke } = this.props;
+                        revoke(currentSubscribedTracker).then(() => {
+                          navigation.navigate('Home');
+                        });
+                      }
+                    }
+                  ],
+                  { cancelable: false }
+                );
+              }
+            });
         } else {
-          console.log(`error server ${response.error}`);
+          Alert.alert(
+            'Network error',
+            'Please try again',
+            [
+              {
+                text: 'OK',
+                onPress: () => {}
+              }
+            ],
+            { cancelable: true }
+          );
         }
       })
       .catch((error) => error);
@@ -136,41 +165,9 @@ class Fetch extends React.Component {
           />
         )}
 
-        {/* {this.state.date && (
-          <Text style={styles.date}>
-            {this.state.date && this.state.date.format('LL')}
-          </Text>
-        )}
-        <Text
-          style={[
-            styles.date,
-            this.state.focus === 'startDate' && styles.focused
-          ]}
-        >
-          {this.state.startDate &&
-            `start date :${this.state.startDate.format('LL')}`}
-        </Text>
-        <Text
-          style={[
-            styles.date,
-            this.state.focus === 'endDate' && styles.focused
-          ]}
-        >
-          {this.state.endDate && `end date :${this.state.endDate.format('LL')}`}
-        </Text> */}
-
         {!this.state.isData && (
           <Button onPress={this.getData} title="Fetch" color="#841584" />
         )}
-        <Button
-          onPress={() => {
-            const { navigation } = this.props;
-            navigation.navigate('Test');
-          }}
-          title="Test"
-          color="#841584"
-        />
-
         {this.state.isData && <Graph data={this.state.data} />}
       </View>
     );
@@ -196,8 +193,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  load: () => dispatch(actionLoad()),
-  update: () => dispatch(actionUpdate())
+  revoke: (subscribed) => dispatch(actionRevoke(subscribed))
 });
 
 export default connect(

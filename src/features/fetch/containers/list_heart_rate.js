@@ -1,10 +1,11 @@
 import React from 'react';
 import { View, Text } from 'react-native';
-import data from './data';
+// import data from './data';
 import moment from 'moment';
+import { NavigationEvents } from 'react-navigation';
 import HeartRateList from '../../../components/hr_list';
 
-const dateFormatter = (x) => moment(x).format('HH:MM');
+const dateFormatter = (x) => moment.unix(x).format('HH:mm');
 
 /**
  * Returns an array with arrays of the given size.
@@ -22,8 +23,8 @@ const chunkArray = (array, size) => {
     const average =
       chunk.reduce((p, c) => p + c['heart-rate'], 0) / chunk.length;
     tempArray.push({
-      start: moment.unix(chunk[0]['date']).format('HH:MM'),
-      end: moment.unix(chunk[chunk.length - 1]['date']).format('HH:MM'),
+      start: dateFormatter(chunk[0]['date']),
+      end: dateFormatter(chunk[chunk.length - 1]['date']),
       average: average,
       data: chunk
     });
@@ -31,14 +32,7 @@ const chunkArray = (array, size) => {
   return tempArray;
 };
 
-const dataFormat = chunkArray(data, 50);
-
-// const array = data.map((obj) => ({
-//   x: moment(obj['date']).format('HH:MM'),
-//   y: obj['heart-rate']
-// }));
-
-class Test extends React.Component {
+class ListHeartRate extends React.Component {
   static navigationOptions = {
     title: 'Heart-Rate list'
   };
@@ -55,6 +49,9 @@ class Test extends React.Component {
   };
 
   render() {
+    const { navigation } = this.props;
+    const data = navigation.getParam('data');
+    const dataFormat = chunkArray(data.lstHeartRate, 50);
     return (
       <HeartRateList
         heartRateData={dataFormat}
@@ -64,4 +61,4 @@ class Test extends React.Component {
   }
 }
 
-export default Test;
+export default ListHeartRate;

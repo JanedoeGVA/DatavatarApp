@@ -49,18 +49,22 @@ const Graph = ({ data }) => {
   const items = data.map((item) => item['heart-rate']);
   const start = moment.unix(data[0].date);
   const end = moment.unix(data[data.length - 1].date);
-  // const start = moment.unix(data[0].date).format('HH:MM');
-  // const end = moment.unix(data[data.length - 1].date).format('HH:MM');
+  // const start = moment.unix(data[0].date).format('HH:mm');
+  // const end = moment.unix(data[data.length - 1].date).format('HH:mm');
   console.log(start);
   console.log(end);
   const duration = moment.duration(end.diff(start));
   var minmax = duration.asMinutes();
   console.log(minmax);
-  var min01 = Math.floor(minmax / 4);
-  var min02 = Math.floor(minmax / 4) * 2;
-  var min03 = Math.floor(minmax / 4) * 3;
-  const time = [0, min01, min02, min03, minmax];
-  const contentInset = { top: 20, bottom: 20 };
+  const time = [];
+  for (let index = 0, size = 4; index < size + 1; index++) {
+    time[index] = Math.floor(minmax / size) * index;
+  }
+  // var min01 = Math.floor(minmax / 4);
+  // var min02 = Math.floor(minmax / 4) * 2;
+  // var min03 = Math.floor(minmax / 4) * 3;
+  // const time = [0, min01, min02, min03, minmax];
+
   const axesSvg = { fontSize: 10, fill: 'grey' };
   const verticalContentInset = { top: 10, bottom: 10 };
   const xAxisHeight = 10;

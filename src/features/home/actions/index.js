@@ -1,7 +1,7 @@
 import {
   getSubscribed,
   loadIfDBEmpty,
-  revokeSubscribed
+  removeSubscribed
 } from '../../../api/activity_tracker';
 import {
   LOAD_IS_PROCESSING,
@@ -14,7 +14,6 @@ import {
   REVOKE_HAS_ERRORED,
   REVOKE_SUCCESS
 } from '../constant';
-import { removeSubscribed } from '../../../store';
 
 export const loadIsProcessing = (bool) => ({
   type: LOAD_IS_PROCESSING,
@@ -36,9 +35,9 @@ export const revokeSuccess = (bool) => ({
   payload: bool
 });
 
-export const revokeIsProcessing = (id) => ({
+export const revokeIsProcessing = (subscribed) => ({
   type: REVOKE_IS_PROCESSING,
-  payload: id
+  payload: subscribed
 });
 
 export const revokeHasErrored = (bool) => ({
@@ -76,7 +75,7 @@ export const load = () => (dispatch) => {
 // object in realm before delete in the redux state app crash. ATM dont find another solution
 export const revoke = (subscribed) => (dispatch) => {
   dispatch(revokeIsProcessing(subscribed));
-  return revokeSubscribed(subscribed)
+  return removeSubscribed(subscribed)
     .then(() => {
       dispatch(revokeSuccess(true));
     })

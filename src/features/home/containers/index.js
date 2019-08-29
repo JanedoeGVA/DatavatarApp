@@ -10,7 +10,6 @@ import {
 import SubscribedGrid from '../../../components/subscribed_grid';
 import { ADD_TRACKER } from '../../../api/activity_tracker';
 import { revoke } from '../../../api/datavatar';
-import { URL_PATH_REVOKE } from '../../../api/constant';
 
 class Home extends React.Component {
   static navigationOptions = {
@@ -78,7 +77,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  revokeSubscribed: (id) => dispatch(actionRevoke(id)),
+  revokeSubscribed: (subscribed) => dispatch(actionRevoke(subscribed)),
   load: () => dispatch(actionLoad()),
   update: () => dispatch(actionUpdate())
 });

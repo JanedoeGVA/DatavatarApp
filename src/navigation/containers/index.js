@@ -12,7 +12,7 @@ import SettingsScreen from '../../features/settings/containers';
 import SubscribeScreen from '../../features/subscribe/containers';
 import FetchScreen from '../../features/fetch/containers';
 import StorageScreen from '../../features/storage/containers';
-import TestScreen from '../../features/fetch/containers/test';
+import ListHeartRateScreen from '../../features/fetch/containers/list_heart_rate';
 import GraphScreen from '../../features/fetch/containers/graph';
 
 const HomeStack = createStackNavigator(
@@ -30,7 +30,7 @@ const FetchStack = createStackNavigator(
     Subscribed: SubscribedListScreen,
     RequestData: RequestDataListScreen,
     Fetch: FetchScreen,
-    Test: TestScreen,
+    ListHeartRate: ListHeartRateScreen,
     Graph: GraphScreen
   },
   {

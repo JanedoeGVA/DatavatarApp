@@ -62,7 +62,12 @@ export const addSubscribed = (avatar, provider, accessToken, secret, refresh) =>
       .then((id) => {
         db.query(TBL_TRACKER_SCHEMA, `provider == "${provider}"`)
           .then((trackers) => {
-            const token = new Token(id, accessToken, secret, refresh);
+            const token = new Token({
+              id: id,
+              accessToken: accessToken,
+              secret: secret,
+              refreshToken: refresh
+            });
             const tracker = trackers[0];
             const subscribed = new SubscribedTracker(
               id,
@@ -144,7 +149,7 @@ export const getSubscribed = (id) =>
   });
 /**
  * - Remove a Subscribed Tracker and the token
- * @param {SubscribedTracker} subscribed
+ * @param {import('../../../api/activity_tracker').SubscribedTracker} subscribed
  * @return {Promise<>}
  */
 export const removeSubscribed = (subscribed) =>
@@ -182,19 +187,14 @@ export const removeAllSubscribed = () =>
 
 /**
  * - Update token
- * @param {SubscribedTracker} subscribed
- * @param {string} refreshToken
+ * @param {import('../../../api/activity_tracker').Token} token
  * @return {Promise<SubscribedTracker>}
  */
-export const updateSubscribedToken = (subscribed, refreshToken) =>
+export const updateToken = (token) =>
   new Promise((resolve, reject) => {
-    console.log(
-      `stringify ${JSON.stringify(subscribed)} ${JSON.stringify(refreshToken)}`
-    );
-    const { id } = subscribed;
-    db.update(TBL_TOKEN_SCHEMA, { id, ...refreshToken })
+    db.update(TBL_TOKEN_SCHEMA, token)
       .then(() => {
-        resolve(token);
+        resolve();
       })
       .catch((error) => {
         reject(error);

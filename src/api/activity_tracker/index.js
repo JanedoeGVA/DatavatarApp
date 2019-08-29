@@ -35,7 +35,7 @@ export class Token {
    * @param {String} refreshToken
    * -The refresh token if OAuth2
    */
-  constructor(id, accessToken, secret = null, refreshToken = null) {
+  constructor({ id, accessToken, secret = null, refreshToken = null }) {
     this.id = id;
     this.accessToken = accessToken;
     this.secret = secret;
@@ -218,7 +218,7 @@ export const getTrackers = () =>
  * @param {SubscribedTracker} subscribed
  * @return {Promise<>}
  */
-export const revokeSubscribed = (subscribed) =>
+export const removeSubscribed = (subscribed) =>
   new Promise((resolve, reject) => {
     store
       .removeSubscribed(subscribed)

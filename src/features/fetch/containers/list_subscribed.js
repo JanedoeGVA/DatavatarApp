@@ -29,6 +29,17 @@ class ListSubscribed extends React.Component {
 
   load = () => {
     // TODO: GET Subscribed Trackers not Tracker List !!!!!
+
+    //TEST DATA
+    // data.forEach((item) => {
+    //   console.log(JSON.stringify(item));
+    //   console.log(item['date']);
+    //   const epoch = item['date'];
+    //   console.log(moment.unix(epoch).format());
+    //   const date = moment.unix(epoch).format('HH:mm');
+    //   console.log(`long : ${epoch} date : ${date}`);
+    // });
+    //TEST DATA
     store
       .getAllSubscribed()
       .then((lstSubscribed) => {

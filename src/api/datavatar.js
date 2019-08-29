@@ -174,6 +174,8 @@ export const refresh = (provider, refreshToken) =>
   new Promise((resolve, reject) => {
     // let token;
     const uri = new URI(Constant.DATAVATAR_BASE_URL);
+    console.log(`provider ${provider}`);
+    console.log(`refresh ${refreshToken}`);
     uri.segment([
       Constant.URL_PATH_API,
       provider.toLowerCase(),

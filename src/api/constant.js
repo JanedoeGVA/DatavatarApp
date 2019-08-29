@@ -23,3 +23,5 @@ export const URL_PATH_REVOKE_METHOD = 'revoke-method';
 export const URL_PATH_REVOKE = 'revoke';
 export const URL_PATH_AUTORIZATION = 'authorization';
 export const URL_PATH_VERIFICATION = 'verification';
+
+export const INVALID_TOKEN = 'invalid token';
