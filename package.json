@@ -31,7 +31,7 @@
     "redux-thunk": "^2.3.0",
     "sprintf-js": "^1.1.2",
     "uri-js": "^4.2.2",
-    "urijs": "^1.19.1",
+    "urijs": "^1.19.4",
     "victory-native": "^33.0.0"
   },
   "devDependencies": {
