@@ -10,7 +10,7 @@
   "dependencies": {
     "lodash": "^4.17.13",
     "lodash.merge": "^4.6.2",
-    "moment": "^2.24.0",
+    "moment": "^2.29.4",
     "react": "16.8.6",
     "react-native": "0.60.0",
     "react-native-base64": "0.0.2",
